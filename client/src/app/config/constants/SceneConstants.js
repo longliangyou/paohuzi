@@ -11,7 +11,7 @@ var SceneConstants = {
     scene : {
         LoginScene: ["LoginScene"],//登陆场景
         FightLoadingScene: ["FightLoadingScene"], //战斗loading场景
-        FightScene: ["FightScene", "LoginScene"],//战斗场景
+        FightScene: ["FightScene", "LoginScene"]//战斗场景
     },
 
 
