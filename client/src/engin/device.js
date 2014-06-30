@@ -36,7 +36,7 @@ device.model       = "unknown"
 display.init = function(){
     var sharedApplication = cc.Application.getInstance()
     var target = sharedApplication.getTargetPlatform()
-    if( target == cc.PLATFORM_OS_WINDOWS) {
+    if( target == cc.PLATFORM_OS_WINDOWS)
         this.platform = "windows"
     else if(target == cc.PLATFORM_OS_MAC)
         this.platform = "mac"
@@ -48,10 +48,10 @@ display.init = function(){
         this.model = "iphone"
     else
         this.model = "ipad"
-    }
+
 
     var language_ = sharedApplication.getCurrentLanguage()
-    if(language_ == cc.LANGUAGE_CHINESE) {
+    if(language_ == cc.LANGUAGE_CHINESE)
         language_ = "cn"
     else if (language_ == cc.LANGUAGE_FRENCH)
             language_ = "fr"
@@ -75,7 +75,7 @@ display.init = function(){
         language_ = "ar"
     else
         language_ = "en"
-    }
+
 
     this.language = language_
     this.writablePath = cc.FileUtils.getInstance().getWritablePath()
