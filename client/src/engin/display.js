@@ -1,5 +1,5 @@
 /**
- * 负责根据 config.lua 中定义的分辨率设定计算屏幕的设计分辨率。
+ * 负责根据 config.js 中定义的分辨率设定计算屏幕的设计分辨率。
  * 框架初始化后，display 模块提供下列属性：
 
  -   display.sizeInPixels.width,
