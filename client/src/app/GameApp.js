@@ -1,4 +1,5 @@
-
+require("config.js")
+require("engin.init.js")
 /**
  * GameApp.js
  * 游戏主类
