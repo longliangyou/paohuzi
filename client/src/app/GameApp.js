@@ -19,11 +19,13 @@ app.run =function(){
     cc.game.onStart = function(){
         cc.view.setDesignResolutionSize(800, 450, cc.ResolutionPolicy.SHOW_ALL);
         cc.view.resizeWithBrowserSize(true);
+
+
         //load resources
         cc.LoaderScene.preload(g_resources, function () {
             cc.director.runScene(new LoginScene());
         }, this);
-
+        //这里其实想改成如下使用  通过调用enterScene 方法进入场景
         //var sceneName,backScaneName = SceneConstants.getScene();
         //this.enterScene(sceneName,backScaneName)
     };
