@@ -1,46 +1,26 @@
-var pomelo = window.pomelo;
+var PomeloApi = function(){
+  var pomelo = window.pomelo;
 
-var route = 'gate.gateHandler.queryEntry';
-var uid = "uid";
-var rid = "rid";
-var username = "paohuzi-user1";
+  var route = {
+    gate: "gate.gateHandler.queryEntry",
+    connect: "connector.entryHandler.enter"
+  };
 
-pomelo.init({
-  host: "127.0.0.1",
-  port: 3014,
-  log: true
-}, function() {
-  pomelo.request(route, {
-    uid: uid
-  }, function(data) {
-    pomelo.disconnect();
+  console.log("hello pomeloApi!");
+
+  this.connectGateServer = function (host, port, gr){
+    if (gr){
+      route.gate = gr;
+    }
     pomelo.init({
-      host: data.host,
-      port: data.port,
+      host: host,
+      port: port,
       log: true
-    }, function() {
-      var route = "connector.entryHandler.enter";
-      pomelo.request(route, {
-        username: username,
-        rid: rid
-      }, function(data) {
-        cc.log(JSON.stringify(data));
-        chatSend();
+    }, function(){
+      pomelo.request(route.gate, function(data){
+        pomelo.disconnect();
       });
     });
-  });
-});
-
-function chatSend() {
-  var route = "chat.chatHandler.send";
-  var target = "*";
-  var msg = "hello test send message"
-  pomelo.request(route, {
-    rid: rid,
-    content: msg,
-    from: username,
-    target: target
-  }, function(data) {
-    cc.log(JSON.stringify(data));
-  });
-}
+  };
+  return this;
+};

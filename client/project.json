@@ -11,6 +11,7 @@
     "modules" : ["cocos2d"],
 
     "jsList" : [
+        "src/pomelo/api.js",
         "src/engin/device.js",
         "src/engin/display.js",
         "src/engin/EnginInit.js",
@@ -23,7 +24,7 @@
         "src/app/scenes/LoginScene.js",
 
 
-        "src/pomelo/api.js",
+
         "src/build.js"
 
 
