@@ -6,6 +6,32 @@ var LoginLayer =  BaseScene.extend({
         this._super();
 
 
+        //创建一个sprite
+        var sprite1 = cc.Sprite.create(res.HelloWorld_png);
+        this.addChild(sprite1);
+        sprite1.setPosition(display.cx,display.cy)
+        cc.eventManager.addListener(cc.EventListener.create({
+            event: cc.EventListener.TOUCH_ONE_BY_ONE, //TOUCH_ONE_BY_ONE 为单次触摸事件监听器
+            swallowTouches: true,
+            onTouchBegan: function (touch, event) {
+                var target = event.getCurrentTarget();
+
+                var locationInNode = target.convertToNodeSpace(touch.getLocation());
+                var s = target.getContentSize();
+                var rect = cc.rect(0, 0, s.width, s.height);
+
+                if (cc.rectContainsPoint(rect, locationInNode)) {
+                    // 需要返回true，否则不会调用后面的onTouchEnded方法
+                    return true;
+                }
+                return false;
+            },
+            onTouchEnded: function (touch, event) {
+               var target = event.getCurrentTarget();
+               cc.log("点击到了sprite1");
+            }
+        }),sprite1);
+
         return true;
     },
 

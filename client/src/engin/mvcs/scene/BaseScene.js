@@ -29,9 +29,71 @@ var BaseScene = cc.Layer.extend({
         this.tipLayer_=display.newNode();
         this.addChild(this.tipLayer_);//tip层
 
+        //开启当前视窗的触屏响应处理。
+        //this.setTouchEnabled(true);
 
+        cc.eventManager.addListener(this.onTouch, this);
         this.schedule(this.tick);
         return true;
+    },
+
+
+    //http://www.cnblogs.com/linn/p/3658140.html 事件
+    onTouch : cc.EventListener.create({
+        event: cc.EventListener.TOUCH_ONE_BY_ONE, //TOUCH_ONE_BY_ONE 为单次触摸事件监听器
+        swallowTouches: true,
+        onTouchBegan: function (touch, event) {
+            var x = touch.getLocation().x;
+            var y = touch.getLocation().y;
+            cc.log(event,touch,x,y,touch);
+            this.drag = {
+                startX  : x,
+                startY  : y,
+                lastX   : x,
+                lastY   : y,
+                offsetX : 0,
+                offsetY : 0,
+                moveOffsetX  : 0,
+                moveOffsetY  : 0,
+                time : 0
+            }
+            //BaseScene.touchesBeganHandle(event);
+            return true
+        },
+        onTouchesMoved:function (touches, event) {
+            //BaseScene.touchesMovedHandle(event);
+            cc.log("onTouchEnded");
+        },
+        onTouchesCancelled :function (touches, event) {
+            //BaseScene.touchesCancelledHandle(event);
+            cc.log("onTouchesCancelled");
+        },
+        onTouchEnded: function (touch, event) {
+           //var target = event.getCurrentTarget();
+            this.drag = null;
+            //BaseScene.touchEndedHandle(event);
+            cc.log("onTouchEnded");
+        }
+    }),
+    //当触屏按下事件被响应时的处理。
+    touchesBeganHandle:function (event) {
+        //设置当前层的成员变量isMouseDown为ture
+        cc.log("onTouchesBegan");
+    },
+    //当触屏按下并移动事件被响应时的处理。
+    touchesMovedHandle:function (touches, event) {
+        //判断如果isMouseDown为ture
+        cc.log("onTouchesMoved");
+    },
+    //当触屏松开事件响应时的处理
+    touchEndedHandle:function (touches, event) {
+        //设置当前层的成员变量isMouseDown为false
+        cc.log("onTouchesEnded");
+    },
+    //当触摸被取消(比如触摸过程中被来电打断),就会调用touchesCancelled方法。
+    touchesCancelledHandle:function (touches, event) {
+        //控制台输出日志
+        cc.log("onTouchesCancelled");
     },
 
 
@@ -40,8 +102,9 @@ var BaseScene = cc.Layer.extend({
      * @param dt
      */
     tick:function(dt){
-        cc.log(dt,"xxxxxxxxxxxxx");
+
     }
+
 });
 
 
