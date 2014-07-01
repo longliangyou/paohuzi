@@ -1,26 +1,27 @@
-var PomeloApi = function(){
-  var pomelo = window.pomelo;
-
-  var route = {
+var pomeloApi = {
+  pomelo: window.pomelo,
+  route: {
     gate: "gate.gateHandler.queryEntry",
     connect: "connector.entryHandler.enter"
-  };
+  }
+};
 
-  console.log("hello pomeloApi!");
 
-  this.connectGateServer = function (host, port, gr){
-    if (gr){
-      route.gate = gr;
-    }
-    pomelo.init({
-      host: host,
-      port: port,
-      log: true
-    }, function(){
-      pomelo.request(route.gate, function(data){
-        pomelo.disconnect();
-      });
+pomeloApi.conenctGateServer = function(host, port, gateRoute){
+  self = this;
+  if (gateRoute){
+    self.route.gate = gateRoute;
+  }
+
+  self.pomelo.init({
+    host: host,
+    port: port,
+    log: true
+  }, function(){
+    pomelo.request(self.route.gate, function(data){
+      console.log(data);
+      pomelo.disconnect();
     });
-  };
-  return this;
+  });
+
 };

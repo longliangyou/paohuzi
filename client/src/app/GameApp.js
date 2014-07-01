@@ -21,7 +21,7 @@ GameApp.run =function(){
 //    cc.LoaderScene.preload(g_resources, function () {
 //        cc.director.runScene(new LoginScene());
 //    }, this);
-  PomeloApi();
+
     //通过调用enterScene 方法进入场景
     var arr = SceneConstants.getSceneName("LoginScene");
     this.enterScene(arr[0],arr[1])
