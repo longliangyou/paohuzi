@@ -30,8 +30,11 @@ var display = {};
 
 
 display.init = function(){
-    var sharedDirector         = cc.director.sharedDirector;
-    var glview = sharedDirector.getOpenGLView()
+//    cc.director = cc.Director.getInstance();
+//    cc.winSize = cc.director.getWinSize();
+//    cc.view = cc.director.getOpenGLView();
+    //var sharedDirector         = cc.director.sharedDirector;
+    var glview =  cc.view //cc.director.getWinSize();//sharedDirector.getOpenGLView()
     var size = glview.getFrameSize()
     this.sizeInPixels = {width : size.width, height : size.height} //真实的屏幕像素
 
@@ -51,7 +54,7 @@ display.init = function(){
         else
             CONFIG_SCREEN_AUTOSCALE = "FIXED_WIDTH"
     }else{
-        CONFIG_SCREEN_AUTOSCALE = "CONFIG_SCREEN_AUTOSCALE".toLowerCase();
+        CONFIG_SCREEN_AUTOSCALE = CONFIG_SCREEN_AUTOSCALE.toUpperCase();
     }
 
 
@@ -63,18 +66,20 @@ display.init = function(){
         }
 
         if(scaleX == null || scaleY == null){
-            scaleX, scaleY = w / CONFIG_SCREEN_WIDTH, h / CONFIG_SCREEN_HEIGHT
+            scaleX = w / CONFIG_SCREEN_WIDTH;
+            scaleY = h / CONFIG_SCREEN_HEIGHT
         }
 
         if(CONFIG_SCREEN_AUTOSCALE == "FIXED_WIDTH") {
             scale = scaleX
-            CONFIG_SCREEN_HEIGHT = h / scale
+            CONFIG_SCREEN_HEIGHT = h / scale;
+
         }else if(CONFIG_SCREEN_AUTOSCALE == "FIXED_HEIGHT"){
             scale = scaleY
-            CONFIG_SCREEN_WIDTH = w / scale
+            CONFIG_SCREEN_WIDTH = parseFloat(w / scale)
         }else{
             scale = 1.0
-            print(string.format("display - invalid CONFIG_SCREEN_AUTOSCALE \"%s\"", CONFIG_SCREEN_AUTOSCALE))
+            cc.log("display - invalid CONFIG_SCREEN_AUTOSCALE \"%s\"", CONFIG_SCREEN_AUTOSCALE)
         }
 
         glview.setDesignResolutionSize(CONFIG_SCREEN_WIDTH, CONFIG_SCREEN_HEIGHT, cc.ResolutionPolicy.NO_BORDER)
@@ -84,7 +89,7 @@ display.init = function(){
 
 
     //记录一些display的信息
-    var winSize = sharedDirector.getWinSize()
+    var winSize = cc.director.getWinSize(); //sharedDirector.getWinSize()
     this.contentScaleFactor = scale
     this.size               = {width : winSize.width, height : winSize.height}
     this.width              = this.size.width

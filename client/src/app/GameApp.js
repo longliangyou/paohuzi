@@ -1,36 +1,29 @@
-require("config.js")
-require("engin.init.js")
+//require("config.js")
+//require("engin.init.js")
 /**
- * GameApp.js
+ * GameGameApp.js
  * 游戏主类
  * Created by Administrator on 2014/6/30.
  */
-var app ={};
+var GameApp ={};
 
 
 //该程序的包
-app.packageRoot = "app";
+GameApp.packageRoot = "app";
 
 
 
 /**
  * 程序第一次启动运行
  */
-app.run =function(){
-    cc.game.onStart = function(){
-        cc.view.setDesignResolutionSize(800, 450, cc.ResolutionPolicy.SHOW_ALL);
-        cc.view.resizeWithBrowserSize(true);
-
-
-        //load resources
-        cc.LoaderScene.preload(g_resources, function () {
-            cc.director.runScene(new LoginScene());
-        }, this);
-        //这里其实想改成如下使用  通过调用enterScene 方法进入场景
-        //var sceneName,backScaneName = SceneConstants.getScene();
-        //this.enterScene(sceneName,backScaneName)
-    };
-    cc.game.run();
+GameApp.run =function(){
+    //load resources
+//    cc.LoaderScene.preload(g_resources, function () {
+//        cc.director.runScene(new LoginScene());
+//    }, this);
+    //通过调用enterScene 方法进入场景
+    var arr = SceneConstants.getSceneName("LoginScene");
+    this.enterScene(arr[0],arr[1])
 }
 
 
@@ -43,15 +36,15 @@ app.run =function(){
  * @param backScaneName 当前场景的上一个返回场景
  * @param param 进入场景的一些参数
  */
-app.enterScene = function(sceneName,backScaneName, param){
+GameApp.enterScene = function(sceneName,backScaneName, param){
     enterSceneFun = function(sceneName, args){
         var scenePackageName = this. packageRoot + ".scenes." + sceneName;
         var sceneClass = scenePackageName; //这里就是动态加载一个类
 
-        //cc.LoaderScene.preload(g_resources, function () {
-            var scene = sceneClass.new(args)
-            cc.director.runScene(scne);
-        //}, this);
+        cc.LoaderScene.preload(g_resources, function () {
+            var scene = SceneConstants.getScene(sceneName)//sceneClass.new(args)
+            cc.director.runScene(scene);
+        }, this);
         return scene
     }
 
@@ -78,8 +71,8 @@ app.enterScene = function(sceneName,backScaneName, param){
 /**
  * 返回到上一个场景
  */
-app.backScene = function(){
-    var sceneName,backScaneName = SceneConstants.getScene();
+GameApp.backScene = function(){
+    var sceneName,backScaneName = SceneConstants.getSceneName();
     if(backScaneName) {
         this.enterScene(sceneName,backScaneName)
     }else{

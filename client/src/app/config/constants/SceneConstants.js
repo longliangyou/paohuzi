@@ -19,12 +19,24 @@ var SceneConstants = {
      * 通过当前场景 获取当前和上一个场景名称
      * @param currentSceneName
      */
-    getScene : function(currentSceneName){
+    getSceneName : function(currentSceneName){
         var arr = this.scene[currentSceneName]
-        return arr[1],arr[2];
+        return arr;
     },
 
+    /**
+     * 通过当前场景
+     * @param currentSceneName
+     */
+    getScene : function(currentSceneName){
+        var arr = this.scene[currentSceneName]
+        var sceneName = arr[0];
+        if(sceneName == "LoginScene" ){
+            return new LoginScene();
+        }
 
+        return null;
+    },
     /**
      * 通过当前场景 获取上一个场景名称
      * @param currentSceneName

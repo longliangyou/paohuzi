@@ -11,10 +11,20 @@
     "modules" : ["cocos2d"],
 
     "jsList" : [
+        "src/engin/device.js",
+        "src/engin/display.js",
+        "src/engin/EnginInit.js",
         "src/app/GameApp.js",
+
+        "src/config.js",
+        "src/app/config/constants/resource.js",
+        "src/app/config/constants/SceneConstants.js",
+        "src/app/scenes/LoginScene.js",
+
+
         "src/pomelo/api.js",
-        "src/build.js",
-        "src/resource.js",
-        "src/app.js"
+        "src/build.js"
+
+
     ]
 }

@@ -1,9 +1,12 @@
+
 var res = {
     HelloWorld_png : "res/HelloWorld.png",
     CloseNormal_png : "res/CloseNormal.png",
     CloseSelected_png : "res/CloseSelected.png"
 };
 
+
+//切换场景的过渡素材
 var g_resources = [
     //image
     res.HelloWorld_png,
@@ -20,3 +23,8 @@ var g_resources = [
 
     //effect
 ];
+
+
+
+
+

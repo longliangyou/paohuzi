@@ -33,24 +33,24 @@ device.platform    = "unknown"
 device.model       = "unknown"
 
 
-display.init = function(){
-    var sharedApplication = cc.Application.getInstance()
-    var target = sharedApplication.getTargetPlatform()
-    if( target == cc.PLATFORM_OS_WINDOWS)
-        this.platform = "windows"
-    else if(target == cc.PLATFORM_OS_MAC)
-        this.platform = "mac"
-    else if(target == cc.PLATFORM_OS_ANDROID)
-        this.platform = "android"
-    else if(target == cc.PLATFORM_OS_IPHONE ||  target == cc.PLATFORM_OS_IPAD)
-        this.platform = "ios"
-    if(target == cc.PLATFORM_OS_IPHONE)
-        this.model = "iphone"
-    else
-        this.model = "ipad"
+device.init = function(){
+//    var sharedApplication = cc.Application.getInstance()
+//    var target =cc.platform // cc .Application .getInstance().getTargetPlatform()
+//    if( target == cc.PLATFORM_OS_WINDOWS)
+//        this.platform = "windows"
+//    else if(target == cc.PLATFORM_OS_MAC)
+//        this.platform = "mac"
+//    else if(target == cc.PLATFORM_OS_ANDROID)
+//        this.platform = "android"
+//    else if(target == cc.PLATFORM_OS_IPHONE ||  target == cc.PLATFORM_OS_IPAD)
+//        this.platform = "ios"
+//    if(target == cc.PLATFORM_OS_IPHONE)
+//        this.model = "iphone"
+//    else
+//        this.model = "ipad"
 
 
-    var language_ = sharedApplication.getCurrentLanguage()
+    var language_ = cc.sys.language;//sharedApplication.getCurrentLanguage()
     if(language_ == cc.LANGUAGE_CHINESE)
         language_ = "cn"
     else if (language_ == cc.LANGUAGE_FRENCH)
@@ -78,7 +78,7 @@ display.init = function(){
 
 
     this.language = language_
-    this.writablePath = cc.FileUtils.getInstance().getWritablePath()
+    //this.writablePath = cc.FileUtils.getWritablePath()// .FileUtils.getInstance().getWritablePath()
     // device.cachePath = cc.FileUtils:getInstance():getCachePath()
     this.directorySeparator = "/"
     this.pathSeparator = ":"
@@ -87,13 +87,13 @@ display.init = function(){
         this.pathSeparator = ";"
     }
 
-    cc.log("# device.platform              = " .. this.platform)
-    cc.log("# device.model                 = " .. this.model)
-    cc.log("# device.language              = " .. this.language)
-    cc.log("# device.writablePath          = " .. this.writablePath)
-//cc.log("# device.cachePath             = " .. device.cachePath)
-    cc.log("# device.directorySeparator    = " .. this.directorySeparator)
-    cc.log("# device.pathSeparator         = " .. this.pathSeparator)
+    cc.log("# device.platform              = " + this.platform)
+    cc.log("# device.model                 = " + this.model)
+    cc.log("# device.language              = " + this.language)
+    cc.log("# device.writablePath          = " + this.writablePath)
+    //cc.log("# device.cachePath             = " + device.cachePath)
+    cc.log("# device.directorySeparator    = " + this.directorySeparator)
+    cc.log("# device.pathSeparator         = " + this.pathSeparator)
     cc.log("#")
 }
 
