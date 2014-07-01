@@ -132,4 +132,21 @@ display.init = function(){
 
 
 
+display.newNode = function(){
+    return cc.Node.create();
+}
 
+display.newLayer = function(color,x,y){
+    //cc.color(255, 100, 100, 128)
+    //ws.width / 2, ws.height / 2
+    return cc.LayerColor.create(color,x,y);
+}
+
+display.newSprite = function(name){
+    return cc.Sprite.create(name);
+}
+
+
+display.newBatchNode = function(){
+    return cc.batchNode.create();
+}

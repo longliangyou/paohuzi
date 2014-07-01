@@ -2,15 +2,13 @@
  * 初始化引擎库
  * Created by Administrator on 2014/6/30.
  */
-
-
-//require("engin/device.js");//载入device。js
-//require("engin/display.js");//载入display。js
-
 var EnginInit = {
     init : function(){
         device.init();
         display.init();
+
+        //cc.view.setDesignResolutionSize(800, 450, cc.ResolutionPolicy.SHOW_ALL);
+        // cc.view.resizeWithBrowserSize(true);//这里始终让其充满浏览器
     }
 
 }

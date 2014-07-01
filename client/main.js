@@ -1,10 +1,7 @@
 
 //这里交给 GameApp　处理
 cc.game.onStart = function(){
-    EnginInit.init();
-    //cc.view.setDesignResolutionSize(800, 450, cc.ResolutionPolicy.SHOW_ALL);
-   // cc.view.resizeWithBrowserSize(true);//这里始终让其充满浏览器
-
+    EnginInit.init();//引擎初始化
     GameApp.run();
 };
 cc.game.run();
