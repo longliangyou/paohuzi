@@ -43,6 +43,7 @@ var BaseScene = cc.Layer.extend({
         event: cc.EventListener.TOUCH_ONE_BY_ONE, //TOUCH_ONE_BY_ONE 为单次触摸事件监听器
         swallowTouches: true,
         onTouchBegan: function (touch, event) {
+            //var target = event.getCurrentTarget();
             var x = touch.getLocation().x;
             var y = touch.getLocation().y;
             cc.log(event,touch,x,y,touch);
@@ -57,7 +58,7 @@ var BaseScene = cc.Layer.extend({
                 moveOffsetY  : 0,
                 time : 0
             }
-            //BaseScene.touchesBeganHandle(event);
+            //BaseScene.touchesBeganHandle(event);//这里为什么不能调用BaseScene.touchesBeganHandle 的方法
             return true
         },
         onTouchesMoved:function (touches, event) {
@@ -69,7 +70,6 @@ var BaseScene = cc.Layer.extend({
             cc.log("onTouchesCancelled");
         },
         onTouchEnded: function (touch, event) {
-           //var target = event.getCurrentTarget();
             this.drag = null;
             //BaseScene.touchEndedHandle(event);
             cc.log("onTouchEnded");
@@ -77,22 +77,18 @@ var BaseScene = cc.Layer.extend({
     }),
     //当触屏按下事件被响应时的处理。
     touchesBeganHandle:function (event) {
-        //设置当前层的成员变量isMouseDown为ture
         cc.log("onTouchesBegan");
     },
     //当触屏按下并移动事件被响应时的处理。
     touchesMovedHandle:function (touches, event) {
-        //判断如果isMouseDown为ture
         cc.log("onTouchesMoved");
     },
     //当触屏松开事件响应时的处理
     touchEndedHandle:function (touches, event) {
-        //设置当前层的成员变量isMouseDown为false
         cc.log("onTouchesEnded");
     },
     //当触摸被取消(比如触摸过程中被来电打断),就会调用touchesCancelled方法。
     touchesCancelledHandle:function (touches, event) {
-        //控制台输出日志
         cc.log("onTouchesCancelled");
     },
 
