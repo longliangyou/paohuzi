@@ -34,7 +34,6 @@ var LoginLayer =  BaseScene.extend({
 
 
         //创建一个plist的小贴图
-
 //        display.addSpriteFramesWithFile("res/explosion.plist","res/explosion.png")
 //        var explosionTexture = cc.textureCache.addImage("res/explosion.png");
 //        var cache = cc.spriteFrameCache.addSpriteFrames(res.explosion,null);
@@ -44,17 +43,7 @@ var LoginLayer =  BaseScene.extend({
 //        var sprite1 = cc.Sprite.create("res/HelloHTML5World.png");
 //        var sprite2 = cc.Sprite.create("res/HelloHTML5World.png",cc.rect(0,0,480,320));
 
-        //2.Create a sprite with a sprite frame name. Must add "#" before frame name.
 
-//
-//
-//       // 4.Create a sprite with an exsiting texture contained in a CCTexture2D object
-//        //After creation, the rect will be the size of the texture, and the offset will be (0,0).
-//        var texture = cc.textureCache.addImage("res/CloseNormal.png");
-//        var sprite4 = cc.Sprite.create(texture);
-//        var sprite5 = cc.Sprite.create(texture, cc.rect(0,0,480,320));
-//        this.addChild(sprite4);
-//        this.addChild(sprite5);
 
         return true;
     },

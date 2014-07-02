@@ -38,23 +38,24 @@ align 和 valign 参数可用的值：
 -    ui.TEXT_VALIGN_BOTTOM 垂直底部对齐
 
 -- 创建一个居中对齐的文字显示对象
-local label = ui.newTTFLabel({
-    text = "Hello, World",
-    font = "Marker Felt",
-    size = 64,
-    align = ui.TEXT_ALIGN_CENTER -- 文字内部居中对齐
+var label = ui.newTTFLabel({
+    text : "Hello, World",
+    font : "Marker Felt",
+    size : 64,
+    align : ui.TEXT_ALIGN_CENTER // 文字内部居中对齐
     })
 
 -- 左对齐，并且多行文字顶部对齐
-local label = ui.newTTFLabel({
-    text = "Hello, World\n您好，世界",
-    font = "Arial",
-    size = 64,
-    color = cc.c3b(255, 0, 0), -- 使用纯红色
-align = ui.TEXT_ALIGN_LEFT,
-    valign = ui.TEXT_VALIGN_TOP,
-    dimensions = cc.size(400, 200)
-})
+ var label = ui.newTTFLabel({
+    text : "Hello, World\n您好，世界",
+    font : "Arial",
+    size : 64,
+    color : cc.color(255, 0, 0, 128),
+    align : ui.TEXT_ALIGN_LEFT,
+    valign : ui.TEXT_VALIGN_TOP,
+    dimensions : cc.size(400, 200)
+});
+ this.addChild(label);
     @param table params 参数表格对象
 
 @return LabelTTF LabelTTF对象
@@ -90,5 +91,50 @@ ui.newTTFLabel = function(params){
     }
 
     if( x && y) label.realign(x, y)
+    return label
+}
+
+
+
+
+/**
+    用位图字体创建文本显示对象，并返回 LabelBMFont 对象。
+BMFont 通常用于显示英文内容，因为英文字母加数字和常用符号也不多，生成的 BMFont 文件较小。如果是中文，应该用 TTFLabel。
+可用参数：
+-    text: 要显示的文本
+-    font: 字体文件名
+-    align: 文字的水平对齐方式（可选）
+-    x, y: 坐标（可选）
+var label = ui.newBMFontLabel({
+    text : "Hello",
+    font : "UIFont.fnt",
+    })
+    @param table params 参数表格对象
+@return LabelBMFont LabelBMFont对象
+**/
+ui.newBMFontLabel=function(params){
+    var text      = tostring(params.text)
+    var font      = params.font
+    //如果params.align 为false,即 textAlign = ui.TEXT_ALIGN_CENTER，否则textAlign = params.align
+    var textAlign = params.align || ui.TEXT_ALIGN_CENTER
+    var x   = params.x;
+    var y   = params.y;
+
+    var label = cc.LabelBMFont.create(text, font, cc.LABEL_AUTOMATIC_WIDTH, textAlign)
+    if(label)
+        return
+
+    if(type(x) == "number" && type(y) == "number")//判断x,y是不是number类型
+        label.setPosition(x, y)
+
+
+    if(textAlign == ui.TEXT_ALIGN_LEFT)
+        label.align(display.LEFT_CENTER)
+    else if( textAlign == ui.TEXT_ALIGN_RIGHT)
+        label.align(display.RIGHT_CENTER)
+    else
+        label.align(display.CENTER)
+
+
     return label
 }
