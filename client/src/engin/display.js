@@ -136,17 +136,256 @@ display.newNode = function(){
     return cc.Node.create();
 }
 
-display.newLayer = function(color,x,y){
+/**
+ *  * 1.
+ * //create a SpriteBatchNode with image path
+ * var spriteBatchNode = cc.SpriteBatchNode.create("res/animations/grossini.png", 50);
+ * 2.
+ * //create a SpriteBatchNode with texture
+ * var texture = cc.textureCache.addImage("res/animations/grossini.png");
+ * var spriteBatchNode = cc.SpriteBatchNode.create(texture,50);
+ *
+ * @param image
+ * @param capacity
+ * @returns {image}
+ */
+display.newBatchNode = function(image, capacity){
+    return cc.SpriteBatchNode.create(image);
+}
+
+display.newLayer = function(){
+    return cc.Layer.create();
+}
+display.newColorLayer = function(color,x,y){
     //cc.color(255, 100, 100, 128)
     //ws.width / 2, ws.height / 2
     return cc.LayerColor.create(color,x,y);
 }
 
-display.newSprite = function(name){
-    return cc.Sprite.create(name);
+/**
+ //1 var cache = display.addSpriteFrames(res.explosion);
+ var sprite = cc.Sprite.create('#explosion_03.png');
+ this.addChild(sprite);
+
+
+ var texture = cc.textureCache.addImage("res/CloseNormal.png");
+ //        var sprite4 = cc.Sprite.create(texture);
+ //        var sprite5 = cc.Sprite.create(texture, cc.rect(0,0,480,320));
+ //        this.addChild(sprite4);
+ //        this.addChild(sprite5);
+ * @param name
+ * @param rect  cc.rect(x, y, 85, 121)
+ * @returns {name}
+ */
+display.newSprite = function(name,rect){
+    return cc.Sprite.create(name,rect);
+}
+
+/**
+    创建并返回一个 Sprite9Scale 显示对象。
+第一种方法：
+ var blocks_scaled_with_insets = cc.Scale9Sprite.create();
+ blocks_scaled_with_insets.updateWithBatchNode(batchNode_scaled_with_insets, cc.rect(0, 0, 96, 96), false, cc.rect(32, 32, 32, 32));
+ blocks_scaled_with_insets.width = 96 * 4.5;
+ blocks_scaled_with_insets.height = 96 * 2.5;
+ blocks_scaled_with_insets.x = x;
+ blocks_scaled_with_insets.y = y;
+ this.addChild(blocks_scaled_with_insets);
+第二种方法：
+ var blocks_with_insets = cc.Scale9Sprite.createWithSpriteFrameName('blocks9.png', cc.rect(32, 32, 32, 32));
+第三种方法：
+ var s = cc.Scale9Sprite.createWithSpriteFrameName('button_normal.png');
+ s.x = x;
+ s.y = y;
+ s.width = 21 * 16;
+ s.height = 13 * 16;
+ this.addChild(s);
+
+ * @method create
+ * @param {String|rect_object|String|String} str
+ * @param {rect_object|String|rect_object} rect
+ * @param {rect_object} rect
+ * @return {cc.Scale9Sprite|cc.Scale9Sprite|cc.Scale9Sprite|cc.Scale9Sprite|cc.Scale9Sprite}
+**/
+display.newScale9Sprite = function(str, rect, rect) {
+    var sprite = cc.Scale9Sprite.createWithSpriteFrameName(str,rect,rect);
+    return sprite;
+//    return this.newSprite(filename, x, y, {class = cc.Scale9Sprite, size = size)
+}
+/**
+ 第一种方法：
+ 创建并返回一个图像帧对象。
+ display.addSpriteFrames("Sprites.plist", "Sprites.png")
+ -- 创建一个 Sprite
+ local sprite = display.newSprite("#Yes.png")
+ -- 创建一个图像帧
+ local frameNo = display.newSpriteFrame("No.png")
+ -- 在需要时，修改 Sprite 的显示内容
+ sprite:setDisplayFrame(frameNo)
+
+ 第二种方法：
+ //3.Create a sprite with a sprite frame
+ var spriteFrame = display.newSpriteFrame("explosion_03.png");
+ var sprite2 = cc.Sprite.create(spriteFrame);
+ this.addChild(sprite2);
+
+ @param string 图像帧名称
+
+ @return SpriteFrameCache
+ **/
+display.newSpriteFrame =function(frameName) {
+    var frame = cc.spriteFrameCache.getSpriteFrame(frameName);
+    if (frame=null){
+        cc.log("error","display.newSpriteFrame() - invalid frameName %s", frameName)
+    }
+    return frame
+}
+
+/**
+以特定模式创建一个包含多个图像帧对象的数组。
+-- 创建一个数组，包含 Walk0001.png 到 Walk0008.png 的 8 个图像帧对象
+local frames = display.newFrames("Walk%04d.png", 1, 8)
+-- 创建一个数组，包含 Walk0008.png 到 Walk0001.png 的 8 个图像帧对象
+local frames = display.newFrames("Walk%04d.png", 1, 8, true)
+@param string pattern 模式字符串
+@param integer begin 起始索引
+@param integer length 长度
+@param boolean isReversed 是否是递减索引
+@return table 图像帧数组
+**/
+display.newFrames = function(pattern, begin, length, isReversed){
+    var frames = {}
+    var step = 1
+    var last = begin + length - 1
+    if (isReversed){
+        last=begin;
+        begin = begin;
+        step = -1
+    }
+    for (var index = begin; index < last; index = step) {
+        var frameName = string.format(pattern, index)
+        var frame = cc.spriteFrameCache.getSpriteFrame(frameName)
+        if (frame == null) {
+            cc.log("error", "display.newFrames() - invalid frame, name %s", frameName)
+            return
+        }
+        frames.push(frame);
+    }
+    return frames
 }
 
 
-display.newBatchNode = function(){
-    return cc.batchNode.create();
+/**
+    以包含图像帧的数组创建一个动画对象。
+local frames = display.newFrames("Walk%04d.png", 1, 8)
+local animation = display.newAnimation(frames, 0.5 / 8) -- 0.5 秒播放 8 桢
+sprite:playAnimationOnce(animation) -- 播放一次动画
+@param table frames 图像帧的数组
+@param number time 每一桢动画之间的间隔时间
+@return Animation Animation对象
+**/
+display.newAnimation =function(frames, time) {
+    var count = frames.length
+    //-- local array = Array:create()
+    //-- for i = 1, count do
+    //    --     array:addObject(frames[i])
+    //-- end
+    time = time || 1.0 / count
+    return cc.Animation.create(frames, time)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+display.TEXTURES_PIXEL_FORMAT = {};
+/**
+    设置材质格式。
+为了节约内存，我们会使用一些颜色品质较低的材质格式，例如针对背景图使用 cc.TEXTURE2_D_PIXEL_FORMAT_RG_B565 格式。
+display.setTexturePixelFormat() 可以指定材质文件的材质格式，这样在加载材质文件时就会使用指定的格式。
+@param string filename 材质文件名
+@param integer format 材质格式
+@see Texture Pixel Format
+**/
+display.setTexturePixelFormat=function(filename, format) {
+    this.TEXTURES_PIXEL_FORMAT[filename] = format
+}
+/**
+ display.addSpriteFramesWithFile(数据文件名, 材质文件名)
+ display.addSpriteFramesWithFile("Sprites.plist", "Sprites.png")
+ Sprite Sheets 通俗一点解释就是包含多张图片的集合。Sprite Sheets 材质文件由多张图片组成，而数据文件则记录了图片在材质文件中的位置等信息。
+注意的是这个plist必须要在loading中加载并定义 Sprites.plist  否则不会读取到plist中的小图片
+
+ @param string plistFilename 数据文件名
+ @param string image 材质文件名
+ @see Sprite Sheets
+ **/
+display.addSpriteFrames = function(plistFilename, image, handler){
+    var async = false
+//    if(handler && typeof(handler) == "function")
+//        async = true;
+
+    if(async) {
+        asyncHandler = function () {
+            cc.log("%s, %s async done.", plistFilename, image);
+            var texture = sharedTextureCache.textureForKey(image)
+            cc.log("error:", texture, "The texture %s, %s is unavailable.", plistFilename, image);
+            cc.spriteFrameCache.addSpriteFrames(plistFilename, image)
+
+            handler(plistFilename, image)
+        }
+    }
+    if(this.TEXTURES_PIXEL_FORMAT[image]){
+        CCTexture2D.setDefaultAlphaPixelFormat(this.TEXTURES_PIXEL_FORMAT[image])
+        if(async)
+            sharedTextureCache.addImageAsync(image, asyncHandler)
+        else {
+            return cc.spriteFrameCache.addSpriteFrames(plistFilename, image)
+        }
+
+        CCTexture2D.setDefaultAlphaPixelFormat(kCCTexture2DPixelFormat_RGBA8888)
+    }else{
+        if(async)
+            return sharedTextureCache.addImageAsync(image, asyncHandler)
+        else {
+            //sharedSpriteFrameCache.addSpriteFramesWithFile(plistFilename, image)
+            return cc.spriteFrameCache.addSpriteFrames(plistFilename, image)
+//            var explosionTexture = cc.textureCache.addImage(res.explosion_png);
+//            this._explosions = cc.SpriteBatchNode.create(explosionTexture);
+        }
+    }
+}
+
+/**
+ 从内存中卸载 Sprite Sheets 材质和数据文件
+ @param string plistFilename 数据文件名
+ @param string image 材质文件名
+ **/
+display.removeSpriteFramesWithFile= function(plistFilename, imageName) {
+    var sharedSpriteFrameCache = cc.spriteFrameCache
+    sharedSpriteFrameCache.removeSpriteFramesFromFile(plistFilename)
+    if(imageName)
+        this.removeSpriteFrameByImageName(imageName)
+}
+
+/**
+ 从图像帧缓存中删除一个图像。
+ 有时候，某些图像仅在特定场景中使用，例如背景图。那么在场景退出时，就可以用 display.removeSpriteFrameByImageName() 从缓存里删除不再使用的图像数据。
+ 此外，CCScene 提供了 markAutoCleanupImage() 接口，可以指定场景退出时需要自动清理的图像，推荐使用。
+ @param string 图像文件名
+ **/
+display.removeSpriteFrameByImageName=function(imageName) {
+    var sharedSpriteFrameCache = cc.sharedSpriteFrameCache;
+    sharedSpriteFrameCache.removeSpriteFrameByName(imageName)
+    cc.textureCache.removeTextureForKey(imageName)
+}
+
+
+

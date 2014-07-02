@@ -8,7 +8,7 @@ var LoginLayer =  BaseScene.extend({
 
         //创建一个sprite
         var sprite1 = cc.Sprite.create(res.HelloWorld_png);
-        this.addChild(sprite1);
+//        this.addChild(sprite1);
         sprite1.setPosition(display.cx,display.cy)
         cc.eventManager.addListener(cc.EventListener.create({
             event: cc.EventListener.TOUCH_ONE_BY_ONE, //TOUCH_ONE_BY_ONE 为单次触摸事件监听器
@@ -31,6 +31,30 @@ var LoginLayer =  BaseScene.extend({
                cc.log("点击到了sprite1");
             }
         }),sprite1);
+
+
+        //创建一个plist的小贴图
+
+//        display.addSpriteFramesWithFile("res/explosion.plist","res/explosion.png")
+//        var explosionTexture = cc.textureCache.addImage("res/explosion.png");
+//        var cache = cc.spriteFrameCache.addSpriteFrames(res.explosion,null);
+
+
+        //1.Create a sprite with image path and rect
+//        var sprite1 = cc.Sprite.create("res/HelloHTML5World.png");
+//        var sprite2 = cc.Sprite.create("res/HelloHTML5World.png",cc.rect(0,0,480,320));
+
+        //2.Create a sprite with a sprite frame name. Must add "#" before frame name.
+
+//
+//
+//       // 4.Create a sprite with an exsiting texture contained in a CCTexture2D object
+//        //After creation, the rect will be the size of the texture, and the offset will be (0,0).
+//        var texture = cc.textureCache.addImage("res/CloseNormal.png");
+//        var sprite4 = cc.Sprite.create(texture);
+//        var sprite5 = cc.Sprite.create(texture, cc.rect(0,0,480,320));
+//        this.addChild(sprite4);
+//        this.addChild(sprite5);
 
         return true;
     },
