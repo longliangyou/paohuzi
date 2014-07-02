@@ -12,8 +12,11 @@
 
     "jsList" : [
         "src/pomelo/api.js",
+
+        "src/engin/function.js",
         "src/engin/device.js",
         "src/engin/display.js",
+        "src/engin/ui.js",
         "src/engin/EnginInit.js",
         "src/engin/mvcs/scene/BaseScene.js",
         "src/app/GameApp.js",
