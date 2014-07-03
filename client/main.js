@@ -3,7 +3,7 @@
 cc.game.onStart = function(){
     EnginInit.init();//引擎初始化
     GameApp.run();
-    pomeloApi.autoTest(); //
+//    pomeloApi.autoTest(); //pomelo测试
 };
 cc.game.run();
 

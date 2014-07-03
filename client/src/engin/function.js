@@ -50,7 +50,7 @@ function isNumber(obj) {
 /**
     检查并尝试转换为数值，如果无法转换则返回
  把给定的值转换成数字（可以是整数或浮点数）。
- 还记得parseInt()和parseFloat()方法只转换第一个无效字符之前的字符串，因此"4.5.6"将被转换为"4.5"。
+ 还记得parseInt()和 parseFloat() 方法只转换第一个无效字符之前的字符串，因此"4.5.6"将被转换为"4.5"。
  用Number()进行强制类型转换，"4.5.6"将返回NaN，
  因为整个字符串值不能转换成数字。
  如果字符串能被完整地转换，Number()将判断是调用parseInt()方法还是调用parseFloat()方法。
@@ -60,8 +60,9 @@ function isNumber(obj) {
 @return number
 **/
 checknumber=function(value) {
-    //return parseFloat(value)
-    return Number(value)
+    var num = Number(value);
+//    var num =  parseFloat(value).tofixed(1);
+    return num
 }
 
 /**
@@ -80,4 +81,37 @@ checknumber=function(value) {
 **/
 checkbool=function(value){
     return Boolean(value);
+}
+
+
+/**
+ * 格式化字符串输出
+ *类似c++中的string.format %d
+ */
+
+stringFormat =function(pattern, index){
+//    var arr = pattern.split("%"); //字符分割
+//    var oneStr = arr[1];
+//    var dIndex = oneStr.indexOf("d");
+//    var dafter=oneStr.substring(dIndex+1);
+//    var nd = parseInt(oneStr.split("d")[0]); // 提取出 % 和d中间的数字
+//
+//
+//    var newIndexStr = tostring(index);
+//    var lenght = newIndexStr.length;
+//
+//    var num = "";
+//    var bu0 = nd-lenght;
+//    if (bu0>0){
+//        for(var i=0;i<bu0;i++){
+//            num = num + "0"
+//        }
+//    }
+//    newIndexStr = num + newIndexStr
+//
+//    var newStr = arr[0] + newIndexStr + dafter;
+
+    var newStr = pattern + "0" + index + ".png";
+    return newStr
+
 }

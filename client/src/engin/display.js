@@ -254,16 +254,18 @@ local frames = display.newFrames("Walk%04d.png", 1, 8, true)
 @return table 图像帧数组
 **/
 display.newFrames = function(pattern, begin, length, isReversed){
-    var frames = {}
+    var frames = []
     var step = 1
-    var last = begin + length - 1
+    var last = begin + length //- 1
     if (isReversed){
         last=begin;
         begin = begin;
         step = -1
     }
-    for (var index = begin; index < last; index = step) {
-        var frameName = string.format(pattern, index)
+
+    for (var index = begin; index < last; index = index + step) {
+        var frameName = stringFormat(pattern, index)
+        cc.log(frameName);
         var frame = cc.spriteFrameCache.getSpriteFrame(frameName)
         if (frame == null) {
             cc.log("error", "display.newFrames() - invalid frame, name %s", frameName)
@@ -284,14 +286,14 @@ sprite:playAnimationOnce(animation) -- 播放一次动画
 @param number time 每一桢动画之间的间隔时间
 @return Animation Animation对象
 **/
-display.newAnimation =function(frames, time) {
+display.newAnimation =function(frames, time,loops) {
     var count = frames.length
     //-- local array = Array:create()
     //-- for i = 1, count do
     //    --     array:addObject(frames[i])
     //-- end
     time = time || 1.0 / count
-    return cc.Animation.create(frames, time)
+    return cc.Animation.create(frames, time,loops)//frames, delay, loops
 }
 
 

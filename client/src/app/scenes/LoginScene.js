@@ -5,9 +5,9 @@ var LoginLayer =  BaseScene.extend({
     ctor: function () {
         this._super();
 
-
         //创建一个sprite
-        var sprite1 = cc.Sprite.create(res.HelloWorld_png);
+        display.addSpriteFrames("res/explosion.plist","res/explosion.png")
+        var sprite1 = cc.Sprite.create("#explosion_08.png");
 //        this.addChild(sprite1);
         sprite1.setPosition(display.cx,display.cy)
         cc.eventManager.addListener(cc.EventListener.create({
@@ -33,15 +33,33 @@ var LoginLayer =  BaseScene.extend({
         }),sprite1);
 
 
-        //创建一个plist的小贴图
-//        display.addSpriteFramesWithFile("res/explosion.plist","res/explosion.png")
-//        var explosionTexture = cc.textureCache.addImage("res/explosion.png");
-//        var cache = cc.spriteFrameCache.addSpriteFrames(res.explosion,null);
+        //创建动画
+        var decorationParma = {
+            framesName   : "explosion_",
+            framesBegin  : 1,
+            framesLength : 8,
+            framesTime   : 1.0 / 20,
+            zorder       : -2,
+            playForever  : true,
+            autoplay     : true,
+            offsetX      : 10,
+            offsetY      : -4
+        };
+        var decorationParma = {
+            imageName : ["#explosion_08.png", "#explosion_02.png"],
+            offsetX   : [-13, -14, -14],
+            offsetY   : [5, 5, 5],
+            visible   : true,
+            scale :1
+        }
+        var decoration = new Decoration(decorationParma,1)
+        decoration.createView(this)
+        var view = decoration.getView()
+        decoration.setDisplayFrameIndex(1);
+        view.setPosition(display.cx , display.cy)
+        view.flippedX =true
 
 
-        //1.Create a sprite with image path and rect
-//        var sprite1 = cc.Sprite.create("res/HelloHTML5World.png");
-//        var sprite2 = cc.Sprite.create("res/HelloHTML5World.png",cc.rect(0,0,480,320));
 
 
 
