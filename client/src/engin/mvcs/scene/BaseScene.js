@@ -36,6 +36,9 @@ var BaseScene = cc.Layer.extend({
 //        }
 //        if (cc.sys.capabilities.hasOwnProperty('touches')) {
             cc.eventManager.addListener(this.onTouch, this);
+            this.getListener().setEnabled(false);
+//            cc.eventManager.pauseTarget(_this, true);
+//            this.setEnabled(false)
 //        }
         this.schedule(this.tick);
         return true;
