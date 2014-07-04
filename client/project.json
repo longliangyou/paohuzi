@@ -13,6 +13,8 @@
     "jsList" : [
         "src/pomelo/api.js",
 
+        "src/engin/cocos2dx/NodeEx.js",
+        "src/engin/cocos2dx/SpriteEx.js",
         "src/engin/function.js",
         "src/engin/device.js",
         "src/engin/display.js",

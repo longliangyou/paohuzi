@@ -133,7 +133,10 @@ display.init = function(){
 
 
 display.newNode = function(){
-    return cc.Node.create();
+    var node = cc.Node.create();
+    NodeEx.init(node);
+    return node //cc.Node.create();
+//    return NodeEx.create();
 }
 
 /**
@@ -178,7 +181,9 @@ display.newColorLayer = function(color,x,y){
  * @returns {name}
  */
 display.newSprite = function(name,rect){
-    return cc.Sprite.create(name,rect);
+    var sprite =  cc.Sprite.create(name,rect);
+    SpriteEx.init(sprite);
+    return sprite
 }
 
 /**

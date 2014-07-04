@@ -7,8 +7,8 @@ var LoginLayer =  BaseScene.extend({
 
         //创建一个sprite
         display.addSpriteFrames("res/explosion.plist","res/explosion.png")
-        var sprite1 = cc.Sprite.create("#explosion_08.png");
-//        this.addChild(sprite1);
+        var sprite1 =display.newSprite("#explosion_08.png");
+        this.addChild(sprite1);
         sprite1.setPosition(display.cx,display.cy)
         cc.eventManager.addListener(cc.EventListener.create({
             event: cc.EventListener.TOUCH_ONE_BY_ONE, //TOUCH_ONE_BY_ONE 为单次触摸事件监听器
@@ -31,6 +31,11 @@ var LoginLayer =  BaseScene.extend({
                cc.log("点击到了sprite1");
             }
         }),sprite1);
+        var callBack = function(){
+            cc.log("delay test");
+        }
+        sprite1.performWithDelay(callBack,6);
+
 
 
         //创建动画
@@ -45,19 +50,14 @@ var LoginLayer =  BaseScene.extend({
             offsetX      : 10,
             offsetY      : -4
         };
-        var decorationParma = {
-            imageName : ["#explosion_08.png", "#explosion_02.png"],
-            offsetX   : [-13, -14, -14],
-            offsetY   : [5, 5, 5],
-            visible   : true,
-            scale :1
-        }
+
         var decoration = new Decoration(decorationParma,1)
         decoration.createView(this)
         var view = decoration.getView()
         decoration.setDisplayFrameIndex(1);
         view.setPosition(display.cx , display.cy)
         view.flippedX =true
+
 
 
 

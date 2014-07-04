@@ -31,13 +31,29 @@ var BaseScene = cc.Layer.extend({
 
         //开启当前视窗的触屏响应处理。
         //this.setTouchEnabled(true);
-
-        cc.eventManager.addListener(this.onTouch, this);
+//        if (cc.sys.capabilities.hasOwnProperty('keyboard')) {
+            cc.eventManager.addListener(this.onKeyboard, this);
+//        }
+//        if (cc.sys.capabilities.hasOwnProperty('touches')) {
+            cc.eventManager.addListener(this.onTouch, this);
+//        }
         this.schedule(this.tick);
         return true;
     },
+    onKeyboard:cc.EventListener.create({
+        event: cc.EventListener.KEYBOARD,
+        onKeyPressed: function (keyCode, event) {
+            cc.log("onKeyPressed",keyCode);
+        },
+        onKeyReleased: function (keyCode, event) {
+           cc.log("onKeyReleased",keyCode);
+            if(keyCode == cc.KEY.back){
 
+            }else if(keyCode == cc.KEY.menu){
 
+            }
+        }
+    }),
     //http://www.cnblogs.com/linn/p/3658140.html 事件
     onTouch : cc.EventListener.create({
         event: cc.EventListener.TOUCH_ONE_BY_ONE, //TOUCH_ONE_BY_ONE 为单次触摸事件监听器

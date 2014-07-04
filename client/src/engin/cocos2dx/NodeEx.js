@@ -3,7 +3,25 @@
  * Created by Administrator on 2014/7/2.
  */
 
-var NodeEx = {}
+var NodeEx={
+
+    init: function (target) {
+        target.performWithDelay = function (callback, delay) {
+            var action = transition.sequence([
+                cc.DelayTime.create(delay),
+                cc.CallFunc.create(callback)
+            ]);
+            target.runAction(action);
+            return action
+        }
+    }
+
+
+};
+
+
+
+
 
 
 //NodeEx:schedule=function(callback, interval)
@@ -16,11 +34,5 @@ var NodeEx = {}
 //return action
 //end
 //
-//function NodeEx:performWithDelay(callback, delay)
-//local action = transition.sequence({
-//    CCDelayTime:create(delay),
-//    CCCallFunc:create(callback),
-//})
-//self:runAction(action)
-//return action
-//end
+
+

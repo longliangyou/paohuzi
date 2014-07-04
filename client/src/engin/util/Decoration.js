@@ -2,30 +2,31 @@
  * 帧动画或者精灵显示
  * 使用方法：
 
+     //创建动画
      var decorationParma = {
-        framesName   : "ShipWaveA%04d.png",
-        framesBegin  : 1,
-        framesLength : 16,
-        framesTime   : 1.0 / 20,
-        zorder       : -2,
-        playForever  : true,
-        autoplay     : true,
-        offsetX      : 0,
-        offsetY      : -4,
-    };
+                framesName   : "explosion_",
+                framesBegin  : 1,
+                framesLength : 8,
+                framesTime   : 1.0 / 20,
+                zorder       : -2,
+                playForever  : true,
+                autoplay     : true,
+                offsetX      : 10,
+                offsetY      : -4
+            };
      var decorationParma = {
-        imageName : {"#PlayerTower0101Destroyed.png", "#PlayerTower0102Destroyed.png"},
-        offsetX   : {-13, -14, -14},
-        offsetY   : {5, 5, 5},
-        visible   : false,
-    }
-     var decoration = Decoration.new(decorationParma, object.staticIndex_)
-     decoration.createView(batch)
-
-     local view = decoration.getView()
-     batch.reorderChild(view, objectZOrder + decoration.zorder_)
-     view.setPosition(x + decoration.offsetX_, y + decoration.offsetY_)
-     view.setFlipX(flip)
+                imageName : ["#explosion_08.png", "#explosion_02.png"],
+                offsetX   : [-13, -14, -14],
+                offsetY   : [5, 5, 5],
+                visible   : true,
+                scale :1
+            }
+     var decoration = new Decoration(decorationParma,1)
+     decoration.createView(this)
+     var view = decoration.getView()
+     decoration.setDisplayFrameIndex(1);
+     view.setPosition(display.cx , display.cy)
+     view.flippedX =true
  *
  * Created by Administrator on 2014/7/3.
  */
