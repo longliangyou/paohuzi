@@ -157,12 +157,16 @@ display.newBatchNode = function(image, capacity){
 }
 
 display.newLayer = function(){
-    return cc.Layer.create();
+    var layer = cc.Layer.create();
+    LayerEx.init(layer);
+    return layer;
 }
 display.newColorLayer = function(color,x,y){
     //cc.color(255, 100, 100, 128)
     //ws.width / 2, ws.height / 2
-    return cc.LayerColor.create(color,x,y);
+    var layer = cc.LayerColor.create(color,x,y);
+    LayerEx.init(layer);
+    return layer
 }
 
 /**

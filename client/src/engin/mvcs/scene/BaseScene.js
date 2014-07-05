@@ -30,18 +30,22 @@ var BaseScene = cc.Layer.extend({
         this.addChild(this.tipLayer_);//tip层
 
         //开启当前视窗的触屏响应处理。
-        //this.setTouchEnabled(true);
 //        if (cc.sys.capabilities.hasOwnProperty('keyboard')) {
             cc.eventManager.addListener(this.onKeyboard, this);
 //        }
 //        if (cc.sys.capabilities.hasOwnProperty('touches')) {
-            cc.eventManager.addListener(this.onTouch, this);
-            this.getListener().setEnabled(false);
-//            cc.eventManager.pauseTarget(_this, true);
-//            this.setEnabled(false)
+//            cc.eventManager.addListener(this.onTouch, this);
+              this.setTouchEnabled(true);
 //        }
         this.schedule(this.tick);
         return true;
+    },
+    setTouchEnabled:function(enable){
+        if(enable) {
+            cc.eventManager.addListener(this.onTouch);
+        }else{
+            cc.eventManager.removeListener(this.onTouch, this);
+        }
     },
     onKeyboard:cc.EventListener.create({
         event: cc.EventListener.KEYBOARD,
@@ -65,7 +69,6 @@ var BaseScene = cc.Layer.extend({
             //var target = event.getCurrentTarget();
             var x = touch.getLocation().x;
             var y = touch.getLocation().y;
-            cc.log(event,touch,x,y,touch);
             this.drag = {
                 startX  : x,
                 startY  : y,
@@ -80,13 +83,14 @@ var BaseScene = cc.Layer.extend({
             //BaseScene.touchesBeganHandle(event);//这里为什么不能调用BaseScene.touchesBeganHandle 的方法
             return true
         },
-        onTouchesMoved:function (touches, event) {
+        onTouchMoved:function (touches, event) {
             //BaseScene.touchesMovedHandle(event);
-            cc.log("onTouchEnded");
+            cc.log("onTouchesMoved");
+            return true
         },
-        onTouchesCancelled :function (touches, event) {
+        onTouchCancelled :function (touches, event) {
             //BaseScene.touchesCancelledHandle(event);
-            cc.log("onTouchesCancelled");
+            cc.log("onTouchCancelled");
         },
         onTouchEnded: function (touch, event) {
             this.drag = null;
