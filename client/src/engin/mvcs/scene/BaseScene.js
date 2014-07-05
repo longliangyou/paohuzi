@@ -30,19 +30,18 @@ var BaseScene = cc.Layer.extend({
         this.addChild(this.tipLayer_);//tip层
 
         //开启当前视窗的触屏响应处理。
-//        if (cc.sys.capabilities.hasOwnProperty('keyboard')) {
-            cc.eventManager.addListener(this.onKeyboard, this);
-//        }
-//        if (cc.sys.capabilities.hasOwnProperty('touches')) {
-//            cc.eventManager.addListener(this.onTouch, this);
-              this.setTouchEnabled(true);
-//        }
+        //if (cc.sys.capabilities.hasOwnProperty('keyboard'))
+        cc.eventManager.addListener(this.onKeyboard, this);
+
+        //tick帧开启
         this.schedule(this.tick);
+
         return true;
     },
     setTouchEnabled:function(enable){
         if(enable) {
-            cc.eventManager.addListener(this.onTouch);
+//           if (cc.sys.capabilities.hasOwnProperty('touches'))
+            cc.eventManager.addListener(this.onTouch,this);
         }else{
             cc.eventManager.removeListener(this.onTouch, this);
         }

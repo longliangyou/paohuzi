@@ -8,8 +8,7 @@ var TouchUtil = {};
 /**
  * 监听事件
  */
-TouchUtil.addTouchEventListener = function(param){
-    var target = param.target;
+TouchUtil.addTouchEventListener = function(target,param){
     var onTouchEndedHandle = param.onTouchEndedHandle;
     var onTouchMovedHandle = param.onTouchMovedHandle,onTouchBeganHandle = param.onTouchBeganHandle;
 

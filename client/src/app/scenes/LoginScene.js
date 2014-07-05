@@ -10,31 +10,11 @@ var LoginLayer =  BaseScene.extend({
         var sprite1 =display.newSprite("#explosion_08.png");
         this.addChild(sprite1);
         sprite1.setPosition(display.cx,display.cy)
-        cc.eventManager.addListener(cc.EventListener.create({
-            event: cc.EventListener.TOUCH_ONE_BY_ONE, //TOUCH_ONE_BY_ONE 为单次触摸事件监听器
-            swallowTouches: true,
-            onTouchBegan: function (touch, event) {
-                var target = event.getCurrentTarget();
-
-                var locationInNode = target.convertToNodeSpace(touch.getLocation());
-                var s = target.getContentSize();
-                var rect = cc.rect(0, 0, s.width, s.height);
-
-                if (cc.rectContainsPoint(rect, locationInNode)) {
-                    // 需要返回true，否则不会调用后面的onTouchEnded方法
-                    return true;
-                }
-                return false;
-            },
-            onTouchEnded: function (touch, event) {
-               var target = event.getCurrentTarget();
-               cc.log("点击到了sprite1");
-            }
-        }),sprite1);
-        var callBack = function(){
-            cc.log("delay test");
+        var onTouchEndedHandle = function(){
+            cc.log("点击到了");
         }
-        sprite1.performWithDelay(callBack,6);
+        TouchUtil.addTouchEventListener(sprite1,{onTouchEndedHandle:onTouchEndedHandle})
+
 
 
 
