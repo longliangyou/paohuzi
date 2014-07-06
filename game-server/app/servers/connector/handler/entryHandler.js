@@ -23,11 +23,11 @@ ConnectorHandler.prototype.register = function(msg, session, next) {
   var password = msg.password;
 
   // TODO 2. register
-  if (username === "test" || !password){
-    next(null, {code: 500, error: true});
-    return;
-  }
-  next(null, {code: 200, token: "loginToken"});
+//  if (username === "test" || !password){
+//    next(null, {code: 500, error: true});
+//    return;
+//  }
+  next(null, {code: 200, token: "loginToken", username: username, password: password});
 };
 
 
@@ -52,21 +52,20 @@ ConnectorHandler.prototype.login = function(msg, session, next) {
   var password = msg.password;
 
 	//duplicate log in
-	if( !! sessionService.getByUid(uid)) {
-		next(null, {
-			code: 500,
-			error: true
-		});
-		return;
-	}
+//	if( !! sessionService.getByUid(uid)) {
+//		next(null, {
+//			code: 500,
+//			error: true
+//		});
+//		return;
+//	}
 
   // TODO 1. auth
-  if (username !== "long" || password !== "123456"){
-    next(null, {code: 500, error: true});
-    return;
-  }
+//  if (username !== "long" || password !== "123456"){
+//    next(null, {code: 500, error: true});
+//    return;
+//  }
 
-  console.log("#login: passwd auth");
 
 	session.bind(uid);
 	session.set('rid', rid);
@@ -76,9 +75,8 @@ ConnectorHandler.prototype.login = function(msg, session, next) {
 		}
 	});
 	session.on('closed', onUserLeave.bind(null, self.app));
-  next(null, {code: 200, error: false});
+  next(null, {code: 200, username: username, password: password, msg: "login with " + username});
 
-  console.log("#login: end");
 
 	//put user into channel
 //	self.app.rpc.chat.chatRemote.add(session, uid, self.app.get('serverId'), rid, true, function(users){

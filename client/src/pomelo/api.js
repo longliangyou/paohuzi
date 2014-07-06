@@ -33,14 +33,14 @@ pomeloApi.autoTest = function(){
 };
 
 
-
+// example: pomeloApi.register("long", "111111", callback)
 pomeloApi.register = function(username, password, callback){
   var self = this;
   self.pomelo.request(self.route.connector.register, {
     username: username,
     password: password
   }, function(data){
-    console.log("#register: ", data);
+    console.log("#register: ", JSON.stringify(data));
     callback(data);
   })
 };
@@ -55,14 +55,11 @@ pomeloApi.register = function(username, password, callback){
  *   password: "password",
  *   logintoken: "loginToken"
  * }
- * exmaple 1 : {
- *   username: "long",
- *   password: "123456",
- * }
- * example 2: {
- *   username: "long",
- *   loginToken: "asdfdguy234sdlfha0r89qy3h23kj123874"
- * }
+ *
+ * example:
+ * pomeloApi.login({username: "long", password: "111111"}, callback)
+ * pomeloApi.login({username: "long", loginToken: "lsdjf34u9f0uds0fu"}, callback)
+ *
  * @return {data}
  */
 pomeloApi.login = function(loginOption, callback) {
@@ -87,7 +84,7 @@ pomeloApi.login = function(loginOption, callback) {
   }
 
   self.pomelo.request(self.route.connector.login, option, function(data){
-    console.log("#login: ", data);
+    console.log("#login: ", JSON.stringify(data));
     callback(data);
   });
 };
