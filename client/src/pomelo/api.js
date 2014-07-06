@@ -34,31 +34,61 @@ pomeloApi.autoTest = function(){
 
 
 
-pomeloApi.register = function(username, password){
+pomeloApi.register = function(username, password, callback){
   var self = this;
   self.pomelo.request(self.route.connector.register, {
     username: username,
     password: password
   }, function(data){
     console.log("#register: ", data);
+    callback(data);
   })
 };
 
 
-
-pomeloApi.login = function(username, password) {
+/**
+ * login
+ *
+ * choose one in password and loginToken
+ * @param  {
+ *   username: "username",
+ *   password: "password",
+ *   logintoken: "loginToken"
+ * }
+ * exmaple 1 : {
+ *   username: "long",
+ *   password: "123456",
+ * }
+ * example 2: {
+ *   username: "long",
+ *   loginToken: "asdfdguy234sdlfha0r89qy3h23kj123874"
+ * }
+ * @return {data}
+ */
+pomeloApi.login = function(loginOption, callback) {
   var self = this;
   console.log("Connect Server: ", self.connectServer.host, self.connectServer.port, self.currentStatus);
   if (!self.connectServer.host || !self.connectServer.port || !self.currentStatus){
     return;
   }
 
-  self.pomelo.request(self.route.connector.login, {
-    uid: self.uid,
-    username: username,
-    password: password
-  }, function(data){
+  if (loginOption.password){
+    option = {
+      uid: self.uid,
+      username: loginOption.username,
+      password: loginOption.password
+    }
+  } else {
+    option = {
+      uid: self.uid,
+      username: loginOption.username,
+      loginToken: loginOption.loginToken
+    }
+  }
+
+  self.pomelo.request(self.route.connector.login, option, function(data){
     console.log("#login: ", data);
+    callback(data);
   });
 };
 
