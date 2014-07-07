@@ -10,10 +10,12 @@ var LoginLayer =  BaseScene.extend({
         var sprite1 =display.newSprite("#explosion_08.png");
         this.addChild(sprite1);
         sprite1.setPosition(display.cx,display.cy)
-        var onTouchEndedHandle = function(){
-            cc.log("点击到了");
+        var param = {
+            onTouchEndedHandle : function(){
+                cc.log("onTouchEndedHandle 点击到了");
+            }
         }
-        TouchUtil.addTouchEventListener(sprite1,{onTouchEndedHandle:onTouchEndedHandle})
+        TouchUtil.addTouchEventListener(sprite1,param)
 
 
 

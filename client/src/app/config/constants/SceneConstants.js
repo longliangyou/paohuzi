@@ -1,6 +1,6 @@
 /**
  * 游戏中的所有场景
- *  主要方便配置场景的前进 后退场景
+ *  主要方便配置场景的前进 后退场景  以及进入该场景要加载的资源
  * Created by Administrator on 2014/6/30.
  */
 
@@ -9,9 +9,32 @@
 
 var SceneConstants = {
     scene : {
-        LoginScene: ["LoginScene"],//登陆场景
-        FightLoadingScene: ["FightLoadingScene"], //战斗loading场景
-        FightScene: ["FightScene", "LoginScene"]//战斗场景
+        LoginScene:  {//战斗场景
+            scene:"LoginScene",
+            loadResources:[
+                //image
+                //plist
+                "res/explosion.plist"
+
+                //fnt
+
+                //tmx
+
+                //bgm
+
+                //effect
+            ]
+        },
+        FightScene: {//战斗场景
+            scene:"FightScene",
+            backScene:"LoginScene",
+            loadResources:{
+
+            }
+        }
+
+
+
     },
 
 
@@ -30,7 +53,7 @@ var SceneConstants = {
      */
     getScene : function(currentSceneName){
         var arr = this.scene[currentSceneName]
-        var sceneName = arr[0];
+        var sceneName = arr.scene;
         if(sceneName == "LoginScene" ){
             return new LoginScene();
         }
@@ -43,7 +66,7 @@ var SceneConstants = {
      */
     getBackScene : function(currentSceneName){
         var arr = this.scene[currentSceneName]
-        var backScene = arr[1];
+        var backScene = arr.backScene;
 
         return backScene;
     }

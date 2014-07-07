@@ -1,5 +1,23 @@
 /**
- * TouchUtil 按钮初始化
+ * TouchUtil
+ * 使用方法
+
+ //创建一个sprite
+ display.addSpriteFrames("res/explosion.plist","res/explosion.png")
+ var sprite1 =display.newSprite("#explosion_08.png");
+ this.addChild(sprite1);
+ sprite1.setPosition(display.cx,display.cy)
+
+ var param = {
+    onTouchEndedHandle : function(){
+        cc.log("onTouchEndedHandle 点击到了");
+    }
+ }
+TouchUtil.addTouchEventListener(sprite1,param)
+
+
+ *
+ * 给按钮添加触摸
  * Created by xhl on 2014/7/5.
  */
 var TouchUtil = {};
@@ -7,6 +25,8 @@ var TouchUtil = {};
 
 /**
  * 监听事件
+ * @param target 要添加触摸的显示对象
+ * @param 相关的事件回调  比如触摸结束 触摸开始  触摸移动等
  */
 TouchUtil.addTouchEventListener = function(target,param){
     var onTouchEndedHandle = param.onTouchEndedHandle;

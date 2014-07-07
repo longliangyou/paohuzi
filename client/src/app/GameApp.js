@@ -24,7 +24,7 @@ GameApp.run =function(){
 
     //通过调用enterScene 方法进入场景
     var arr = SceneConstants.getSceneName("LoginScene");
-    this.enterScene(arr[0],arr[1])
+    this.enterScene(arr.scene,arr.backScene,arr.loadResources)
 }
 
 
@@ -37,12 +37,13 @@ GameApp.run =function(){
  * @param backScaneName 当前场景的上一个返回场景
  * @param param 进入场景的一些参数
  */
-GameApp.enterScene = function(sceneName,backScaneName, param){
+GameApp.enterScene = function(sceneName,backScaneName,loadResources, param){
     enterSceneFun = function(sceneName, args){
         var scenePackageName = this. packageRoot + ".scenes." + sceneName;
         var sceneClass = scenePackageName; //这里就是动态加载一个类
 
-        cc.LoaderScene.preload(g_resources, function () {
+
+        cc.LoaderScene.preload(loadResources, function () {
             var scene = SceneConstants.getScene(sceneName)//sceneClass.new(args)
             cc.director.runScene(scene);
         }, this);
