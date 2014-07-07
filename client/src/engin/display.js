@@ -132,6 +132,51 @@ display.init = function(){
 
 
 
+
+
+
+
+
+
+display.COLOR_WHITE = cc.color.WHITE
+display.COLOR_BLACK = cc.color.BLACK
+display.COLOR_RED   = cc.color.RED
+display.COLOR_GREEN = cc.color.GREEN
+display.COLOR_BLUE  = cc.color.BLUE
+
+
+
+display.CENTER        = 0
+display.LEFT_TOP      = 1; display.TOP_LEFT      = 1
+display.CENTER_TOP    = 2; display.TOP_CENTER    = 2
+display.RIGHT_TOP     = 3; display.TOP_RIGHT     = 3
+display.CENTER_LEFT   = 4; display.LEFT_CENTER   = 4
+display.CENTER_RIGHT  = 5; display.RIGHT_CENTER  = 5
+display.BOTTOM_LEFT   = 6; display.LEFT_BOTTOM   = 6
+display.BOTTOM_RIGHT  = 7; display.RIGHT_BOTTOM  = 7
+display.BOTTOM_CENTER = 8; display.CENTER_BOTTOM = 8
+
+display.ANCHOR_POINTS = [
+{x:0.5, y:0.5},  // CENTER
+{x:0, y:1},      // TOP_LEFT
+{x:0.5, y:1},    // TOP_CENTER
+{x:1, y:1},      // TOP_RIGHT
+{x:0, y:0.5},    // CENTER_LEFT
+{x:1,y: 0.5},    // CENTER_RIGHT
+{x:0, y:0},      // BOTTOM_LEFT
+{x:1,y: 0},      // BOTTOM_RIGHT
+{x:0.5,y: 0}    // BOTTOM_CENTER
+]
+
+
+
+
+
+
+
+
+
+
 display.newNode = function(){
     var node = cc.Node.create();
     NodeEx.init(node);
@@ -164,6 +209,9 @@ display.newLayer = function(){
 display.newColorLayer = function(color,x,y){
     //cc.color(255, 100, 100, 128)
     //ws.width / 2, ws.height / 2
+    if(color && !color.a)
+        color.a = 255;
+
     var layer = cc.LayerColor.create(color,x,y);
     LayerEx.init(layer);
     return layer

@@ -23,7 +23,7 @@ GameApp.run =function(){
 //    }, this);
 
     //通过调用enterScene 方法进入场景
-    var arr = SceneConstants.getSceneName("LoginScene");
+    var arr = SceneConstants.getSceneName("HallScene");
     this.enterScene(arr.scene,arr.backScene,arr.loadResources)
 }
 

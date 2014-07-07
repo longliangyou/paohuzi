@@ -13,6 +13,15 @@ var NodeEx={
             ]);
             target.runAction(action);
             return action
+        },
+
+        target.align=function(anchorPoint, x, y){
+            var anchorPoint = display.ANCHOR_POINTS[anchorPoint] || {x:0,y:0}
+            target.setAnchorPoint(anchorPoint.x,anchorPoint.y);
+            if(x && y){
+                target.setPosition(x, y)
+            }
+            return target
         }
     }
 

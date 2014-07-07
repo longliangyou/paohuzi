@@ -25,6 +25,22 @@ var SceneConstants = {
                 //effect
             ]
         },
+        HallScene:{
+            scene:"HallScene",
+            loadResources:[
+                //image
+                //plist
+                "res/explosion.plist"
+
+                //fnt
+
+                //tmx
+
+                //bgm
+
+                //effect
+            ]
+        },
         FightScene: {//战斗场景
             scene:"FightScene",
             backScene:"LoginScene",
@@ -54,9 +70,11 @@ var SceneConstants = {
     getScene : function(currentSceneName){
         var arr = this.scene[currentSceneName]
         var sceneName = arr.scene;
-        if(sceneName == "LoginScene" ){
-            return new LoginScene();
-        }
+//        if(sceneName == "LoginScene" ){
+//            return new LoginScene();
+//        }
+        var sceneCla = eval("new "+sceneName +"()");
+        return sceneCla
 
         return null;
     },

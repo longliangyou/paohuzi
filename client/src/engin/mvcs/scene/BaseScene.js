@@ -9,6 +9,10 @@ var BaseScene = cc.Layer.extend({
     ctor: function () {
         this._super();
 
+        this.mapLayer_ = display.newNode()
+        this.mapLayer_.align(display.LEFT_BOTTOM, 0, 0)
+        this.addChild(this.mapLayer_)
+
         this.floorsLayer_ = display.newNode()
         this.addChild(this.floorsLayer_)//底层
 
