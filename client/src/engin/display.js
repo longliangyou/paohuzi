@@ -34,13 +34,13 @@ display.init = function(){
 //    cc.winSize = cc.director.getWinSize();
 //    cc.view = cc.director.getOpenGLView();
     //var sharedDirector         = cc.director.sharedDirector;
-    var glview =  cc.view //cc.director.getWinSize();//sharedDirector.getOpenGLView()
-    var size = glview.getFrameSize()
+//    var glview =  cc.director.getOpenGLView()  //cc.director.getWinSize();//sharedDirector.getOpenGLView()
+    var glview = cc.view;
+    var size = cc.view.getFrameSize()
     this.sizeInPixels = {width : size.width, height : size.height} //真实的屏幕像素
 
     var w = this.sizeInPixels.width
     var h = this.sizeInPixels.height
-
 
     if ( CONFIG_SCREEN_WIDTH == null || CONFIG_SCREEN_HEIGHT == null){
         CONFIG_SCREEN_WIDTH = w
@@ -66,6 +66,9 @@ display.init = function(){
         }
 
         if(scaleX == null || scaleY == null){
+
+            cc.log( CONFIG_SCREEN_WIDTH,CONFIG_SCREEN_HEIGHT);
+
             scaleX = w / CONFIG_SCREEN_WIDTH;
             scaleY = h / CONFIG_SCREEN_HEIGHT
         }
@@ -108,24 +111,24 @@ display.init = function(){
     this.heightInPixels     = this.sizeInPixels.height
 
     //打印信息
-    cc.log("# CONFIG_SCREEN_AUTOSCALE      = %s", CONFIG_SCREEN_AUTOSCALE)
-    cc.log("# CONFIG_SCREEN_WIDTH          = %0.2f", CONFIG_SCREEN_WIDTH)
-    cc.log("# CONFIG_SCREEN_HEIGHT         = %0.2f", CONFIG_SCREEN_HEIGHT)
-    cc.log("# display.widthInPixels        = %0.2f", this.widthInPixels)
-    cc.log("# display.heightInPixels       = %0.2f", this.heightInPixels)
-    cc.log("# display.contentScaleFactor   = %0.2f", this.contentScaleFactor)
-    cc.log("# display.width                = %0.2f", this.width)
-    cc.log("# display.height               = %0.2f", this.height)
-    cc.log("# display.cx                   = %0.2f", this.cx)
-    cc.log("# display.cy                   = %0.2f", this.cy)
-    cc.log("# display.left                 = %0.2f", this.left)
-    cc.log("# display.right                = %0.2f", this.right)
-    cc.log("# display.top                  = %0.2f", this.top)
-    cc.log("# display.bottom               = %0.2f", this.bottom)
-    cc.log("# display.c_left               = %0.2f", this.c_left)
-    cc.log("# display.c_right              = %0.2f", this.c_right)
-    cc.log("# display.c_top                = %0.2f", this.c_top)
-    cc.log("# display.c_bottom             = %0.2f", this.c_bottom)
+    cc.log("# CONFIG_SCREEN_AUTOSCALE      = %s     =", CONFIG_SCREEN_AUTOSCALE)
+    cc.log("# CONFIG_SCREEN_WIDTH          = %0.2f  =", CONFIG_SCREEN_WIDTH)
+    cc.log("# CONFIG_SCREEN_HEIGHT         = %0.2f  =", CONFIG_SCREEN_HEIGHT)
+    cc.log("# display.widthInPixels        = %0.2f  =", this.widthInPixels)
+    cc.log("# display.heightInPixels       = %0.2f  =", this.heightInPixels)
+    cc.log("# display.contentScaleFactor   = %0.2f  =", this.contentScaleFactor)
+    cc.log("# display.width                = %0.2f  =", this.width)
+    cc.log("# display.height               = %0.2f  =", this.height)
+    cc.log("# display.cx                   = %0.2f  =", this.cx)
+    cc.log("# display.cy                   = %0.2f  =", this.cy)
+    cc.log("# display.left                 = %0.2f  =", this.left)
+    cc.log("# display.right                = %0.2f  =", this.right)
+    cc.log("# display.top                  = %0.2f  =", this.top)
+    cc.log("# display.bottom               = %0.2f  =", this.bottom)
+    cc.log("# display.c_left               = %0.2f  =", this.c_left)
+    cc.log("# display.c_right              = %0.2f  =", this.c_right)
+    cc.log("# display.c_top                = %0.2f  =", this.c_top)
+    cc.log("# display.c_bottom             = %0.2f  =", this.c_bottom)
     cc.log("#")
 }
 
