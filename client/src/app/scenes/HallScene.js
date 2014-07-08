@@ -8,8 +8,28 @@ var HallLayer =  BaseScene.extend({
         this._super();
 
 
+        //背景层
+        var backgroundLayer = this.backgroundLayer_;
+
         var bg = display.newColorLayer(display.COLOR_BLUE);
-        this.addChild(bg);
+        backgroundLayer.addChild(bg);
+
+        var hall_image_up = display.newSprite("#hall_image_up.png",display.cx,display.top-50,null,{size:cc.size(display.width,100)})
+        backgroundLayer.addChild(hall_image_up);
+
+        var hall_image_down = display.newSprite("#hall_image_down.png",display.cx,50,null,{size:cc.size(display.width,100)})
+        backgroundLayer.addChild(hall_image_down);
+
+
+        var ccsTableViewList = new CCSTableViewList()
+        var param = {
+            size:cc.size(300,300),
+            array:[[],[],[]],
+            batch : this
+
+        }
+        ccsTableViewList.initData(param)
+        ccsTableViewList.initView();
 
 
         return true;
@@ -32,6 +52,8 @@ var HallLayer =  BaseScene.extend({
 var HallScene = cc.Scene.extend({
     onEnter: function () {
         this._super();
+        display.addSpriteFrames("res/Sheet_Hall.plist","res/Sheet_Hall.png")
+
         var layer = new HallLayer();
         this.addChild(layer);
     }

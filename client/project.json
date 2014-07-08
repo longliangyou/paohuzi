@@ -8,7 +8,7 @@
     "renderMode" : 0,
     "engineDir":"frameworks/cocos2d-html5",
 
-    "modules" : ["cocos2d"],
+    "modules" : ["cocos2d", "extensions", "external"],
 
     "jsList" : [
         "src/pomelo/api.js",
@@ -24,8 +24,9 @@
         "src/engin/audio.js",
         "src/engin/transition.js",
         "src/engin/util/Decoration.js",
-        "src/engin/EnginInit.js",
+        "src/engin/components/ccstableview/CCSTableViewList.js",
         "src/engin/mvcs/scene/BaseScene.js",
+        "src/engin/EnginInit.js",
         "src/app/GameApp.js",
 
         "src/config.js",

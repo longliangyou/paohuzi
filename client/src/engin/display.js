@@ -234,9 +234,20 @@ display.newColorLayer = function(color,x,y){
  * @param rect  cc.rect(x, y, 85, 121)
  * @returns {name}
  */
-display.newSprite = function(name,rect){
+display.newSprite = function(name,x,y,rect,params){
     var sprite =  cc.Sprite.create(name,rect);
     SpriteEx.init(sprite);
+
+    var size
+    if(params && params.size){
+        size = params.size
+        sprite.setContentSize(size)
+    }
+
+    if(isNumber(x) && isNumber(y)){
+        sprite.setPosition(x, y);
+    }
+
     return sprite
 }
 
