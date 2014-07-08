@@ -145,7 +145,6 @@ display.COLOR_GREEN = cc.color.GREEN
 display.COLOR_BLUE  = cc.color.BLUE
 
 
-
 display.CENTER        = 0
 display.LEFT_TOP      = 1; display.TOP_LEFT      = 1
 display.CENTER_TOP    = 2; display.TOP_CENTER    = 2
@@ -157,15 +156,15 @@ display.BOTTOM_RIGHT  = 7; display.RIGHT_BOTTOM  = 7
 display.BOTTOM_CENTER = 8; display.CENTER_BOTTOM = 8
 
 display.ANCHOR_POINTS = [
-{x:0.5, y:0.5},  // CENTER
-{x:0, y:1},      // TOP_LEFT
-{x:0.5, y:1},    // TOP_CENTER
-{x:1, y:1},      // TOP_RIGHT
-{x:0, y:0.5},    // CENTER_LEFT
-{x:1,y: 0.5},    // CENTER_RIGHT
-{x:0, y:0},      // BOTTOM_LEFT
-{x:1,y: 0},      // BOTTOM_RIGHT
-{x:0.5,y: 0}    // BOTTOM_CENTER
+    {x:0.5, y:0.5},  // CENTER
+    {x:0, y:1},      // TOP_LEFT
+    {x:0.5, y:1},    // TOP_CENTER
+    {x:1, y:1},      // TOP_RIGHT
+    {x:0, y:0.5},    // CENTER_LEFT
+    {x:1,y: 0.5},    // CENTER_RIGHT
+    {x:0, y:0},      // BOTTOM_LEFT
+    {x:1,y: 0},      // BOTTOM_RIGHT
+    {x:0.5,y: 0}    // BOTTOM_CENTER
 ]
 
 
