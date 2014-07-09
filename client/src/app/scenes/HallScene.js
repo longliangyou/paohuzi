@@ -14,22 +14,30 @@ var HallLayer =  BaseScene.extend({
         var bg = display.newColorLayer(display.COLOR_BLUE);
         backgroundLayer.addChild(bg);
 
-        var hall_image_up = display.newSprite("#hall_image_up.png",display.cx,display.top-50,null,{size:cc.size(display.width,100)})
+        var hall_image_up = display.newSprite("#hall_image_up.png",display.cx,display.top-50,null)
+        hall_image_up.setContentSizeScale(display.width,100);
         backgroundLayer.addChild(hall_image_up);
 
-        var hall_image_down = display.newSprite("#hall_image_down.png",display.cx,50,null,{size:cc.size(display.width,100)})
+        var hall_image_down = display.newSprite("#hall_image_down.png",display.cx,50,null)
+        hall_image_down.setContentSizeScale(display.width,100);
         backgroundLayer.addChild(hall_image_down);
 
 
-        var ccsTableViewList = new CCSTableViewList()
+        //中间的listview 选择房间类型
         var param = {
-            size:cc.size(300,300),
-            array:[[],[],[]],
-            batch : this
-
+            size : cc.size(960, 255),
+            cellSize:cc.size(220,255),
+            direction:ccui.ScrollView.DIR_HORIZONTAL //ccui.ScrollView.DIR_VERTICAL
         }
-        ccsTableViewList.initData(param)
-        ccsTableViewList.initView();
+        var ccsListView = new CCSListView()
+        ccsListView.init(param);
+        ccsListView.setPosition(0,display.cy-255/2+30);
+        backgroundLayer.addChild(ccsListView);
+
+        //开速开始按钮
+        var startSpt = display.newSprite("#hall_image_start.png",display.cx,140)
+        backgroundLayer.addChild(startSpt);
+
 
 
         return true;

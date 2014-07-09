@@ -1,6 +1,11 @@
 
+
 //这里交给 GameApp　处理
 cc.game.onStart = function(){
+//    cc.view.adjustViewPort(true);
+//    cc.view.setDesignResolutionSize(960,640,cc.ResolutionPolicy.SHOW_ALL);
+//    cc.view.resizeWithBrowserSize(true);
+
     EnginInit.init();//引擎初始化
     GameApp.run();
 };

@@ -13,6 +13,8 @@ var SceneConstants = {
             scene:"LoginScene",
             loadResources:[
                 //image
+
+
                 //plist
                 "res/explosion.plist"
 
@@ -29,6 +31,8 @@ var SceneConstants = {
             scene:"HallScene",
             loadResources:[
                 //image
+                "res/hall_image_3ren.png",
+
                 //plist
                 "res/Sheet_Hall.plist"
 

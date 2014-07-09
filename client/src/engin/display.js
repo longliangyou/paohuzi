@@ -37,7 +37,7 @@ display.init = function(){
 //    var glview =  cc.director.getOpenGLView()  //cc.director.getWinSize();//sharedDirector.getOpenGLView()
     var glview = cc.view;
     var size = cc.view.getFrameSize()
-    this.sizeInPixels = {width : size.width, height : size.height} //真实的屏幕像素
+    this.sizeInPixels = {width:960,height:640}//{width : size.width, height : size.height} //真实的屏幕像素
 
     var w = this.sizeInPixels.width
     var h = this.sizeInPixels.height
@@ -66,9 +66,6 @@ display.init = function(){
         }
 
         if(scaleX == null || scaleY == null){
-
-            cc.log( CONFIG_SCREEN_WIDTH,CONFIG_SCREEN_HEIGHT);
-
             scaleX = w / CONFIG_SCREEN_WIDTH;
             scaleY = h / CONFIG_SCREEN_HEIGHT
         }
@@ -85,7 +82,7 @@ display.init = function(){
             cc.log("display - invalid CONFIG_SCREEN_AUTOSCALE \"%s\"", CONFIG_SCREEN_AUTOSCALE)
         }
 
-        glview.setDesignResolutionSize(CONFIG_SCREEN_WIDTH, CONFIG_SCREEN_HEIGHT, cc.ResolutionPolicy.NO_BORDER)
+//        glview.setDesignResolutionSize(CONFIG_SCREEN_WIDTH, CONFIG_SCREEN_HEIGHT, cc.ResolutionPolicy.NO_BORDER)
     }
 
 
@@ -234,15 +231,10 @@ display.newColorLayer = function(color,x,y){
  * @param rect  cc.rect(x, y, 85, 121)
  * @returns {name}
  */
-display.newSprite = function(name,x,y,rect,params){
+display.newSprite = function(name,x,y,rect){
     var sprite =  cc.Sprite.create(name,rect);
     SpriteEx.init(sprite);
 
-    var size
-    if(params && params.size){
-        size = params.size
-        sprite.setContentSize(size)
-    }
 
     if(isNumber(x) && isNumber(y)){
         sprite.setPosition(x, y);
@@ -314,7 +306,7 @@ display.newSpriteFrame =function(frameName) {
 /**
 以特定模式创建一个包含多个图像帧对象的数组。
 -- 创建一个数组，包含 Walk0001.png 到 Walk0008.png 的 8 个图像帧对象
-local frames = display.newFrames("Walk%04d.png", 1, 8)
+local frames = display.newFrames("Walk%d.png", 1, 8)
 -- 创建一个数组，包含 Walk0008.png 到 Walk0001.png 的 8 个图像帧对象
 local frames = display.newFrames("Walk%04d.png", 1, 8, true)
 @param string pattern 模式字符串
@@ -334,7 +326,8 @@ display.newFrames = function(pattern, begin, length, isReversed){
     }
 
     for (var index = begin; index < last; index = index + step) {
-        var frameName = stringFormat(pattern, index)
+        //var frameName = stringFormat(pattern, index)
+        var frameName = name.replace('%d', index);
         cc.log(frameName);
         var frame = cc.spriteFrameCache.getSpriteFrame(frameName)
         if (frame == null) {
