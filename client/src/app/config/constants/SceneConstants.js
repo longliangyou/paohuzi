@@ -31,7 +31,7 @@ var SceneConstants = {
             scene:"HallScene",
             loadResources:[
                 //image
-                "res/hall_image_3ren.png",
+
 
                 //plist
                 "res/Sheet_Hall.plist"

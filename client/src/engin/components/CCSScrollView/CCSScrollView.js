@@ -33,9 +33,11 @@ var CCSScrollView = cc.Node.extend({
                     var claX = 0
                     var claY = 0
                     if(direction == ccui.ScrollView.DIR_HORIZONTAL) {//横板
-                        claX = i * cellSize.width;
+                        claX = i * cellSize.width + cellSize.width/2;
+                        claY = cellSize.height/2;
                     }else {
-                        claY = i * cellSize.height;
+                        claX = cellSize.width/2;
+                        claY = i * cellSize.height + cellSize.height/2;
                     }
 
 
@@ -47,7 +49,7 @@ var CCSScrollView = cc.Node.extend({
 
                 if(direction == ccui.ScrollView.DIR_HORIZONTAL) {//横板
                     var  innerContainerlen =  array.length * cellSize.width;
-                    scrollView.setInnerContainerSize(cc.size(size.width + innerContainerlen, size.height));//scrollHeight 就是可以滑动的高度
+                    scrollView.setInnerContainerSize(cc.size( innerContainerlen, size.height));//scrollHeight 就是可以滑动的高度
                 }else{
                     var  innerContainerlen =  array.length * cellSize.height;
                     scrollView.setInnerContainerSize(cc.size(size.width, size.height + scrollHeight));//scrollHeight 就是可以滑动的高度

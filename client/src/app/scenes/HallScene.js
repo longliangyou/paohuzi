@@ -28,7 +28,7 @@ var HallLayer =  BaseScene.extend({
             size : cc.size(960, 255),
             cellSize:cc.size(220,255),
             cellName:"CCSScrollCellView_HallType",
-            array:[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
+            array:[[],[],[],[],[],[],[],[],[],[]],
             direction:ccui.ScrollView.DIR_HORIZONTAL //ccui.ScrollView.DIR_VERTICAL
         }
         var ccsScrollView = new CCSScrollView()
