@@ -1,5 +1,16 @@
 /**
  * CCSListView.js
+ * 使用方法：
+ *  var param = {
+        size : cc.size(960, 255),
+        cellSize:cc.size(220,255),
+        direction:ccui.ScrollView.DIR_HORIZONTAL //ccui.ScrollView.DIR_VERTICAL
+    }
+    var ccsListView = new CCSListView()
+    ccsListView.init(param);
+    ccsListView.setPosition(0,display.cy-255/2+30);
+    backgroundLayer.addChild(ccsListView);
+
  * Created by Administrator on 2014/7/8.
  */
 

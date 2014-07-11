@@ -26,7 +26,7 @@
         "src/engin/util/Decoration.js",
         "src/engin/components/ccstableview/CCSTableView.js",
         "src/engin/components/ccslistview/CCSListView.js",
-
+        "src/engin/components/ccsscrollView/CCSScrollView.js",
 
         "src/engin/mvcs/scene/BaseScene.js",
         "src/engin/EnginInit.js",

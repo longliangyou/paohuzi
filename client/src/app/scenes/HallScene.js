@@ -27,16 +27,21 @@ var HallLayer =  BaseScene.extend({
         var param = {
             size : cc.size(960, 255),
             cellSize:cc.size(220,255),
+            cellName:"CCSScrollCellView_HallType",
+            array:[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
             direction:ccui.ScrollView.DIR_HORIZONTAL //ccui.ScrollView.DIR_VERTICAL
         }
-        var ccsListView = new CCSListView()
-        ccsListView.init(param);
-        ccsListView.setPosition(0,display.cy-255/2+30);
-        backgroundLayer.addChild(ccsListView);
+        var ccsScrollView = new CCSScrollView()
+        ccsScrollView.init(param);
+        ccsScrollView.setPosition(0,display.cy-255/2+30);
+        backgroundLayer.addChild(ccsScrollView);
+
+
 
         //开速开始按钮
         var startSpt = display.newSprite("#hall_image_start.png",display.cx,140)
         backgroundLayer.addChild(startSpt);
+
 
 
 
