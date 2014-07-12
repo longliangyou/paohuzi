@@ -12,7 +12,7 @@
 
     "jsList" : [
         "src/pomelo/api.js",
-
+        "src/underscore-min.js",
         "src/engin/cocos2dx/NodeEx.js",
         "src/engin/cocos2dx/LayerEx.js",
         "src/engin/cocos2dx/SpriteEx.js",
