@@ -9,7 +9,15 @@ var CCSScrollCellView_HallType = cc.Node.extend({
     init:function(data){
         var image = data.image;
         var spt = display.newSprite(image)
-        this.spt = spt
         this.addChild(spt);
+
+
+//        var param = {
+//            onTouchEndedHandle : function(){
+//                var arr = SceneConstants.getSceneName("FightScene");
+//                GameApp.enterScene(arr.scene,arr.backScene,arr.loadResources)
+//            }
+//        }
+//        TouchUtil.addTouchEventListener(spt,param)
     }
 })

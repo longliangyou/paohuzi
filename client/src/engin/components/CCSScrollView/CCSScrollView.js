@@ -18,7 +18,7 @@ var CCSScrollView = cc.Node.extend({
             scrollView.setTouchEnabled(true);
             scrollView.setSize(size);
             this.addChild(scrollView);
-
+            //cc.eventManager.addListener(this.listener, scrollView);
 
             //加载cell
             var callBack = function(){//js加载成功
@@ -118,10 +118,14 @@ var CCSScrollView = cc.Node.extend({
         }
         return false;
     },
-
-    onTouchEnded: function (touch) {
-       cc.log("=============",touch);
-    }
+    listener : cc.EventListener.create({
+        event: cc.EventListener.TOUCH_ONE_BY_ONE,
+        swallowTouches:true,
+        onTouchBegan: function(touch, event){
+            cc.log("===onTouchBegan=========");
+            return true
+        }
+    })
 
 
 });
