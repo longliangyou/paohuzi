@@ -1,127 +1,93 @@
-var pomeloApi = {
-  pomelo: window.pomelo,
-  route: {
-    gate: "gate.gateHandler.queryEntry",
-    connector: {
-      login: "connector.entryHandler.login",
-      register: "connector.entryHandler.register"
-    }
-  },
-  gateServer: {
+// pomeloApi 调用方法指南
+
+// 1. 初始化, userId 类似于博雅斗地主的游客ID
+//    pomeloApi.init(userId)
+// 
+// 2. 判断是否已经连接到服务器。
+//    pomeloApi.isReady()
+// 
+// 3. pomeloApi.remote(methodName, options, callback)
+//    调用其它函数，这个 remote 会根据 methodName 查找 methods 里面对应的路由
+//    然后访问服务器，callback 是回调函数。
+//    根据需要填充 methods 数组。
+// 如
+// methods: [
+//   {
+//     name: "login", // 客户端定一个这个调用的名字。
+//     options: {
+//       username: "long",
+//       password: "12345678"
+//     }, // 要传递的参数。
+//     route: "connector.entryHandler.login" // 由服务端来填充。
+//   },
+//   ...
+// ]
+
+var pomeloApi = (function(){
+  var pomelo = window.pomelo;
+
+  var gate = {
+    route: "gate.gateHandler.queryEntry",
     host: "127.0.0.1",
     port: "3014"
-  },
-  connectServer: {
-    host: "",
-    port: ""
-  },
-  status: {
-    IDLE: 0,
-    CONNECTED: 1
-  },
-  currentStatus: 0,
-  user: {
-    uid: "long"
-  }
-};
+  };
+
+  var connector = {};
+
+  var status = false;
+
+  var uid = null;
+
+  // 在这里增加需要调用服务器的资源。
+  // name 调用方法，可以自己定义。
+  // options 传递到服务器的参数
+  // route 服务器路由，由服务端来写，客户端不需要写。
+  var methods = [
+    // {
+    //   name: String,
+    //   options: {
+    //     key: value
+    //   },
+    //   route: String
+    // }
+  ];
 
 
-
-pomeloApi.autoTest = function(){
-  var self = this;
-  self.connectGateServer(self.gateServer.host, self.gateServer.port);
-};
-
-
-// example: pomeloApi.register("long", "111111", callback)
-pomeloApi.register = function(username, password, callback){
-  var self = this;
-  self.pomelo.request(self.route.connector.register, {
-    username: username,
-    password: password
-  }, function(data){
-    console.log("#register: ", JSON.stringify(data));
-    callback(data);
-  })
-};
-
-
-/**
- * login
- *
- * choose one in password and loginToken
- * @param  {
- *   username: "username",
- *   password: "password",
- *   logintoken: "loginToken"
- * }
- *
- * example:
- * pomeloApi.login({username: "long", password: "111111"}, callback)
- * pomeloApi.login({username: "long", loginToken: "lsdjf34u9f0uds0fu"}, callback)
- *
- * @return {data}
- */
-pomeloApi.login = function(loginOption, callback) {
-  var self = this;
-  console.log("Connect Server: ", self.connectServer.host, self.connectServer.port, self.currentStatus);
-  if (!self.connectServer.host || !self.connectServer.port || !self.currentStatus){
-    return;
-  }
-
-  if (loginOption.password){
-    option = {
-      uid: self.uid,
-      username: loginOption.username,
-      password: loginOption.password
-    }
-  } else {
-    option = {
-      uid: self.uid,
-      username: loginOption.username,
-      loginToken: loginOption.loginToken
-    }
-  }
-
-  self.pomelo.request(self.route.connector.login, option, function(data){
-    console.log("#login: ", JSON.stringify(data));
-    callback(data);
-  });
-};
-
-
-
-
-pomeloApi.connectGateServer = function(host, port, gateRoute){
-  var self = this;
-  if (!self.pomelo) {
-    self.pomelo = window.pomelo;
-  }
-
-  if (gateRoute){
-    self.route.gate = gateRoute;
-  }
-
-  self.pomelo.init({
-    host: host,
-    port: port,
-    log: true
-  }, function(){
-    self.pomelo.request(self.route.gate, {uid: self.user.uid}, function(data){
-      console.log("#entry", data);
-      if (data){
-        self.connectServer.host = data.host;
-        self.connectServer.port = data.port;
-        self.currentStatus = self.status.CONNECTED;
-      }
-      self.pomelo.disconnect();
-      self.pomelo.init({
-        host: self.connectServer.host,
-        port: self.connectServer.port,
-        log: true
-      }, function(){
-        self.currentStatus = self.status.CONNECTED;
+  this.init = function(userId, callback){
+    uid = userId;
+    pomelo.init({
+      host: gate.host,
+      port: gate.port,
+      log: true
+    }, function(){
+      pomelo.request(gate.route, {uid: uid}, function(data){
+        console.log("#connector server: " + JSON.Stringify(data));
+        if (data){
+          connector.host = data.host;
+          connector.port = data.port;
+        }
+        pomelo.disconnect();
+        pomelo.init({
+          host: connector.host,
+          port: connector.port,
+          log: true
+        }, function(){
+          status = true;
+          callback(null);
+        });
       });
     });
-  });
-};
+  };
+
+  this.isReady = function(){
+    return this.status;
+  };
+
+  this.remote = function(methodName, options, callback){
+    method = _.find(methods, function(method){ return (method.name == methodName);} );
+    options = _.extend(options, {uid: uid});
+    pomelo.request(method.route, options, callback);
+  };
+
+  return this;
+}());
