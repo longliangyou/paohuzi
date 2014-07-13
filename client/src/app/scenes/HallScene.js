@@ -28,7 +28,13 @@ var HallLayer =  BaseScene.extend({
             size : cc.size(960, 255),
             cellSize:cc.size(220,255),
             cellName:"CCSScrollCellView_HallType",
-            array:[[],[],[],[],[],[],[],[],[],[]],
+            array:[
+                {image:"#hall_image_3ren.png"},
+                {image:"#hall_image_bisai.png"},
+                {image:"#hall_image_bisai.png"},
+                {image:"#hall_image_siren.png"},
+                {image:"#hall_image_siren.png"}
+            ],
             direction:ccui.ScrollView.DIR_HORIZONTAL //ccui.ScrollView.DIR_VERTICAL
         }
         var ccsScrollView = new CCSScrollView()
@@ -39,9 +45,15 @@ var HallLayer =  BaseScene.extend({
 
 
         //开速开始按钮
+        var param = {
+            onTouchEndedHandle : function(){
+                var arr = SceneConstants.getSceneName("FightScene");
+                GameApp.enterScene(arr.scene,arr.backScene,arr.loadResources)
+            }
+        }
         var startSpt = display.newSprite("#hall_image_start.png",display.cx,140)
         backgroundLayer.addChild(startSpt);
-
+        TouchUtil.addTouchEventListener(startSpt,param)
 
 
 

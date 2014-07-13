@@ -24,6 +24,24 @@ var TouchUtil = {};
 
 
 /**
+ * 只监听点击弹起后的事件
+ * @param target
+ * @param param
+ */
+TouchUtil.addTouchEndEventListener = function(target,callBack){
+    var param = {
+        onTouchEndedHandle : function(){
+            if(callBack){
+                callBack();
+            }
+        }
+    }
+    TouchUtil.addTouchEventListener(target,param)
+}
+
+
+
+/**
  * 监听事件
  * @param target 要添加触摸的显示对象
  * @param 相关的事件回调  比如触摸结束 触摸开始  触摸移动等
@@ -70,6 +88,7 @@ TouchUtil.addTouchEventListener = function(target,param){
         onTouchMoved: function(touch, event){
             cc.log("sprite onTouchMoved.. ");
             onTouchMovedHandleFun()
+            return true
         },
         onTouchEnded: function(touch, event){
             cc.log("sprite onTouchesEnded.. ");

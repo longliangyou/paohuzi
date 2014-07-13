@@ -36,6 +36,7 @@
         "src/app/config/constants/SceneConstants.js",
         "src/app/scenes/LoginScene.js",
         "src/app/scenes/HallScene.js",
+        "src/app/scenes/FightScene.js",
 
 
 

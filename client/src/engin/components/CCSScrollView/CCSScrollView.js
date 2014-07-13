@@ -20,7 +20,6 @@ var CCSScrollView = cc.Node.extend({
             this.addChild(scrollView);
 
 
-
             //加载cell
             var callBack = function(){//js加载成功
 
@@ -29,6 +28,7 @@ var CCSScrollView = cc.Node.extend({
                     var cla = eval("new "+cellName +"()");
                     cla.init(one);
                     scrollView.addNode(cla)
+                    //TouchUtil.addTouchEndEventListener(cla.spt,this.onTouchEnded)
 
                     var claX = 0
                     var claY = 0
@@ -117,6 +117,10 @@ var CCSScrollView = cc.Node.extend({
             return true;
         }
         return false;
+    },
+
+    onTouchEnded: function (touch) {
+       cc.log("=============",touch);
     }
 
 

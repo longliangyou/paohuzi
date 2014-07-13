@@ -6,8 +6,10 @@
 var CCSScrollCellView_HallType = cc.Node.extend({
 
 
-    init:function(){
-        var spt = display.newSprite("#hall_image_3ren.png")
+    init:function(data){
+        var image = data.image;
+        var spt = display.newSprite(image)
+        this.spt = spt
         this.addChild(spt);
     }
 })

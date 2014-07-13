@@ -47,10 +47,22 @@ var SceneConstants = {
         },
         FightScene: {//战斗场景
             scene:"FightScene",
-            backScene:"LoginScene",
-            loadResources:{
+            backScene:"HallScene",
+            loadResources:[
+                //image
 
-            }
+
+                //plist
+                "res/Sheet_Hall.plist"
+
+                //fnt
+
+                //tmx
+
+                //bgm
+
+                //effect
+            ]
         }
 
 
