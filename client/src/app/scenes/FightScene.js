@@ -11,6 +11,20 @@ var FightLayer =  BaseScene.extend({
 
         //背景层
         var backgroundLayer = this.backgroundLayer_;
+        var bg = display.newColorLayer(display.COLOR_BLUE);
+        backgroundLayer.addChild(bg);
+
+        var bg = display.newSprite("#fight_bg.png",display.cx,display.cy,null)
+        bg.setContentSizeScale(display.width,display.height);
+        backgroundLayer.addChild(bg);
+
+        var bg_down = display.newSprite("#fight_down_bg.png",display.cx,50,null)
+        bg_down.setContentSizeScale(display.width,100);
+        backgroundLayer.addChild(bg_down);
+
+
+        //加载三个头像显示
+
 
 
 
@@ -38,7 +52,7 @@ var FightScene = cc.Scene.extend({
     },
     onEnter: function () {
         this._super();
-        display.addSpriteFrames("res/Sheet_Hall.plist","res/Sheet_Hall.png")
+        display.addSpriteFrames("res/Sheet_Fight.plist","res/Sheet_Fight.png")
 
         var layer = new FightLayer(this.data_);
         this.addChild(layer);
