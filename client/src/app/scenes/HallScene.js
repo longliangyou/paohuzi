@@ -75,6 +75,9 @@ var HallLayer =  BaseScene.extend({
 
 
 var HallScene = cc.Scene.extend({
+    initData:function(data){
+        this.data_ = data;
+    },
     onEnter: function () {
         this._super();
         display.addSpriteFrames("res/Sheet_Hall.plist","res/Sheet_Hall.png")

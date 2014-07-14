@@ -26,8 +26,8 @@ var CCSScrollView = cc.Node.extend({
                 for(var i=0;i<array.length;i++){
                     var one = array[i];
                     var cla = eval("new "+cellName +"()");
-                    cla.init(one);
-                    scrollView.addNode(cla)
+                    cla.init(i,one,scrollView);
+                    //scrollView.addNode(cla)
                     //TouchUtil.addTouchEndEventListener(cla.spt,this.onTouchEnded)
 
                     var claX = 0
@@ -39,8 +39,6 @@ var CCSScrollView = cc.Node.extend({
                         claX = cellSize.width/2;
                         claY = i * cellSize.height + cellSize.height/2;
                     }
-
-
                     cla.setPosition(claX,claY);
                 }
 
@@ -61,7 +59,7 @@ var CCSScrollView = cc.Node.extend({
 
 
 
-//            //加载ccs的ui
+            //加载ccs的ui
 //            for(var i=0;i<array.length;i++) {
 //                var button = ccui.Button.create();
 //                button.setTouchEnabled(true);

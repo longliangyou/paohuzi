@@ -23,8 +23,8 @@ GameApp.run =function(){
 //    }, this);
 
     //通过调用enterScene 方法进入场景
-    var arr = SceneConstants.getSceneName("HallScene");
-    this.enterScene(arr.scene,arr.backScene,arr.loadResources)
+
+    this.enterScene("HallScene")
 }
 
 
@@ -37,7 +37,12 @@ GameApp.run =function(){
  * @param backScaneName 当前场景的上一个返回场景
  * @param param 进入场景的一些参数
  */
-GameApp.enterScene = function(sceneName,backScaneName,loadResources, param){
+GameApp.enterScene = function(sceneName, param){
+    var arr = SceneConstants.getSceneName(sceneName);
+    var backScaneName = arr.backScene;
+    var loadResources = arr.loadResources;
+
+
     enterSceneFun = function(sceneName, args){
         var scenePackageName = this. packageRoot + ".scenes." + sceneName;
         var sceneClass = scenePackageName; //这里就是动态加载一个类
@@ -45,6 +50,7 @@ GameApp.enterScene = function(sceneName,backScaneName,loadResources, param){
 
         cc.LoaderScene.preload(loadResources, function () {
             var scene = SceneConstants.getScene(sceneName)//sceneClass.new(args)
+            scene.initData(args);
             cc.director.runScene(scene);
         }, this);
         return scene
@@ -52,11 +58,10 @@ GameApp.enterScene = function(sceneName,backScaneName,loadResources, param){
 
 
 
-    if(param == null){
-        param = {
-            sceneName : sceneName
-        };
-    }
+    /**参数**/
+    if(param == null)
+        param = {};
+    param.sceneName = sceneName;
 
 
     //进入场景  并记录  上一个场景名称  当前场景名称  以及当前场景实例

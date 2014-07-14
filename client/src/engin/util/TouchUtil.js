@@ -77,6 +77,9 @@ TouchUtil.addTouchEventListener = function(target,param){
             var s = target.getContentSize();
             var rect = cc.rect(0, 0, s.width, s.height);
 
+//            var currentRect = target.getBoundingBox();
+//            var rect = cc.rect(currentRect.getMinX(), currentRect.getMinY(), currentRect.getMaxX(), currentRect.getMaxY());
+
             if (cc.rectContainsPoint(rect, locationInNode)) {
                 cc.log("sprite onTouchBegan.. ");
                 //target.setOpacity(180);
