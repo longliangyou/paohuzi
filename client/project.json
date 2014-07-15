@@ -39,6 +39,7 @@
         "src/app/scenes/FightScene.js",
 
         "src/app/view/AvatarSprite.js",
+        "src/app/view/CardSprite.js",
 
 
 

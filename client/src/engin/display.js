@@ -222,6 +222,12 @@ display.newColorLayer = function(color,x,y){
  this.addChild(sprite);
 
 
+ 2
+ var spriteFrame = display.newSpriteFrame("fight_wash_card.png")
+ //            cardSpt.initWithSpriteFrame(spriteFrame)
+ cardSpt.setSpriteFrame(spriteFrame);
+
+3
  var texture = cc.textureCache.addImage("res/CloseNormal.png");
  //        var sprite4 = cc.Sprite.create(texture);
  //        var sprite5 = cc.Sprite.create(texture, cc.rect(0,0,480,320));
@@ -296,11 +302,14 @@ display.newScale9Sprite = function(str, rect, rect) {
  @return SpriteFrameCache
  **/
 display.newSpriteFrame =function(frameName) {
-    var frame = cc.spriteFrameCache.getSpriteFrame(frameName);
-    if (frame=null){
-        cc.log("error","display.newSpriteFrame() - invalid frameName %s", frameName)
-    }
-    return frame
+    var spriteFrame = cc.spriteFrameCache.getSpriteFrame(frameName);
+    return spriteFrame;
+
+//    var frame = cc.spriteFrameCache.getSpriteFrame(frameName);
+//    if (frame=null){
+//        cc.log("error","display.newSpriteFrame() - invalid frameName %s", frameName)
+//    }
+//    return frame
 }
 
 /**

@@ -33,18 +33,40 @@ var FightLayer =  BaseScene.extend({
 
         //加载三个头像显示
         var flysLayer = this.flysLayer_
-
-
         var avatarSprite0 = new AvatarSprite();
-        avatarSprite0.setPosition(display.cx,40);
+        avatarSprite0.setPosition(display.cx,display.bottom + 40);
         flysLayer.addChild(avatarSprite0);
+        this.avatarSprite0_ = avatarSprite0
 
 
+        var avatarSprite1 = new AvatarSprite();
+        avatarSprite1.setPosition(display.left + 100,display.top - 40);
+        flysLayer.addChild(avatarSprite1);
+        this.avatarSprite1_ = avatarSprite1
 
+        var avatarSprite2 = new AvatarSprite(1);
+        avatarSprite2.setPosition(display.right - 100,display.top - 40);
+        flysLayer.addChild(avatarSprite2);
+        this.avatarSprite2_ = avatarSprite2
+
+
+        this.sendCard();
 
         return true;
     },
+    /**
+     * 发牌
+     */
+    sendCard:function(){
+        var batch = this.batch_
 
+        var cardSprite = new CardSprite();
+        cardSprite.initData();
+        cardSprite.initView();
+        batch.addChild(cardSprite);
+        cardSprite.setPosition(display.cx,display.cy);
+
+    },
     /**
      * 帧刷新事件
      * @param dt
