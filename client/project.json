@@ -17,6 +17,7 @@
         "src/engin/cocos2dx/LayerEx.js",
         "src/engin/cocos2dx/SpriteEx.js",
         "src/engin/util/TouchUtil.js",
+        "src/engin/util/Math2d.js",
         "src/engin/function.js",
         "src/engin/device.js",
         "src/engin/display.js",

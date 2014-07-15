@@ -40,12 +40,12 @@ var FightLayer =  BaseScene.extend({
 
 
         var avatarSprite1 = new AvatarSprite();
-        avatarSprite1.setPosition(display.left + 100,display.top - 40);
+        avatarSprite1.setPosition(display.left + 120,display.top - 40);
         flysLayer.addChild(avatarSprite1);
         this.avatarSprite1_ = avatarSprite1
 
         var avatarSprite2 = new AvatarSprite(1);
-        avatarSprite2.setPosition(display.right - 100,display.top - 40);
+        avatarSprite2.setPosition(display.right - 120,display.top - 40);
         flysLayer.addChild(avatarSprite2);
         this.avatarSprite2_ = avatarSprite2
 
@@ -59,13 +59,18 @@ var FightLayer =  BaseScene.extend({
      */
     sendCard:function(){
         var batch = this.batch_
+        this.allCardSpt_ = [];
 
-        var cardSprite = new CardSprite();
-        cardSprite.initData();
-        cardSprite.initView();
-        batch.addChild(cardSprite);
-        cardSprite.setPosition(display.cx,display.cy);
+        for(var i=0;i<40;i++) {
+            var cardSprite = new CardSprite();
+            cardSprite.initData();
+            cardSprite.initView();
+            batch.addChild(cardSprite);
+            cardSprite.setPosition(display.cx, display.top + 40);
+            this.allCardSpt_.push(cardSprite)
 
+            transition.moveTo(cardSprite,{delay:i*0.01,time:0.1,y:display.cy + i})
+        }
     },
     /**
      * 帧刷新事件

@@ -77,7 +77,7 @@ transition.create = function(action, args) {
     if(actions.length > 1)
         return transition.sequence(actions)
     else
-        return actions[1]
+        return actions[0]
 }
 
 
