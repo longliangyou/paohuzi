@@ -6,7 +6,7 @@ var FightLayer =  BaseScene.extend({
     ctor: function (data) {
         this._super();
 
-        //数据存储
+        //数据存储  {index:房间类型}
         this.data_ = data;
 
         //背景层
@@ -18,13 +18,26 @@ var FightLayer =  BaseScene.extend({
         bg.setContentSizeScale(display.width,display.height);
         backgroundLayer.addChild(bg);
 
-        var bg_down = display.newSprite("#fight_down_bg.png",display.cx,50,null)
-        bg_down.setContentSizeScale(display.width,100);
+        var bg_down = display.newSprite("#fight_down_bg.png")
+        bg_down.align(display.BOTTOM_LEFT,display.cx,0);
+        bg_down.setContentSizeScale(display.width,159);
         backgroundLayer.addChild(bg_down);
 
 
-        //加载三个头像显示
 
+
+
+
+
+
+
+        //加载三个头像显示
+        var flysLayer = this.flysLayer_
+
+
+        var avatarSprite0 = new AvatarSprite();
+        avatarSprite0.setPosition(display.cx,40);
+        flysLayer.addChild(avatarSprite0);
 
 
 

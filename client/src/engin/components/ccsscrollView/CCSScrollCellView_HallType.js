@@ -4,8 +4,15 @@
  * Created by Administrator on 2014/7/10.
  */
 var CCSScrollCellView_HallType = cc.Class.extend({
+//var CCSScrollCellView_HallType = cc.Node.extend({
 
 
+    /**
+     *初始化
+     * @param index  房间类型
+     * @param data  单个cell的数据
+     * @param batch 父显示类
+     */
     init:function(index,data,batch){
         var image = data.image;
         /**

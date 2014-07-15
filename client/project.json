@@ -38,6 +38,7 @@
         "src/app/scenes/HallScene.js",
         "src/app/scenes/FightScene.js",
 
+        "src/app/view/AvatarSprite.js",
 
 
 
