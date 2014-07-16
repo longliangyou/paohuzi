@@ -35,10 +35,11 @@ var Configure = function(){
     var routeUtil = bearcat.getBean("routeUtil");
     app.route('chat', routeUtil.chat.bind(routeUtil));
 
+    app.route("play", routeUtil.play.bind(routeUtil));
     // filter configures
     app.filter(pomelo.timeout());
   });
-}
+};
 
 var contextPath = require.resolve("./context.json");
 bearcat.createApp([contextPath]);

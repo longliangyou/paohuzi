@@ -8,6 +8,7 @@ cc.game.onStart = function(){
 
     EnginInit.init();//引擎初始化
     GameApp.run();
+    PomeloApi.init('123456', function(){}); // TODO
 };
 cc.game.run();
 

@@ -1,37 +1,12 @@
 var bearcat = require("bearcat");
 var pomelo = require('pomelo');
+var _ = require("underscore");
 
 var ConnectorHandler = function() {
   this.$id = "connectorHandler";
+  this.$userDao = null;
   this.app = pomelo.app;
 };
-
-/**
-* New client register.
-*
-*
-* @param  {Object}   msg     request message
-* @param  {Object}   session current session object
-* @param  {Function} next    next stemp callback
-* @return {Void}
-*/
-ConnectorHandler.prototype.register = function(msg, session, next) {
-  var self = this;
-  var rid = msg.rid;
-  var uid = msg.username + '*' + rid;
-  var username = msg.username;
-  var password = msg.password;
-
-  // TODO 2. register
-//  if (username === "test" || !password){
-//    next(null, {code: 500, error: true});
-//    return;
-//  }
-  next(null, {code: 200, token: "loginToken", username: username, password: password});
-};
-
-
-
 
 /**
  * New client login chat server.
@@ -43,48 +18,27 @@ ConnectorHandler.prototype.register = function(msg, session, next) {
  * @return {Void}
  */
 ConnectorHandler.prototype.login = function(msg, session, next) {
+  console.log("login");
 	var self = this;
-	var rid = msg.rid;
-	var uid = msg.username + '*' + rid
+	var uid = msg.uid;
 	var sessionService = self.app.get('sessionService');
-
-  var username = msg.username;
-  var password = msg.password;
-
-	//duplicate log in
-//	if( !! sessionService.getByUid(uid)) {
-//		next(null, {
-//			code: 500,
-//			error: true
-//		});
-//		return;
-//	}
-
-  // TODO 1. auth
-//  if (username !== "long" || password !== "123456"){
-//    next(null, {code: 500, error: true});
-//    return;
-//  }
 
 
 	session.bind(uid);
-	session.set('rid', rid);
-	session.push('rid', function(err) {
-		if(err) {
-			console.error('set rid for session service failed! error is : %j', err.stack);
-		}
-	});
 	session.on('closed', onUserLeave.bind(null, self.app));
-  next(null, {code: 200, username: username, password: password, msg: "login with " + username});
 
+  var servers = this.app.getServersByType('playroom');
 
-	//put user into channel
-//	self.app.rpc.chat.chatRemote.add(session, uid, self.app.get('serverId'), rid, true, function(users){
-//		next(null, {
-//			users:users
-//		});
-//	});
+  servers = _.map(servers, function(s){
+    return _.pick(s, "id", "name");
+  });
+
+  this.$userDao.getUserInfo(uid, function(error, user){
+    next(null, {code: 200, user: user, servers: servers, msg: "login success! "});
+  });
+
 };
+
 
 /**
  * User log out handler
