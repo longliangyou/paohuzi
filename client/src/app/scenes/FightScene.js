@@ -64,14 +64,14 @@ var FightLayer =  BaseScene.extend({
 
 
         //发牌
-        for(var i=0;i<40;i++) {
+        for(var i=0;i<80;i++) {
             var cardSprite = new CardSprite();
             cardSprite.initData();
             cardSprite.initView();
             batch.addChild(cardSprite);
             cardSprite.setPosition(display.cx, display.top + 40);
             this.allCardSpt_.push(cardSprite)
-            transition.moveTo(cardSprite,{delay:i*0.01,time:0.1,y:display.cy + i})
+            transition.moveTo(cardSprite,{delay:i*0.01,time:0.1,y:display.cy + 0.5})
         }
 
 
