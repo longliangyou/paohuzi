@@ -61,6 +61,9 @@ var FightLayer =  BaseScene.extend({
         var batch = this.batch_
         this.allCardSpt_ = [];
 
+
+
+        //发牌
         for(var i=0;i<40;i++) {
             var cardSprite = new CardSprite();
             cardSprite.initData();
@@ -68,9 +71,23 @@ var FightLayer =  BaseScene.extend({
             batch.addChild(cardSprite);
             cardSprite.setPosition(display.cx, display.top + 40);
             this.allCardSpt_.push(cardSprite)
-
             transition.moveTo(cardSprite,{delay:i*0.01,time:0.1,y:display.cy + i})
         }
+
+
+        //洗牌  太复杂  直接用cocostudio做动画算了
+        var onComplete = function(){
+            for(var i=0;i<40;i++) {
+                var cardSprite = this.allCardSpt_[i];
+
+                if(i>30){
+
+                }else if(i>20){
+
+                }
+            }
+        }
+        this.performWithDelay(callback, onComplete);
     },
     /**
      * 帧刷新事件
