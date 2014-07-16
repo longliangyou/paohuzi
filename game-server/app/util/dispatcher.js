@@ -6,6 +6,7 @@ var Dispatcher = function() {
 
 Dispatcher.prototype.dispatch = function(uid, connectors) {
   var index = Math.abs(crc.crc32(uid)) % connectors.length;
+  console.log("user : " + uid + " diapatch to " + index);
   return connectors[index];
 };
 

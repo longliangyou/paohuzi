@@ -1,7 +1,7 @@
 // pomeloApi 调用方法指南
 
-// 1. 初始化, userId 类似于博雅斗地主的游客ID
-//    pomeloApi.init(userId)
+// 1. 初始化, uid 类似于博雅斗地主的游客ID
+//    pomeloApi.init(uid, function(){})
 // 
 // 2. 判断是否已经连接到服务器。
 //    pomeloApi.isReady()
@@ -15,17 +15,14 @@
 //   {
 //     name: "login", // 客户端定一个这个调用的名字。
 //     options: {
-//       username: "long",
-//       password: "12345678"
 //     }, // 要传递的参数。
 //     route: "connector.entryHandler.login" // 由服务端来填充。
 //   },
 //   ...
 // ]
 
-var pomeloApi = (function(){
-  var pomelo = window.pomelo;
-
+var PomeloApi = (function(){
+  var pomelo = null;
   var gate = {
     route: "gate.gateHandler.queryEntry",
     host: "127.0.0.1",
@@ -43,6 +40,12 @@ var pomeloApi = (function(){
   // options 传递到服务器的参数
   // route 服务器路由，由服务端来写，客户端不需要写。
   var methods = [
+    {
+      name: "login",
+      options: {
+      },
+      route: "connector.entryHandler.login"
+    }
     // {
     //   name: String,
     //   options: {
@@ -54,14 +57,15 @@ var pomeloApi = (function(){
 
 
   this.init = function(userId, callback){
+    pomelo = window.pomelo;
     uid = userId;
     pomelo.init({
       host: gate.host,
       port: gate.port,
       log: true
     }, function(){
-      pomelo.request(gate.route, {uid: uid}, function(data){
-        console.log("#connector server: " + JSON.Stringify(data));
+      pomelo.request(gate.route, {uid: userId}, function(data){
+        console.log(data);
         if (data){
           connector.host = data.host;
           connector.port = data.port;
@@ -85,6 +89,9 @@ var pomeloApi = (function(){
 
   this.remote = function(methodName, options, callback){
     method = _.find(methods, function(method){ return (method.name == methodName);} );
+    if (!_.isObject(options)){
+      options = {};
+    }
     options = _.extend(options, {uid: uid});
     pomelo.request(method.route, options, callback);
   };
