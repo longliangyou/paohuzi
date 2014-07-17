@@ -50,14 +50,14 @@ var FightLayer =  BaseScene.extend({
         this.avatarSprite2_ = avatarSprite2
 
 
-        this.sendCard();
+        this.shuffleCard();
 
         return true;
     },
     /**
-     * 发牌
+     * 洗牌
      */
-    sendCard:function(){
+    shuffleCard:function(){
         var batch = this.batch_
         this.allCardSpt_ = [];
 
@@ -71,23 +71,40 @@ var FightLayer =  BaseScene.extend({
             batch.addChild(cardSprite);
             cardSprite.setPosition(display.cx, display.top + 40);
             this.allCardSpt_.push(cardSprite)
-            transition.moveTo(cardSprite,{delay:i*0.01,time:0.1,y:display.cy + 0.5})
+            transition.moveTo(cardSprite,{delay:i*0.01,time:0.1,y:display.cy + i*0.5})
         }
 
 
         //洗牌  太复杂  直接用cocostudio做动画算了
         var onComplete = function(){
-            for(var i=0;i<40;i++) {
-                var cardSprite = this.allCardSpt_[i];
-
-                if(i>30){
-
-                }else if(i>20){
-
-                }
-            }
+//            for(var i=0;i<40;i++) {
+//                var cardSprite = this.allCardSpt_[i];
+//
+//                if(i>30){
+//
+//                }else if(i>20){
+//
+//                }
+//            }
+            this.sendCard();
         }
-        this.performWithDelay(callback, onComplete);
+        this.backgroundLayer_.performWithDelay(onComplete,2);
+
+
+
+    },
+    /**
+     * 发牌
+     */
+    sendCard:function(){
+        var batch = this.batch_
+        var fight_card_storage= display.newSprite("#fight_card_storage.png",display.cx,display.top-40)
+        batch.addChild(fight_card_storage);
+
+        for(var i=0;i<80;i++) {
+            var cardSprite = this.allCardSpt_[i];
+            //cardSprite.setPosition(display.cx,display.top-40 + i*0.5);
+        }
     },
     /**
      * 帧刷新事件
