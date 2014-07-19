@@ -21,42 +21,51 @@
 //   ...
 // ]
 
-var PomeloApi = (function(){
-  var pomelo = null;
-  var gate = {
-    route: "gate.gateHandler.queryEntry",
-    host: "127.0.0.1",
-    port: "3014"
-  };
+var PomeloApi = {};
 
-  var connector = {};
+PomeloApi.ctor = function() {
+    var pomelo = null;
+    var gate = {
+        route: "gate.gateHandler.queryEntry",
+        host: "127.0.0.1",
+        port: "3014"
+    };
 
-  var status = false;
+    var connector = {};
 
-  var uid = null;
+    var status = false;
 
-  // 在这里增加需要调用服务器的资源。
-  // name 调用方法，可以自己定义。
-  // options 传递到服务器的参数
-  // route 服务器路由，由服务端来写，客户端不需要写。
-  var methods = [
-    {
-      name: "login",
-      options: {
-      },
-      route: "connector.entryHandler.login"
-    }
-    // {
-    //   name: String,
-    //   options: {
-    //     key: value
-    //   },
-    //   route: String
-    // }
-  ];
+    var uid = null;
+
+    // 在这里增加需要调用服务器的资源。
+    // name 调用方法，可以自己定义。
+    // options 传递到服务器的参数
+    // route 服务器路由，由服务端来写，客户端不需要写。
+    var methods = [
+        {
+            name: "login",
+            options: {
+            },
+            route: "connector.entryHandler.login"
+        }
+        // {
+        //   name: String,
+        //   options: {
+        //     key: value
+        //   },
+        //   route: String
+        // }
+    ];
+}
 
 
-  this.init = function(userId, callback){
+
+
+
+
+PomeloApi.init = function(userId, callback){
+    PomeloApi.ctor();
+
     pomelo = window.pomelo;
     uid = userId;
     pomelo.init({
@@ -81,20 +90,17 @@ var PomeloApi = (function(){
         });
       });
     });
-  };
+ }
 
-  this.isReady = function(){
+PomeloApi.isReady = function(){
     return this.status;
-  };
+}
 
-  this.remote = function(methodName, options, callback){
+PomeloApi.remote = function(methodName, options, callback){
     method = _.find(methods, function(method){ return (method.name == methodName);} );
     if (!_.isObject(options)){
       options = {};
     }
     options = _.extend(options, {uid: uid});
     pomelo.request(method.route, options, callback);
-  };
-
-  return this;
-}());
+ }
