@@ -39,6 +39,19 @@
         "src/app/scenes/HallScene.js",
         "src/app/scenes/FightScene.js",
 
+
+        "src/app/handle/BaseHandle.js",
+        "src/app/handle/FightHandle.js",
+
+
+        "src/app/model/BaseModel.js",
+        "src/app/model/LoginModel.js",
+        "src/app/model/FightModel.js",
+
+        "src/app/vo/FightVo.js",
+
+
+
         "src/app/view/AvatarSprite.js",
         "src/app/view/CardSprite.js",
 

@@ -155,8 +155,12 @@ var FightScene = cc.Scene.extend({
         this._super();
         display.addSpriteFrames("res/Sheet_Fight.plist","res/Sheet_Fight.png")
 
+
         var layer = new FightLayer(this.data_);
         this.addChild(layer);
+
+        var model = new FightModel()
+        var handle = new FightHandle(model,layer);
     }
 });
 
