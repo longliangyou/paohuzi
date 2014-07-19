@@ -61,13 +61,18 @@ var FightLayer =  BaseScene.extend({
         var batch = this.batch_
         this.allCardSpt_ = [];
 
-
+        var fight_card_storage= display.newSprite("#fight_card_storage.png",display.cx,display.top-100)
+        fight_card_storage.align(display.BOTTOM_CENTER);
+        batch.addChild(fight_card_storage);
+        fight_card_storage.setVisible(false);
+        this.fight_card_storage_ = fight_card_storage;
 
         //发牌
         for(var i=0;i<80;i++) {
             var cardSprite = new CardSprite();
             cardSprite.initData();
             cardSprite.initView();
+            cardSprite.updateShow(false,"fight_wash_card.png");
             batch.addChild(cardSprite);
             cardSprite.setPosition(display.cx, display.top + 40);
             this.allCardSpt_.push(cardSprite)
@@ -75,35 +80,55 @@ var FightLayer =  BaseScene.extend({
         }
 
 
+
+
         //洗牌  太复杂  直接用cocostudio做动画算了
+        var that =this;
         var onComplete = function(){
-//            for(var i=0;i<40;i++) {
-//                var cardSprite = this.allCardSpt_[i];
-//
-//                if(i>30){
-//
-//                }else if(i>20){
-//
-//                }
-//            }
-            this.sendCard();
+            that.sendCard();
         }
-        this.backgroundLayer_.performWithDelay(onComplete,2);
-
-
-
+        this.backgroundLayer_.performWithDelay(onComplete,2)
     },
     /**
      * 发牌
      */
     sendCard:function(){
-        var batch = this.batch_
-        var fight_card_storage= display.newSprite("#fight_card_storage.png",display.cx,display.top-40)
-        batch.addChild(fight_card_storage);
+        //庄家 以及 玩家分配过来并初始化
+
+
+        //纯牌的夹子安排
+        this.fight_card_storage_.setVisible(true);//存牌的夹子
+        var fight_card_storage= display.newSprite("#fight_up_card_storage.png",display.cx-2,display.top-100+5)
+        fight_card_storage.align(display.BOTTOM_CENTER);
+        this.batch_.addChild(fight_card_storage);
 
         for(var i=0;i<80;i++) {
-            var cardSprite = this.allCardSpt_[i];
-            //cardSprite.setPosition(display.cx,display.top-40 + i*0.5);
+            var cardSprite = this.allCardSpt_[80-i-1];//索引为0的放上面
+            cardSprite.updateShow(false,"fight_small_card.png");
+            cardSprite.setPosition(display.cx,display.top-75 + i*0.2);
+        }
+
+
+
+        //开始发牌
+        for(var i=0;i<15;i++){
+            //庄家
+            var index = i*3;
+            var delay = i * 0.02;
+
+            var cardSprite0 = this.allCardSpt_[index];
+            cardSprite0.updateShow(false,"fight_full_card.png");
+            transition.moveTo(cardSprite0,{delay:delay,time:0.2,y:display.bottom + 10})
+
+            var cardSprite1 = this.allCardSpt_[index+1];
+            cardSprite1.updateShow(false,"fight_full_card.png");
+            cardSprite1.setRotation(90);
+            transition.moveTo(cardSprite1,{delay:delay,time:0.2,x:display.right + 100})
+
+            var cardSprite2 = this.allCardSpt_[index+2];
+            cardSprite2.updateShow(false,"fight_full_card.png");
+            cardSprite2.setRotation(90);
+            transition.moveTo(cardSprite2,{delay:delay,time:0.2,x:display.left - 100})
         }
     },
     /**
