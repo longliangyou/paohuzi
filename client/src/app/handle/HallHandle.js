@@ -9,8 +9,11 @@ var HallHandle = BaseHandle.extend({
      * @param deskType //0表示单机 1表示私人场  2表示三人网络场
      */
     joinHallRoom:function(deskType){
-
-
-
+        var onComplete = function(result){
+            if(result.success){
+                GameApp.enterScene("FightScene")
+            }
+        }
+        this.model_.joinHallRoom(deskType,onComplete);
     }
 })

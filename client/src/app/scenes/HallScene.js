@@ -38,19 +38,17 @@ var HallLayer =  BaseScene.extend({
             direction:ccui.ScrollView.DIR_HORIZONTAL //ccui.ScrollView.DIR_VERTICAL
         }
         var ccsScrollView = new CCSScrollView()
-        ccsScrollView.init(param);
+        ccsScrollView.init(param,this);
         ccsScrollView.setPosition(0,display.cy-255/2+30);
         backgroundLayer.addChild(ccsScrollView);
 
 
 
         //开速开始按钮
+        var that = this;
         var param = {
             onTouchEndedHandle : function(){
-                var param = {
-                    deskType : 2 //网络三人场
-                }
-                GameApp.enterScene("FightScene",param)
+                that.joinHallRoom(2)//网络三人场
             }
         }
         var startSpt = display.newSprite("#hall_image_start.png",display.cx,140)
@@ -62,6 +60,9 @@ var HallLayer =  BaseScene.extend({
         return true;
     },
 
+    joinHallRoom:function(deskType){
+        this.handle_.joinHallRoom(deskType);
+    },
     /**
      * 帧刷新事件
      * @param dt
@@ -77,9 +78,6 @@ var HallLayer =  BaseScene.extend({
 
 
 var HallScene = cc.Scene.extend({
-    initData:function(data){
-        this.data_ = data;
-    },
     onEnter: function () {
         this._super();
         display.addSpriteFrames("res/Sheet_Hall.plist","res/Sheet_Hall.png")

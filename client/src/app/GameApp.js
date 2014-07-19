@@ -51,7 +51,9 @@ GameApp.enterScene = function(sceneName, param){
 
         cc.LoaderScene.preload(loadResources, function () {
             var scene = SceneConstants.getScene(sceneName)//sceneClass.new(args)
-            scene.initData(args);
+            if(scene.initData) { //含有initData方法
+                scene.initData(args);
+            }
             cc.director.runScene(scene);
         }, this);
         return scene

@@ -13,7 +13,7 @@ var CCSScrollCellView_HallType = cc.Class.extend({
      * @param data  单个cell的数据
      * @param batch 父显示类
      */
-    init:function(index,data,batch){
+    init:function(index,data,batch,scene){
         var image = data.image;
         /**
         var spt = display.newSprite(image)
@@ -31,10 +31,7 @@ var CCSScrollCellView_HallType = cc.Class.extend({
         //textButton.setTitleText("Title Button");
         textButton.addTouchEventListener(function (sender, type) {
                 if (type == ccui.Widget.TOUCH_ENDED) {
-                    var param = {
-                        deskType: index
-                    }
-                    GameApp.enterScene("FightScene")
+                    scene.joinHallRoom(0);
                 }
         } ,this);
         this.sprite_ =textButton;
