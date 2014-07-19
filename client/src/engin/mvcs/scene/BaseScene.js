@@ -4,7 +4,13 @@
  * Created by Administrator on 2014/7/1.
  */
 var BaseScene = cc.Layer.extend({
-
+    /**
+     * 依赖注入控制器
+     * @param handle
+     */
+    initHandle:function(handle){
+        this.handle_ = handle;
+    },
     //构造函数
     ctor: function () {
         this._super();

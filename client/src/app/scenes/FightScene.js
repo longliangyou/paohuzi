@@ -3,11 +3,8 @@
  * Created by Administrator on 2014/7/7.
  */
 var FightLayer =  BaseScene.extend({
-    ctor: function (data) {
+    ctor: function () {
         this._super();
-
-        //数据存储  {index:房间类型}
-        this.data_ = data;
 
         //背景层
         var backgroundLayer = this.backgroundLayer_;
@@ -148,19 +145,18 @@ var FightLayer =  BaseScene.extend({
 
 
 var FightScene = cc.Scene.extend({
-    initData:function(data){
-        this.data_ = data;
-    },
     onEnter: function () {
         this._super();
         display.addSpriteFrames("res/Sheet_Fight.plist","res/Sheet_Fight.png")
 
 
-        var layer = new FightLayer(this.data_);
+        var layer = new FightLayer();
         this.addChild(layer);
 
+        //依赖注入mvc
         var model = new FightModel()
         var handle = new FightHandle(model,layer);
+        layer.initHandle(handle);
     }
 });
 

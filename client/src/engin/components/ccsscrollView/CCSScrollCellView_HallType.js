@@ -29,11 +29,13 @@ var CCSScrollCellView_HallType = cc.Class.extend({
         textButton.setTouchEnabled(true);
         textButton.loadTextures("res/hall_image_3ren.png", "res/hall_image_3ren.png", "");
         //textButton.setTitleText("Title Button");
-        textButton.addTouchEventListener(function(){
-            var param = {
-                index : index
-            }
-            GameApp.enterScene("FightScene",param)
+        textButton.addTouchEventListener(function (sender, type) {
+                if (type == ccui.Widget.TOUCH_ENDED) {
+                    var param = {
+                        deskType: index
+                    }
+                    GameApp.enterScene("FightScene")
+                }
         } ,this);
         this.sprite_ =textButton;
         batch.addChild(this.sprite_);

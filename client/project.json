@@ -33,15 +33,16 @@
         "src/engin/EnginInit.js",
         "src/app/GameApp.js",
 
+
         "src/config.js",
         "src/app/config/constants/SceneConstants.js",
-        "src/app/scenes/LoginScene.js",
         "src/app/scenes/HallScene.js",
         "src/app/scenes/FightScene.js",
 
 
         "src/app/handle/BaseHandle.js",
         "src/app/handle/FightHandle.js",
+        "src/app/handle/HallHandle.js",
 
 
         "src/app/model/BaseModel.js",

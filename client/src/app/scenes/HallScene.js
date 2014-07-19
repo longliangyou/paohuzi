@@ -47,8 +47,10 @@ var HallLayer =  BaseScene.extend({
         //开速开始按钮
         var param = {
             onTouchEndedHandle : function(){
-                var arr = SceneConstants.getSceneName("FightScene");
-                GameApp.enterScene(arr.scene,arr.backScene,arr.loadResources)
+                var param = {
+                    deskType : 2 //网络三人场
+                }
+                GameApp.enterScene("FightScene",param)
             }
         }
         var startSpt = display.newSprite("#hall_image_start.png",display.cx,140)
@@ -84,6 +86,13 @@ var HallScene = cc.Scene.extend({
 
         var layer = new HallLayer();
         this.addChild(layer);
+
+
+        //依赖注入mvc
+        var model = new LoginModel()
+        var handle = new HallHandle(model,layer);
+        layer.initHandle(handle);
+
     }
 });
 

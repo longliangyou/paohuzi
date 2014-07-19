@@ -4,8 +4,11 @@
  */
 var FightModel = BaseModel.extend({
 
+
+
+
     /**
-     * 配卓
+     * 进入到战斗以后  然后配卓发牌
      * 配卓成功 需要返回其他人的角色信息 以及 大家的手上的牌
      * @return
      */
