@@ -17,3 +17,9 @@ var HallHandle = BaseHandle.extend({
         this.model_.joinHallRoom(deskType,onComplete);
     }
 })
+
+
+
+
+
+

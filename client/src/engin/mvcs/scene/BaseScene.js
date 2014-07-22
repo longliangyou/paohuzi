@@ -172,8 +172,21 @@ var BaseScene = cc.Layer.extend({
 //        cc.SpriteFrameCache.purgeSharedSpriteFrameCache();
 //        cc.ShaderCache.purgeSharedShaderCache();
 //        ccs.ArmatureDataManager.purge();
-    }
+    },
 
+
+    /**
+     * 调用handle控制器的类
+     * @param methodName
+     * @param param 参数  依次排开
+     */
+    callMethod:function(){
+//        var methodName = arguments.shift();
+//        [].shift.apply(arguments)
+        var methodName = Array.prototype.shift.apply(arguments)
+//        methodName.apply(this.handle_, arguments)
+        this.handle_[methodName].apply(this.handle_, arguments)
+    }
 });
 
 
