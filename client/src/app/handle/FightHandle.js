@@ -5,7 +5,7 @@
 var FightHandle = BaseHandle.extend({
 
     /**
-     *
+     * 配桌子
      */
     joinDesk:function(){
         var info = this.model_.joinDesk();

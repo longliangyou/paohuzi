@@ -89,6 +89,8 @@ PomeloApi.init = function(userId, callback){
           callback(null);
         });
       });
+
+
     });
  }
 

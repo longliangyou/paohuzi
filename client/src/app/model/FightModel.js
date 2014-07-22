@@ -20,5 +20,8 @@ var FightModel = BaseModel.extend({
         }
     }
 
+
+
+
 })
 

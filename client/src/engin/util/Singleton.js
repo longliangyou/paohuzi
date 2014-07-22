@@ -20,7 +20,7 @@ Singleton.getInstance = function(ref){
 
         // 创建实例锁
         this.dict[ref] = false;
-        this.dict[ref] = new ref(arguments); //这种情况  我怎么把参数塞进构造函数里面去
+        this.dict[ref] = new ref(); //这种情况  我怎么把参数塞进构造函数里面去
     }
     return this.dict[ref];
 }

@@ -116,6 +116,10 @@ var FightLayer =  BaseScene.extend({
             //从我开始逆时针发牌
             var cardSprite0 = this.allCardSpt_[index];
             cardSprite0.updateShow(false,"fight_big_card.png");
+            TouchUtil.addTouchEndEventListener(cardSprite0,function(){
+                cc.log("点击牌");
+                CardAnimation.outputAnimationByOne(cardSprite0);
+            });
             transition.moveTo(cardSprite0,{delay:delay,time:0.2,y:display.bottom + 10})
 
 

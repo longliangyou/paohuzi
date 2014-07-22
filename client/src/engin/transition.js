@@ -161,11 +161,11 @@ transition.rotateTo=function(target, args) {
 /**
     将显示对象移动到指定位置，并返回 Action 动作对象。
 -- 移动到屏幕中心
-transition.moveTo(sprite, {x = display.cx, y = display.cy, time = 1.5})
+transition.moveTo(sprite, {x : display.cx, y : display.cy, time : 1.5})
 -- 移动到屏幕左边，不改变 y
 transition.moveTo(sprite, {x = display.left, time = 1.5})
 -- 移动到屏幕底部，不改变 x
-transition.moveTo(sprite, {y = display.bottom, time = 1.5})
+transition.moveTo(sprite, {y : display.bottom, time : 1.5})
     @param cc.Node target 显示对象
 @param table args 参数表格对象
 @return mixed 结果
