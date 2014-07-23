@@ -17,7 +17,7 @@ CardAnimation.outputAnimationByOne = function(cardSprite,sendDirection){
 //    var action = cc.MoveTo.create(0.1, cc.p(display.cx, display.bottom + 100))
 
     transition.scaleTo(cardSprite, {scale : 1, time : 1.5});
-    transition.moveTo(cardSprite, {y : display.bottom + 100, time : 1.5})
+    transition.moveTo(cardSprite, {y : display.bottom + 200, time : 1.5})
 }
 
 

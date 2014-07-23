@@ -12,8 +12,8 @@ var CardSprite = cc.Sprite.extend({
 
         this.cardId_ = param.cardId;//定义牌的标记 0-79
 
-        this.cardType_ = param.cardType;//定义大小 d 或者 x
-        this.cardNum_ = param.cardNum;//定义卡片的数字
+        this.cardType_ = this.cardId_> 39 ? "d":"x" ;//定义大小 d 或者 x
+        this.cardNum_ = checkint((this.cardId_ +1)%11);//定义卡片的数字
     },
     /**
      * 显示视图

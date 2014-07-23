@@ -4,13 +4,17 @@
  */
 var FightHandle = BaseHandle.extend({
 
-    /**
-     * 配桌子
-     */
     joinDesk:function(){
+        var callBack = function(result){
+            if(result.success){
+                console.log(result.info);
+                this.sceneLayer_.sendCard();
+            }
+        }
+
         var fightModel = Singleton.getInstance("FightModel");
-        var info = fightModel.joinDesk();
-        cc.log(info);
+        var info = fightModel.joinDesk(Util.proxy(callBack,this));
+//        var info = fightModel.joinDesk(callBack.bind(this));
     }
 
 

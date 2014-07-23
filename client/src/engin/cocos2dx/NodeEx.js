@@ -29,7 +29,6 @@ var NodeEx={
             var currentHeight = size.height;
             var scaleX = width/currentWith;
             var scaleY = height/currentHeight;
-            cc.log(scaleX,scaleY,currentWith,currentHeight);
             target.setScaleX(scaleX);
             target.setScaleY(scaleY);
         }

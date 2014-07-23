@@ -16,6 +16,11 @@
 TouchUtil.addTouchEventListener(sprite1,param)
 
 
+
+ //禁用触摸事件
+
+
+
  *
  * 给按钮添加触摸
  * Created by xhl on 2014/7/5.
@@ -100,4 +105,11 @@ TouchUtil.addTouchEventListener = function(target,param){
         }
     });
     cc.eventManager.addListener(listener, target);
+
+    /***自己加的一个控制触摸事件的方法**/
+    target.setTouchEnabled = function(enable){
+        listener.setEnabled(enable);
+    }
+
+    return listener
 }

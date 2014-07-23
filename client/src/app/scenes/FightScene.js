@@ -67,7 +67,7 @@ var FightLayer =  BaseScene.extend({
         //发牌
         for(var i=0;i<80;i++) {
             var cardSprite = new CardSprite();
-            cardSprite.initData();
+            cardSprite.initData({cardId:i});
             cardSprite.initView(false,"fight_wash_card.png");
             batch.addChild(cardSprite);
             cardSprite.setPosition(display.cx, display.top + 40);
@@ -82,15 +82,13 @@ var FightLayer =  BaseScene.extend({
             //请求服务器配卓
             that.callMethod("joinDesk")
         }
-        this.backgroundLayer_.performWithDelay(onComplete,2)
+        this.backgroundLayer_.performWithDelay(onComplete,2);
     },
     /**
      * 发牌
      */
     sendCard:function(){
         //庄家 以及 玩家分配过来并初始化
-
-
         //纯牌的夹子安排
         this.fight_card_storage_.setVisible(true);//存牌的夹子
         var fight_card_storage= display.newSprite("#fight_up_card_storage.png",display.cx-2,display.top-140+5)
@@ -105,6 +103,14 @@ var FightLayer =  BaseScene.extend({
 
 
 
+        var clickFun = function(cardSprite0){
+            TouchUtil.addTouchEndEventListener(cardSprite0,function(){
+                CardAnimation.outputAnimationByOne(cardSprite0);
+                cardSprite0.setTouchEnabled(false);
+            });
+        };
+
+
         //开始发牌
         for(var i=0;i<15;i++){
             //庄家
@@ -114,12 +120,8 @@ var FightLayer =  BaseScene.extend({
             //从我开始逆时针发牌
             var cardSprite0 = this.allCardSpt_[index];
             cardSprite0.initView(false,"fight_big_card.png");
-            TouchUtil.addTouchEndEventListener(cardSprite0,function(){
-                cc.log("点击牌");
-                CardAnimation.outputAnimationByOne(cardSprite0);
-            });
             transition.moveTo(cardSprite0,{delay:delay,time:0.2,y:display.bottom + 10})
-
+            clickFun(cardSprite0);
 
             var cardSprite1 = this.allCardSpt_[index+1];
             cardSprite1.initView(false,"fight_big_card.png");

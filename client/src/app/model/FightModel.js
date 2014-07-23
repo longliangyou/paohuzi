@@ -12,14 +12,22 @@ var FightModel = BaseModel.extend({
      * 配卓成功 需要返回其他人的角色信息 以及 大家的手上的牌
      * @return
      */
-    joinDesk:function(){
+    joinDesk:function(callBack){
+        var result = {
+             success:false
+        };
+
         if(FightVo.deskType == 0) {//单机版
             FightVo.round = Round.createNew(["user1", "user2", "user3"], 1);
             //return getCardsByUserId("user1");
-            return FightVo.round.getCardsByUserId("user1");
+            result.info = FightVo.round.getCardsByUserId("user1");
+            result.success = true;
+
         }else if(FightVo.deskType == 2) {//三人网络场
 
         }
+
+        callBack(result);
     }
 
 

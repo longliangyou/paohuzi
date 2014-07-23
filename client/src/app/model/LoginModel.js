@@ -34,11 +34,11 @@ var LoginModel = BaseModel.extend({
      * 在大厅hall中  去加入大厅的某个房间
      * @param deskType //0表示单机 1表示私人场  2表示三人网络场
      */
-    joinHallRoom:function(deskType,onComplete){
+    joinHallRoom:function(deskType,callBack){
         if(deskType == 0 ){
             FightVo.deskType = 0;
-            if(onComplete){
-                onComplete({success:true});
+            if(callBack){
+                callBack({success:true});
             }
         }else if(deskType == 2) {//三人网络场
 
