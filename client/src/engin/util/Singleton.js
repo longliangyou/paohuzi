@@ -16,11 +16,10 @@ Singleton.dict = {};
 */
 Singleton.getInstance = function(ref){
     if (this.dict[ref] == null){
-        var ref = Array.prototype.shift.apply(arguments)
-
+        //var ref = Array.prototype.shift.apply(arguments)
         // 创建实例锁
         this.dict[ref] = false;
-        this.dict[ref] = new ref(); //这种情况  我怎么把参数塞进构造函数里面去
+        this.dict[ref] = eval("new "+ref +"()"); //new ref(); //这种情况  我怎么把参数塞进构造函数里面去
     }
     return this.dict[ref];
 }

@@ -14,7 +14,9 @@ var HallHandle = BaseHandle.extend({
                 GameApp.enterScene("FightScene")
             }
         }
-        this.model_.joinHallRoom(deskType,onComplete);
+
+        var loginModel = Singleton.getInstance("LoginModel");
+        loginModel.joinHallRoom(deskType,onComplete);
     }
 })
 

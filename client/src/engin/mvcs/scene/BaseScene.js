@@ -8,7 +8,7 @@ var BaseScene = cc.Layer.extend({
      * 依赖注入控制器
      * @param handle
      */
-    initHandle:function(handle){
+    setHandle:function(handle){
         this.handle_ = handle;
     },
     //构造函数

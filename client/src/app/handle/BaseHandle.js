@@ -6,13 +6,11 @@
 var BaseHandle = cc.Class.extend({
 
     /**
-     * 构造函数
+     * 注入视图
      * 存储model层和scene层
-     * @param model
      * @param sceneLayer
      */
-    ctor:function(model,sceneLayer){
-        this.model_ = model;
+    setView:function(sceneLayer){
         this.sceneLayer_ = sceneLayer;
     }
 

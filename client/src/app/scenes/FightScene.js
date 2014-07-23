@@ -68,8 +68,7 @@ var FightLayer =  BaseScene.extend({
         for(var i=0;i<80;i++) {
             var cardSprite = new CardSprite();
             cardSprite.initData();
-            cardSprite.initView();
-            cardSprite.updateShow(false,"fight_wash_card.png");
+            cardSprite.initView(false,"fight_wash_card.png");
             batch.addChild(cardSprite);
             cardSprite.setPosition(display.cx, display.top + 40);
             this.allCardSpt_.push(cardSprite)
@@ -77,12 +76,11 @@ var FightLayer =  BaseScene.extend({
         }
 
 
-
-
         //洗牌  太复杂  直接用cocostudio做动画算了
         var that =this;
         var onComplete = function(){
-            that.sendCard();
+            //请求服务器配卓
+            that.callMethod("joinDesk")
         }
         this.backgroundLayer_.performWithDelay(onComplete,2)
     },
@@ -101,7 +99,7 @@ var FightLayer =  BaseScene.extend({
 
         for(var i=0;i<80;i++) {
             var cardSprite = this.allCardSpt_[80-i-1];//索引为0的放上面
-            cardSprite.updateShow(false,"fight_small_card.png");
+            cardSprite.initView(false,"fight_small_card.png");
             cardSprite.setPosition(display.cx,display.top-75-40 + i*0.2);
         }
 
@@ -115,7 +113,7 @@ var FightLayer =  BaseScene.extend({
 
             //从我开始逆时针发牌
             var cardSprite0 = this.allCardSpt_[index];
-            cardSprite0.updateShow(false,"fight_big_card.png");
+            cardSprite0.initView(false,"fight_big_card.png");
             TouchUtil.addTouchEndEventListener(cardSprite0,function(){
                 cc.log("点击牌");
                 CardAnimation.outputAnimationByOne(cardSprite0);
@@ -124,12 +122,12 @@ var FightLayer =  BaseScene.extend({
 
 
             var cardSprite1 = this.allCardSpt_[index+1];
-            cardSprite1.updateShow(false,"fight_big_card.png");
+            cardSprite1.initView(false,"fight_big_card.png");
             cardSprite1.setRotation(90);
             transition.moveTo(cardSprite1,{delay:delay,time:0.2,x:display.right + 100})
 
             var cardSprite2 = this.allCardSpt_[index+2];
-            cardSprite2.updateShow(false,"fight_big_card.png");
+            cardSprite2.initView(false,"fight_big_card.png");
             cardSprite2.setRotation(90);
             transition.moveTo(cardSprite2,{delay:delay,time:0.2,x:display.left - 100})
         }
@@ -157,10 +155,10 @@ var FightScene = cc.Scene.extend({
         var layer = new FightLayer();
         this.addChild(layer);
 
-        //依赖注入mvc
-        var model = new FightModel()
-        var handle = new FightHandle(model,layer);
-        layer.initHandle(handle);
+        //依赖注入mvc中的视图
+        var handle = new FightHandle();
+        handle.setView(layer);
+        layer.setHandle(handle);
     }
 });
 

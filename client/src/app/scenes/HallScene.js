@@ -88,9 +88,9 @@ var HallScene = cc.Scene.extend({
 
 
         //依赖注入mvc
-        var model = new LoginModel()
-        var handle = new HallHandle(model,layer);
-        layer.initHandle(handle);
+        var handle = new HallHandle();
+        handle.setView(layer);
+        layer.setHandle(handle);
 
     }
 });
