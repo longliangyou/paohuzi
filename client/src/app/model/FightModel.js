@@ -13,6 +13,9 @@ var FightModel = BaseModel.extend({
      * @return
      */
     joinDesk:function(callBack){
+
+
+        //这里无论是网络还是单机  都统一到这个回调   然后我在吧牌写到fightvo内存中 在fightvo中吧array解析出来
         var onComplete = function(result){
             if(result.success){
                 var data = result.data;
