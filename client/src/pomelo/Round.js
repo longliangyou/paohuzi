@@ -11,6 +11,7 @@ var Round = {
   //   }
   // ]
   // onTable: [] // 桌上的底牌
+  // @return []
   createNew: function(userIds, bankerNum){
     // var userIds = ["long", "hua", "zhuang"];
     // var bankerNum = 2;
@@ -47,7 +48,7 @@ var Round = {
         uid: player.uid,
         onHandLength: player.onHand.length,
         onTable: player.onTable,
-        onTrash: player.onHand.onTrash
+        onTrash: player.onTrash
       };
       return otherPlayer;
     };
