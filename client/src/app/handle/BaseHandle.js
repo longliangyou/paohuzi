@@ -1,5 +1,6 @@
 /**
  * 控制层
+ * handle其实也是单例类型
  * BaseHandle.js
  * Created by xhl on 2014/7/19.
  */
