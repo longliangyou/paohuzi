@@ -52,6 +52,7 @@
         "src/app/model/FightModel.js",
 
         "src/app/vo/FightVo.js",
+        "src/app/vo/UserVo.js",
 
 
 

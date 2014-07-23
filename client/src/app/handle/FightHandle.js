@@ -9,7 +9,8 @@ var FightHandle = BaseHandle.extend({
      */
     joinDesk:function(){
         var fightModel = Singleton.getInstance("FightModel");
-        fightModel.joinDesk();
+        var info = fightModel.joinDesk();
+        cc.log(info);
     }
 
 
