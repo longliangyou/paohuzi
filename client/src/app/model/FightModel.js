@@ -14,7 +14,8 @@ var FightModel = BaseModel.extend({
      */
     joinDesk:function(){
         if(FightVo.deskType == 0) {//单机版
-
+            FightVo.round = Round.createNew(["user1", "user2", "user3"], 1);
+            return getCardsByUserId("user1");
         }else if(FightVo.deskType == 2) {//三人网络场
 
         }
