@@ -55,8 +55,8 @@ var Round = {
     round.getCardsByUserId = function(uid) {
       player = _.find(players, function(player){return player.uid == uid;});
 
-      nextPlayer = getOtherPlayerCards(users[(player.num+1)%3]);
-      previousPlayer = getOtherPlayerCards(users[(player.num + 2)%3]);
+      nextPlayer = getOtherPlayerCards(players[(player.num+1)%3]);
+      previousPlayer = getOtherPlayerCards(players[(player.num + 2)%3]);
 
       return [previousPlayer, player, nextPlayer];
     };
