@@ -5,7 +5,16 @@
 var FightModel = BaseModel.extend({
 
 
+    ctor:function(){
+        //监听后台消息
+        //PomeloApi.addEventListener("onMessageHandle",this.onMessageHandle)
+    },
+    onMessageHandle:function(event){
+        var cmd = event.cmd;
+        if(cmd == "EAT_CARD"){ //吃牌
 
+        }
+    },
 
     /**
      * 进入到战斗以后  然后配卓发牌

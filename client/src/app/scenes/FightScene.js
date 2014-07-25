@@ -112,26 +112,39 @@ var FightLayer =  BaseScene.extend({
 
 
         //开始发牌
+        var userCard0 = FightVo.userCard0;
+        var userCard1 = FightVo.userCard1;
+        var userCard2 = FightVo.userCard2;
         for(var i=0;i<15;i++){
-            //庄家
             var index = i*3;
             var delay = i * 0.04;
 
-            //从我开始逆时针发牌
+
             var cardSprite0 = this.allCardSpt_[index];
             cardSprite0.initView(false,"fight_big_card.png");
-            transition.moveTo(cardSprite0,{delay:delay,time:0.2,y:display.bottom + 10})
-            clickFun(cardSprite0);
+            cardSprite0.setRotation(90);
+            transition.moveTo(cardSprite0,{delay:delay,time:0.2,x:display.right + 100})
+
 
             var cardSprite1 = this.allCardSpt_[index+1];
             cardSprite1.initView(false,"fight_big_card.png");
-            cardSprite1.setRotation(90);
-            transition.moveTo(cardSprite1,{delay:delay,time:0.2,x:display.right + 100})
+            transition.moveTo(cardSprite1,{delay:delay,time:0.2,y:display.bottom + 10});
+            clickFun(cardSprite1);
+
+//            cardSprite1.initData({cardId:userCard1.onHand[i]})
+//            cardSprite1.initView(true,"full_card");
+//            cardSprite1.setPosition(display.cx,display.cy);
+
 
             var cardSprite2 = this.allCardSpt_[index+2];
             cardSprite2.initView(false,"fight_big_card.png");
             cardSprite2.setRotation(90);
             transition.moveTo(cardSprite2,{delay:delay,time:0.2,x:display.left - 100})
+        }
+
+        //排列我的牌
+        for(var i=0;i<15;i++){
+
         }
     },
     /**

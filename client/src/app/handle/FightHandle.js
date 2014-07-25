@@ -7,7 +7,6 @@ var FightHandle = BaseHandle.extend({
     joinDesk:function(){
         var callBack = function(result){
             if(result.success){
-                console.log(result.info);
                 this.sceneLayer_.sendCard();
             }
         }

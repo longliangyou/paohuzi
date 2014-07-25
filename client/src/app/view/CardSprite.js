@@ -7,6 +7,11 @@ var CardSprite = cc.Sprite.extend({
 //    var CardSprite = cc.Layer.extend({
 //    var CardSprite = cc.Node.extend({
 
+    /**
+     * 初始化
+     * initData({cardId:})
+     * @param param
+     */
     initData:function(param){
         if(param == null) param ={}
 
@@ -19,12 +24,12 @@ var CardSprite = cc.Sprite.extend({
      * 显示视图
      * @param showFlag  是否显示卡牌的正面
      * @param imageName 以下两种情况
-     *                  当showFlag为true时，imageName 表示牌的大小类型，有full、big、small三种类型
+     *                  当showFlag为true时，imageName 表示牌的大小类型，有 full_card、full_big、full_small三种类型
      *                  当showFlag为true时，imageName 表示显示牌的背面的图片(fight_full_card.png、fight_big_card.png、fight_small_card.png、fight_wash_card.png)
      */
     initView:function(showFlag,imageName){
         if(showFlag) {
-            var imageName = "#fight_" + this.imageType_ + "_" + this.cardType_ + this.cardNum_ + ".png";
+            var imageName = "fight_" + imageName + "_" + this.cardType_ + this.cardNum_ + ".png";
             var spriteFrame = display.newSpriteFrame(imageName)
             //在需要时，修改 Sprite 的显示内容
             this.setSpriteFrame(spriteFrame)

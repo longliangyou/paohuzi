@@ -69,7 +69,7 @@ transition.create = function(action, args) {
     actions.push(action)
 
     var onComplete = args.onComplete
-    if (isFunction(onComplete))
+    if (isFunction(onComplete)==false)
         onComplete = null
     if (onComplete)
         actions.push(cc.CallFunc.create(onComplete))
