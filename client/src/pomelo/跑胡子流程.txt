@@ -25,3 +25,78 @@
 如果都不吃不碰不胡，
 
 4.1.3 服务器翻底牌，通知所有玩家。等待下一轮动作。
+
+
+
+
+
+
+服务器、客户端; 消息类型: request/response, notify.
+request/response: 客户端发送 request，等待服务器 response。callback 的形式.
+notify: 服务器通知客户端消息，onMessage 的形式。
+
+游戏启动之后，客户端都需要启动倒计时。
+
+
+客户端 request [joinRoom]: 发送加入房间消息到服务器，等待服务器开启游戏。
+服务器: - response [joinRoom], 将用户加入房间，返回房间及其它玩家信息，notify 其它用户新加入玩家信息。
+       - notify [onJoinRoom] 其他玩家，通知其它玩家新玩家加入房间。
+       - notify [onGameStart] 所有玩家，通知所有玩家游戏开始。
+       - notify [onNewRound] 所有玩家，发牌。
+       - 等待庄家出牌。
+
+客户端[庄家]: 启动倒计时。
+       - 是否有四张同样的牌，如有则杠。request [gang]
+       - 胡牌, request [win]
+       - 出牌, request [card]
+
+服务器: - 第一步，服务器需要重新验证计算用户动作是否有效。然后 response. 根据 waitUsersAction 判断用户动作是否有效。
+       - response [gang], 返回用户命令继续出牌。notify 其它玩家用户杠。
+       - response [win], 返回用户胡牌。notify 其它玩家用户胡牌。
+       - response [card], 返回用户出牌。notify 其它玩家用户出牌，计算 waitUsersAction.
+
+       - notify [newCard], 通知所有用户出牌，计算 waitUsersAction.
+
+客户端: - request [card], 出牌
+       - request [eat], 吃牌
+       - request [cancle], 取消
+       - request [peng], 碰牌
+       - request [win], 胡牌
+       - request [joinRoom], 加入房间，准备游戏
+
+服务器: - notify [onJoinRoom], 玩家加入房间
+       - notify [onCard], 玩家出牌
+       - notify [onEat], 玩家吃牌
+       - notify [onPeng], 玩家碰牌
+       - notify [onWin], 玩家胡牌
+       - notify [onGang], 玩家杠牌
+       - notify [onNewRound], 开局发牌
+
+工具函数:
+
+calculeteHuxi: 计算胡息。
+calculeteActions: 计算动作, 胡或者吃或者碰, 或者杠。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
