@@ -6,7 +6,12 @@
 var CardSprite = cc.Sprite.extend({
 //    var CardSprite = cc.Layer.extend({
 //    var CardSprite = cc.Node.extend({
-
+     ctor:function(){
+         TouchUtil.addTouchEndEventListener(this,function(){
+             CardAnimation.outputAnimationByOne(this);
+         });
+         this.setTouchEnabled(false);
+     },
     /**
      * 初始化
      * initData({cardId:})

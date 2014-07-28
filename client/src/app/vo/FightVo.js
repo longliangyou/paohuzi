@@ -16,6 +16,10 @@ var oneUserCard = {
         this.onTable  = data.onTable //自己家吃的牌 在桌面上的牌
         this.onTrash  = data.onTrash; // 自己家扔掉的牌
         this.onHand = data.onHand; //自己手上的牌
+
+
+        this.onHandleCardSprite_ =[] ;//自己手上牌的sprite
+
         return this;
     }
 };

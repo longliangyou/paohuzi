@@ -103,12 +103,12 @@ var FightLayer =  BaseScene.extend({
 
 
 
-        var clickFun = function(cardSprite0){
-            TouchUtil.addTouchEndEventListener(cardSprite0,function(){
-                CardAnimation.outputAnimationByOne(cardSprite0);
-                cardSprite0.setTouchEnabled(false);
-            });
-        };
+//        var clickFun = function(cardSprite0){
+//            TouchUtil.addTouchEndEventListener(cardSprite0,function(){
+//                CardAnimation.outputAnimationByOne(cardSprite0);
+//                cardSprite0.setTouchEnabled(false);
+//            });
+//        };
 
 
         //开始发牌
@@ -129,7 +129,8 @@ var FightLayer =  BaseScene.extend({
             var cardSprite1 = this.allCardSpt_[index+1];
             cardSprite1.initView(false,"fight_big_card.png");
             transition.moveTo(cardSprite1,{delay:delay,time:0.2,y:display.bottom + 10});
-            clickFun(cardSprite1);
+            userCard1.onHandleCardSprite_.push(cardSprite1);
+//            clickFun(cardSprite1);
 
 //            cardSprite1.initData({cardId:userCard1.onHand[i]})
 //            cardSprite1.initView(true,"full_card");
@@ -143,9 +144,20 @@ var FightLayer =  BaseScene.extend({
         }
 
         //排列我的牌
-        for(var i=0;i<15;i++){
+        var onHandleCardSprite =  userCard1.onHandleCardSprite_;
+        var outputCard = CardUtil.riffle(userCard1.onHand);
+        var behaveNum = outputCard.length/2
+        var isEven = Math2d.isEvenOrOddNumber(outputCard.length);
+        if(!isEven)
+            behaveNum = behaveNum + 1;
+        for(var i=0;i<outputCard.length;i++){
+            var oneOutputCard = outputCard[i]
+            for(var j=0;j<oneOutputCard.length;j++){
 
+            }
         }
+
+
     },
     /**
      * 帧刷新事件
