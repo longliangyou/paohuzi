@@ -53,21 +53,25 @@ TouchUtil.addTouchEndEventListener = function(target,callBack){
  */
 TouchUtil.addTouchEventListener = function(target,param){
     var onTouchEndedHandle = param.onTouchEndedHandle;
-    var onTouchMovedHandle = param.onTouchMovedHandle,onTouchBeganHandle = param.onTouchBeganHandle;
+    var onTouchMovedHandle = param.onTouchMovedHandle;
+    var onTouchBeganHandle = param.onTouchBeganHandle;
 
-    var onTouchEndedHandleFun = function(){
+    var onTouchEndedHandleFun = function(touch,event){
         if(onTouchEndedHandle){
-            onTouchEndedHandle();
+            cc.log("sprite onTouchesEnded.. ");
+            onTouchEndedHandle(touch,event);
         }
     }
-    var onTouchMovedHandleFun = function(){
+    var onTouchMovedHandleFun = function(touch,event){
         if(onTouchMovedHandle){
-            onTouchMovedHandle();
+            cc.log("sprite onTouchMoved.. ");
+            onTouchMovedHandle(touch,event);
         }
     }
-    var onTouchBeganHandleFun = function(){
+    var onTouchBeganHandleFun = function(touch,event){
+        cc.log("sprite onTouchBegan.. ");
         if(onTouchBeganHandle){
-            onTouchBeganHandle();
+            onTouchBeganHandle(touch,event);
         }
     }
 
@@ -86,22 +90,22 @@ TouchUtil.addTouchEventListener = function(target,param){
 //            var rect = cc.rect(currentRect.getMinX(), currentRect.getMinY(), currentRect.getMaxX(), currentRect.getMaxY());
 
             if (cc.rectContainsPoint(rect, locationInNode)) {
-                cc.log("sprite onTouchBegan.. ");
+                //cc.log("sprite onTouchBegan.. ");
                 //target.setOpacity(180);
-                onTouchBeganHandleFun();
+                onTouchBeganHandleFun(touch,event);
                 return true;
             }
             return false;
         },
         onTouchMoved: function(touch, event){
-            cc.log("sprite onTouchMoved.. ");
-            onTouchMovedHandleFun()
+            //cc.log("sprite onTouchMoved.. ");
+            onTouchMovedHandleFun(touch,event)
             return true
         },
         onTouchEnded: function(touch, event){
-            cc.log("sprite onTouchesEnded.. ");
+            //cc.log("sprite onTouchesEnded.. ");
             //event.getCurrentTarget().setOpacity(255);
-            onTouchEndedHandleFun();
+            onTouchEndedHandleFun(touch,event);
         }
     });
     cc.eventManager.addListener(listener, target);

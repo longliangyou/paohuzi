@@ -71,7 +71,8 @@ checknumber=function(value) {
 @return integer
  */
  checkint= function(value){
-     return Math.round(checknumber(value))
+//     return Math.round(checknumber(value))
+     return Math.floor(checknumber(value));
  }
 
 /**

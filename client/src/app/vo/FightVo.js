@@ -19,6 +19,7 @@ var oneUserCard = {
 
 
         this.onHandleCardSprite_ =[] ;//自己手上牌的sprite
+        this.onHandleCardSpriteArr_ =[];//自己手上排好序的
 
         return this;
     }

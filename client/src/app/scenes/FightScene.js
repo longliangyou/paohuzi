@@ -52,7 +52,7 @@ var FightLayer =  BaseScene.extend({
         return true;
     },
     /**
-     * 洗牌
+     * 洗牌 动画
      */
     shuffleCard:function(){
         var batch = this.batch_
@@ -102,15 +102,6 @@ var FightLayer =  BaseScene.extend({
         }
 
 
-
-//        var clickFun = function(cardSprite0){
-//            TouchUtil.addTouchEndEventListener(cardSprite0,function(){
-//                CardAnimation.outputAnimationByOne(cardSprite0);
-//                cardSprite0.setTouchEnabled(false);
-//            });
-//        };
-
-
         //开始发牌
         var userCard0 = FightVo.userCard0;
         var userCard1 = FightVo.userCard1;
@@ -132,11 +123,6 @@ var FightLayer =  BaseScene.extend({
 //            transition.moveTo(cardSprite1,{delay:delay,time:0.2,y:display.bottom + 10});
             userCard1.onHandleCardSprite_.push(cardSprite1);
 //            clickFun(cardSprite1);
-
-//            cardSprite1.initData({cardId:userCard1.onHand[i]})
-//            cardSprite1.initView(true,"full_card");
-//            cardSprite1.setPosition(display.cx,display.cy);
-
 
             var cardSprite2 = this.allCardSpt_[index+2];
             cardSprite2.initView(false,"fight_big_card.png");
@@ -160,34 +146,41 @@ var FightLayer =  BaseScene.extend({
         var userCard1 = FightVo.userCard1;
         var onHandleCardSprite =  userCard1.onHandleCardSprite_;
         var outputCard = CardUtil.riffle(userCard1.onHand);
-        var behaveNum = outputCard.length/2
-        var isEven = Math2d.isEvenOrOddNumber(outputCard.length);
-        if(!isEven)
-            behaveNum = behaveNum + 1;
+        var behaveNum = checkint(outputCard.length/2)
+//        var isEven = Math2d.isEvenOrOddNumber(outputCard.length);
+//        if(!isEven)
+//            behaveNum = checkint((outputCard.length+1)/2);
 
+
+        var onHandleCardSpriteArr = [];
         var index = 0;
         for(var i=0;i<outputCard.length;i++){
             var oneOutputCardArr = outputCard[i]
             var x = display.cx;
             if(i<behaveNum) {
-                x = x - i * 75;
+                x = x - (behaveNum - i) * 75;
             }else{
                 x = x + (i-behaveNum) * 75;
             }
 
-
+            onHandleCardSpriteArr.push([])
             for(var j=0;j<oneOutputCardArr.length;j++){
                 var y = display.bottom + 115 + j * 115/2;
                 var oneOutputCard = oneOutputCardArr[j];
                 var cardSprite = onHandleCardSprite[index];
+                cardSprite.setCardArrayIndex(i,j);
                 cardSprite.initData({cardId:oneOutputCard});
                 cardSprite.initView(true,"big_card");
                 cardSprite.setPosition(x,y);
-                cardSprite.setZOrder(oneOutputCardArr.length-j);
-                index ++;
+                cardSprite.setLocalZOrder(oneOutputCardArr.length-j);
+                cardSprite.setTouch();
+                onHandleCardSpriteArr[i].push(cardSprite)
 
+                index ++;
             }
         }
+        //存储起来
+        userCard1.onHandleCardSpriteArr_ = onHandleCardSpriteArr;
     },
 
 
