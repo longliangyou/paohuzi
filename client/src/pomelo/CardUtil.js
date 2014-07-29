@@ -95,5 +95,8 @@ CardUtil.riffle = function(cards) {
   riffledCards.push(group1);
   riffledCards.push(group2);
   riffledCards.push(group3);
+  riffledCards = _.reject(riffledCards, function (group){
+    return !group.length;
+  });
   return riffledCards;
 };
