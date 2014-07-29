@@ -37,6 +37,12 @@ var Round = {
       player.onTrash = [];
       player.unFollow = [];
       player.unTouch = [];
+      if (bankerNumer === index)
+      {
+        player.isBanker = true;
+      } else {
+        player.isBanker = false;
+      }
       onTable = _.rest(onTable, 20);
     });
 
