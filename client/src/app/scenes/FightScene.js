@@ -64,7 +64,7 @@ var FightLayer =  BaseScene.extend({
         fight_card_storage.setVisible(false);
         this.fight_card_storage_ = fight_card_storage;
 
-        //发牌
+        //生成牌
         for(var i=0;i<80;i++) {
             var cardSprite = new CardSprite();
             cardSprite.initData({cardId:i});
@@ -115,7 +115,7 @@ var FightLayer =  BaseScene.extend({
         var userCard0 = FightVo.userCard0;
         var userCard1 = FightVo.userCard1;
         var userCard2 = FightVo.userCard2;
-        for(var i=0;i<15;i++){
+        for(var i=0;i<20;i++){
             var index = i*3;
             var delay = i * 0.04;
 
@@ -128,7 +128,8 @@ var FightLayer =  BaseScene.extend({
 
             var cardSprite1 = this.allCardSpt_[index+1];
             cardSprite1.initView(false,"fight_big_card.png");
-            transition.moveTo(cardSprite1,{delay:delay,time:0.2,y:display.bottom + 10});
+            transition.moveTo(cardSprite1,{delay:delay,time:0.2,y:display.bottom - 115});
+//            transition.moveTo(cardSprite1,{delay:delay,time:0.2,y:display.bottom + 10});
             userCard1.onHandleCardSprite_.push(cardSprite1);
 //            clickFun(cardSprite1);
 
@@ -143,22 +144,53 @@ var FightLayer =  BaseScene.extend({
             transition.moveTo(cardSprite2,{delay:delay,time:0.2,x:display.left - 100})
         }
 
+
+        //排列自己的牌
+        var that =this;
+        var onComplete = function(){
+            that.orderMyCard();
+        }
+        this.backgroundLayer_.performWithDelay(onComplete,4);
+    },
+    /**
+     * 排列牌
+     */
+    orderMyCard:function(){
         //排列我的牌
+        var userCard1 = FightVo.userCard1;
         var onHandleCardSprite =  userCard1.onHandleCardSprite_;
         var outputCard = CardUtil.riffle(userCard1.onHand);
         var behaveNum = outputCard.length/2
         var isEven = Math2d.isEvenOrOddNumber(outputCard.length);
         if(!isEven)
             behaveNum = behaveNum + 1;
+
+        var index = 0;
         for(var i=0;i<outputCard.length;i++){
-            var oneOutputCard = outputCard[i]
-            for(var j=0;j<oneOutputCard.length;j++){
+            var oneOutputCardArr = outputCard[i]
+            var x = display.cx;
+            if(i<behaveNum) {
+                x = x - i * 75;
+            }else{
+                x = x + (i-behaveNum) * 75;
+            }
+
+
+            for(var j=0;j<oneOutputCardArr.length;j++){
+                var y = display.bottom + 115 + j * 115/2;
+                var oneOutputCard = oneOutputCardArr[j];
+                var cardSprite = onHandleCardSprite[index];
+                cardSprite.initData({cardId:oneOutputCard});
+                cardSprite.initView(true,"big_card");
+                cardSprite.setPosition(x,y);
+                cardSprite.setZOrder(oneOutputCardArr.length-j);
+                index ++;
 
             }
         }
-
-
     },
+
+
     /**
      * 帧刷新事件
      * @param dt
