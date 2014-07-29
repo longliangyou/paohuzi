@@ -147,9 +147,6 @@ var FightLayer =  BaseScene.extend({
         var onHandleCardSprite =  userCard1.onHandleCardSprite_;
         var outputCard = CardUtil.riffle(userCard1.onHand);
         var behaveNum = checkint(outputCard.length/2)
-//        var isEven = Math2d.isEvenOrOddNumber(outputCard.length);
-//        if(!isEven)
-//            behaveNum = checkint((outputCard.length+1)/2);
 
 
         var onHandleCardSpriteArr = [];
@@ -163,7 +160,7 @@ var FightLayer =  BaseScene.extend({
                 x = x + (i-behaveNum) * 75;
             }
 
-            onHandleCardSpriteArr.push([])
+            var oneonHandleCardSpriteArr = [];
             for(var j=0;j<oneOutputCardArr.length;j++){
                 var y = display.bottom + 115 + j * 115/2;
                 var oneOutputCard = oneOutputCardArr[j];
@@ -174,10 +171,11 @@ var FightLayer =  BaseScene.extend({
                 cardSprite.setPosition(x,y);
                 cardSprite.setLocalZOrder(oneOutputCardArr.length-j);
                 cardSprite.setTouch();
-                onHandleCardSpriteArr[i].push(cardSprite)
 
+                oneonHandleCardSpriteArr.push(cardSprite)
                 index ++;
             }
+            onHandleCardSpriteArr.push(oneonHandleCardSpriteArr)
         }
         //存储起来
         userCard1.onHandleCardSpriteArr_ = onHandleCardSpriteArr;

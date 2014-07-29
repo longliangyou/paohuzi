@@ -78,7 +78,7 @@ var CardSprite = cc.Sprite.extend({
                 var x = touch.getLocationX();
                 var y = touch.getLocationY();
                 if(y > display.cy - 115/2 ) {
-                    var isSendCard = this.isSendCard_; //当前是否是出牌
+                    var isSendCard = that.isSendCard_; //当前是否是出牌
                     if (!isSendCard) {
                         that.setPosition(that.drag.startX, that.drag.startY);
                     } else {
@@ -90,7 +90,7 @@ var CardSprite = cc.Sprite.extend({
 
 
 
-                    var currentBigIndexCardSpriteArray = onHandleCardSpriteArr[this.bigArrayIndex_];
+                    var currentBigIndexCardSpriteArray = onHandleCardSpriteArr[that.bigArrayIndex_];
 
                     var startOnHandleCardSprite = onHandleCardSpriteArr[0][0];
                     var startOnHandleCardSpriteX = startOnHandleCardSprite.getPositionX();
@@ -99,7 +99,11 @@ var CardSprite = cc.Sprite.extend({
                     }
                     if(x < startOnHandleCardSpriteX){
                         if(startOnHandleCardSprite != that){
-//                            currentBigIndexCardSpriteArray
+                            currentBigIndexCardSpriteArray.splice(that.smallArrayIndex_,1)
+                            if(currentBigIndexCardSpriteArray.length>0)
+                                onHandleCardSpriteArr.splice(that.bigArrayIndex_,1,currentBigIndexCardSpriteArray);
+                            else
+                                onHandleCardSpriteArr.splice(that.bigArrayIndex_,1);
                             onHandleCardSpriteArr.splice(0,0,[startOnHandleCardSprite]);
                         }
                     }
