@@ -153,6 +153,7 @@ CardUtil.updateSort = function(CardSprite,onHandleCardSpriteArr,drag) {
             onHandleCardSpriteArr.splice(onHandleCardSpriteArrLen, 0, [CardSprite]);
         }else{
             var count = Math.round((lastX - leftX)/75)
+            if(count>onHandleCardSpriteArrLen-1) count = onHandleCardSpriteArrLen-1
             var bool = spliceOrgion(count);
             if(bool) {
                 deleteOrgion();
