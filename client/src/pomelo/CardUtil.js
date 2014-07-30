@@ -130,33 +130,32 @@ CardUtil.updateSort = function(CardSprite,onHandleCardSpriteArr,drag) {
 
         var spliceOrgion = function(index){
             var oneArr = onHandleCardSpriteArr[index];
-            if(oneArr.length < 4){
-                //首先移除当前的这个卡牌
-                var  bigIndex = CardSprite.bigArrayIndex_;
-                var smallIndex = CardSprite.smallArrayIndex_;
-                var oneSmallArr = onHandleCardSpriteArr[bigIndex];
-                oneSmallArr.splice(smallIndex,1);
-
+            if(oneArr.length < 3){
                 return true
             }
             return false;
         }
 
+        var deleteOrgion = function(){
+            //首先移除当前的这个卡牌
+            var  bigIndex = CardSprite.bigArrayIndex_;
+            var smallIndex = CardSprite.smallArrayIndex_;
+            var oneSmallArr = onHandleCardSpriteArr[bigIndex];
+            oneSmallArr.splice(smallIndex,1);
+        }
+
 
         if(lastX<leftX){
-            var bool = spliceOrgion(0);
-            if(bool) {
-                onHandleCardSpriteArr.splice(0,0,[CardSprite]);
-            }
-        }else if(lastX>rightX) {
-            var bool = spliceOrgion(onHandleCardSpriteArrLen-1);
-            if(bool) {
-                onHandleCardSpriteArr.splice(onHandleCardSpriteArrLen-1, 0, [CardSprite]);
-            }
+            deleteOrgion();
+            onHandleCardSpriteArr.splice(0,0,[CardSprite]);
+        }else if(lastX > rightX ) {
+            deleteOrgion();
+            onHandleCardSpriteArr.splice(onHandleCardSpriteArrLen, 0, [CardSprite]);
         }else{
             var count = Math.floor((lastX - leftX)/75)
             var bool = spliceOrgion(count);
             if(bool) {
+                deleteOrgion();
                 var oneArr = onHandleCardSpriteArr[count];
                 oneArr.splice(oneArr.length, 0, CardSprite);
             }
@@ -167,7 +166,7 @@ CardUtil.updateSort = function(CardSprite,onHandleCardSpriteArr,drag) {
 
     onHandleCardSpriteArr = _.select(onHandleCardSpriteArr, function(cardSprite){
         return cardSprite && cardSprite.length;
-    }
+    });
 
 
 
@@ -183,7 +182,7 @@ CardUtil.updateSort = function(CardSprite,onHandleCardSpriteArr,drag) {
             x = x + (i - behaveNum) * 75;
         }
 
-
+        cc.log(oneOutputCardArr.length,x);
         for (var j = 0; j < oneOutputCardArr.length; j++) {
             var y = display.bottom + 115 + j * 115 / 2;
             var cardSprite = oneOutputCardArr[j];
@@ -193,7 +192,7 @@ CardUtil.updateSort = function(CardSprite,onHandleCardSpriteArr,drag) {
         }
     }
 
-
-
+    var userCard1 = FightVo.userCard1;
+    userCard1.onHandleCardSpriteArr_ = onHandleCardSpriteArr;
     return onHandleCardSpriteArr;
 }
