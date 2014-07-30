@@ -20,6 +20,10 @@ var CardSprite = cc.Sprite.extend({
         this.cardType_ = this.cardId_> 39 ? "d":"x" ;//定义大小 d 或者 x
         this.cardNum_ = checkint((this.cardId_ )%10);//定义卡片的数字
         if(this.cardNum_ == 0) this.cardNum_ = 10;
+
+        //调试定位原点
+        var spt  = display.newSprite("#PointFlag.png");
+        this.addChild(spt);
     },
     /**
      * 显示视图

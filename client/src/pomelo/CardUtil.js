@@ -123,14 +123,14 @@ CardUtil.updateSort = function(CardSprite,onHandleCardSpriteArr,drag) {
         var onHandleCardSpriteArrLen = onHandleCardSpriteArr.length;
         var behaveNum = checkint(onHandleCardSpriteArrLen/2)
         var leftX = display.cx - behaveNum * 75;
-        var rightX  = leftX + (onHandleCardSpriteArrLen -1) * 75; //display.cx + (i-behaveNum) * 75;
+        var rightX  = leftX + (onHandleCardSpriteArrLen ) * 75; //display.cx + (i-behaveNum) * 75;
 
 
 
 
         var spliceOrgion = function(index){
             var oneArr = onHandleCardSpriteArr[index];
-            if(oneArr.length < 3){
+            if(!oneArr || oneArr.length < 3){
                 return true
             }
             return false;
@@ -152,7 +152,7 @@ CardUtil.updateSort = function(CardSprite,onHandleCardSpriteArr,drag) {
             deleteOrgion();
             onHandleCardSpriteArr.splice(onHandleCardSpriteArrLen, 0, [CardSprite]);
         }else{
-            var count = Math.floor((lastX - leftX)/75)
+            var count = Math.round((lastX - leftX)/75)
             var bool = spliceOrgion(count);
             if(bool) {
                 deleteOrgion();

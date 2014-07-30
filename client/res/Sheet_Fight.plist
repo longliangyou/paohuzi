@@ -4,6 +4,19 @@
     <dict>
         <key>frames</key>
         <dict>
+            <key>PointFlag.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{180,993},{4,4}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{2,2},{4,4}}</string>
+                <key>sourceSize</key>
+                <string>{8,8}</string>
+            </dict>
             <key>fight_bg.png</key>
             <dict>
                 <key>frame</key>
@@ -1002,7 +1015,7 @@
             <key>size</key>
             <string>{1024,2048}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:f76b3078d3a0b16674e41904354255ca:55741d64c2af6d8d1f51b31f5eeebf07:476fcd4873c1984eefe6c7e206ec713e$</string>
+            <string>$TexturePacker:SmartUpdate:6ce7aa37b5e3f77552f6ed574a154754:95f2862531dbdcfffdb39f16a2227eb0:476fcd4873c1984eefe6c7e206ec713e$</string>
             <key>textureFileName</key>
             <string>Sheet_Fight.png</string>
         </dict>
