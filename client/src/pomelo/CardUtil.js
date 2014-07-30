@@ -100,3 +100,100 @@ CardUtil.riffle = function(cards) {
   });
   return riffledCards;
 };
+
+
+/**
+ * 返回一个重新组合好的 onHandleCardSpriteArr
+ * @param CardSprite  onHandleCardSpriteArr其中的一个 cardsprite
+ * @param onHandleCardSpriteArr 结构类似CardUtil.riffle返回的数组结构，不过最小单位是 cardsprite
+ * @param drag
+ */
+CardUtil.updateSort = function(CardSprite,onHandleCardSpriteArr,drag) {
+    if(y > display.cy - 115/2 ) {
+        var isSendCard = that.isSendCard_; //当前是否是出牌
+        if (!isSendCard) {
+            return onHandleCardSpriteArr;
+        }
+    }else {//根据自己需求的牌进行排列的操作
+        var startX = drag.startX;
+        var startY = drag.startY;
+        var lastX = drag.lastX;
+        var lastY = drag.lastY;
+
+        var onHandleCardSpriteArrLen = onHandleCardSpriteArr.length;
+        var behaveNum = checkint(onHandleCardSpriteArrLen/2)
+        var leftX = display.cx - behaveNum * 75;
+        var rightX  = leftX + (onHandleCardSpriteArrLen -1) * 75; //display.cx + (i-behaveNum) * 75;
+
+
+
+
+        var spliceOrgion = function(index){
+            var oneArr = onHandleCardSpriteArr[index];
+            if(oneArr.length < 4){
+                //首先移除当前的这个卡牌
+                var  bigIndex = CardSprite.bigArrayIndex_;
+                var smallIndex = CardSprite.smallArrayIndex_;
+                var oneSmallArr = onHandleCardSpriteArr[bigIndex];
+                oneSmallArr.splice(smallIndex,1);
+
+                return true
+            }
+            return false;
+        }
+
+
+        if(lastX<leftX){
+            var bool = spliceOrgion(0);
+            if(bool) {
+                onHandleCardSpriteArr.splice(0,0,[CardSprite]);
+            }
+        }else if(lastX>rightX) {
+            var bool = spliceOrgion(onHandleCardSpriteArrLen-1);
+            if(bool) {
+                onHandleCardSpriteArr.splice(onHandleCardSpriteArrLen-1, 0, [CardSprite]);
+            }
+        }else{
+            var count = Math.floor((lastX - leftX)/75)
+            var bool = spliceOrgion(count);
+            if(bool) {
+                var oneArr = onHandleCardSpriteArr[count];
+                oneArr.splice(oneArr.length, 0, CardSprite);
+            }
+
+        }
+    }
+
+
+    onHandleCardSpriteArr = _.select(onHandleCardSpriteArr, function(cardSprite){
+        return cardSprite && cardSprite.length;
+    }
+
+
+
+
+
+    var behaveNum = checkint(onHandleCardSpriteArr.length/2)
+    for(var i=0;i<onHandleCardSpriteArr.length;i++) {
+        var oneOutputCardArr = onHandleCardSpriteArr[i]
+        var x = display.cx;
+        if (i < behaveNum) {
+            x = x - (behaveNum - i) * 75;
+        } else {
+            x = x + (i - behaveNum) * 75;
+        }
+
+
+        for (var j = 0; j < oneOutputCardArr.length; j++) {
+            var y = display.bottom + 115 + j * 115 / 2;
+            var cardSprite = oneOutputCardArr[j];
+            cardSprite.setCardArrayIndex(i, j);
+            cardSprite.setPosition(x, y);
+            cardSprite.setLocalZOrder(oneOutputCardArr.length - j);
+        }
+    }
+
+
+
+    return onHandleCardSpriteArr;
+}

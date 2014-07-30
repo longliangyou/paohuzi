@@ -58,10 +58,10 @@ var CardSprite = cc.Sprite.extend({
                 var x = touch.getLocationX();
                 var y = touch.getLocationY();
                 that.drag = {
-                    startX: that.getPositionX(),
-                    startY:  that.getPositionY(),
-                    lastX: x,
-                    lastY: y,
+                    startX: x,//that.getPositionX(),
+                    startY: y,// that.getPositionY(),
+                    lastX: 0,
+                    lastY: 0,
                     offsetX: 0,
                     offsetY: 0,
                     moveOffsetX: 0,
@@ -77,36 +77,30 @@ var CardSprite = cc.Sprite.extend({
             onTouchEndedHandle:function(touch,event){
                 var x = touch.getLocationX();
                 var y = touch.getLocationY();
-                if(y > display.cy - 115/2 ) {
-                    var isSendCard = that.isSendCard_; //当前是否是出牌
-                    if (!isSendCard) {
-                        that.setPosition(that.drag.startX, that.drag.startY);
-                    } else {
-                        that.setPosition(display.cx, display.cy + 115 / 2);
-                    }
-                }else{//根据自己需求的牌进行排列的操作
-                    var userCard1 = FightVo.userCard1;
-                    var onHandleCardSpriteArr = userCard1.onHandleCardSpriteArr_;
+                that.drag.lastX = x;
+                that.drag.lastY = y;
 
+                var userCard1 = FightVo.userCard1;
+                var onHandleCardSpriteArr = userCard1.onHandleCardSpriteArr_;
+                var newonHandleCardSpriteArr = CardUtil.updateSort(that,onHandleCardSpriteArr,that.drag) ;
 
-
-                    var currentBigIndexCardSpriteArray = onHandleCardSpriteArr[that.bigArrayIndex_];
-
-                    var startOnHandleCardSprite = onHandleCardSpriteArr[0][0];
-                    var startOnHandleCardSpriteX = startOnHandleCardSprite.getPositionX();
-                    if(startOnHandleCardSprite == that){
-                        startOnHandleCardSpriteX = that.drag.startX;
-                    }
-                    if(x < startOnHandleCardSpriteX){
-                        if(startOnHandleCardSprite != that){
-                            currentBigIndexCardSpriteArray.splice(that.smallArrayIndex_,1)
-                            if(currentBigIndexCardSpriteArray.length>0)
-                                onHandleCardSpriteArr.splice(that.bigArrayIndex_,1,currentBigIndexCardSpriteArray);
-                            else
-                                onHandleCardSpriteArr.splice(that.bigArrayIndex_,1);
-                            onHandleCardSpriteArr.splice(0,0,[startOnHandleCardSprite]);
-                        }
-                    }
+//                    var currentBigIndexCardSpriteArray = onHandleCardSpriteArr[that.bigArrayIndex_];
+//
+//                    var startOnHandleCardSprite = onHandleCardSpriteArr[0][0];
+//                    var startOnHandleCardSpriteX = startOnHandleCardSprite.getPositionX();
+//                    if(startOnHandleCardSprite == that){
+//                        startOnHandleCardSpriteX = that.drag.startX;
+//                    }
+//                    if(x < startOnHandleCardSpriteX){
+//                        if(startOnHandleCardSprite != that){
+//                            currentBigIndexCardSpriteArray.splice(that.smallArrayIndex_,1)
+//                            if(currentBigIndexCardSpriteArray.length>0)
+//                                onHandleCardSpriteArr.splice(that.bigArrayIndex_,1,currentBigIndexCardSpriteArray);
+//                            else
+//                                onHandleCardSpriteArr.splice(that.bigArrayIndex_,1);
+//                            onHandleCardSpriteArr.splice(0,0,[startOnHandleCardSprite]);
+//                        }
+//                    }
 
 //                    var endOnHandleCardSprite = onHandleCardSpriteArr[onHandleCardSpriteArr.length-1][0];
 //                    if(){
@@ -115,7 +109,7 @@ var CardSprite = cc.Sprite.extend({
 
 
 
-                }
+
 
                 that.drag = null
             }

@@ -129,6 +129,12 @@ var FightLayer =  BaseScene.extend({
             cardSprite2.setRotation(90);
             transition.moveTo(cardSprite2,{delay:delay,time:0.2,x:display.left - 100})
         }
+        if(userCard1.isBanker){//如果我是庄家
+            var cardSprite1 = this.allCardSpt_[60];
+            cardSprite1.initView(false,"fight_big_card.png");
+            transition.moveTo(cardSprite1,{delay:20*0.04,time:0.2,y:display.bottom - 115});
+            userCard1.onHandleCardSprite_.push(cardSprite1);
+        }
 
 
         //排列自己的牌
