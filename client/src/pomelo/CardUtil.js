@@ -15,89 +15,124 @@ var CardUtil = {};
 //   Array[2]
 // ]
 CardUtil.riffle = function(cards) {
+  // console.log("cards: ", cards);
+  var countedCards = _.countBy(cards, function(c){return c;});
   var riffledCards = [];
+  console.log("countedCards: ", countedCards);
 
-  var bigCards = [];
-  var smallCards = [];
 
-  // 0 标记牌
-  _.each(cards, function(card){
-    if (card > 40){
-      bigCards.push(card);
+  // 1. 四张、三张
+  _.each(countedCards, function(value, key){
+    if(value === 4){
+      riffledCards.push([key,key,key,key]);
+      delete countedCards[key];
+    } else if (value === 3){
+      riffledCards.push([key,key,key]);
+      delete countedCards[key];
+    }
+  });
+
+
+  // 2. 贰柒拾
+  if (countedCards[12] && countedCards[17] && countedCards[20]){
+    riffledCards.push([12, 17, 20]);
+    countedCards[12]--;
+    countedCards[17]--;
+    countedCards[20]--;
+  }
+  if (countedCards[12] && countedCards[17] && countedCards[20]){
+    riffledCards.push([12, 17, 20]);
+    countedCards[12]--;
+    countedCards[17]--;
+    countedCards[20]--;
+  }
+
+
+  // 3. 壹贰叁
+  if (countedCards[11] && countedCards[12] && countedCards[13]){
+    riffledCards.push([11, 12, 13]);
+    countedCards[11]--;
+    countedCards[12]--;
+    countedCards[13]--;
+  }
+  if (countedCards[11] && countedCards[12] && countedCards[13]){
+    riffledCards.push([11, 12, 13]);
+    countedCards[11]--;
+    countedCards[12]--;
+    countedCards[13]--;
+  }
+
+
+  // 4. 二七十
+  if (countedCards[2] && countedCards[7] && countedCards[10]){
+    riffledCards.push([2, 7, 10]);
+    countedCards[2]--;
+    countedCards[7]--;
+    countedCards[10]--;
+  }
+  if (countedCards[2] && countedCards[7] && countedCards[10]){
+    riffledCards.push([2, 7, 10]);
+    countedCards[2]--;
+    countedCards[7]--;
+    countedCards[10]--;
+  }
+
+
+  // 5. 一二三
+  if (countedCards[1] && countedCards[2] && countedCards[3]){
+    riffledCards.push([1, 2, 3]);
+    countedCards[1]--;
+    countedCards[2]--;
+    countedCards[3]--;
+  }
+  if (countedCards[1] && countedCards[2] && countedCards[3]){
+    riffledCards.push([1, 2, 3]);
+    countedCards[1]--;
+    countedCards[2]--;
+    countedCards[3]--;
+  }
+
+
+
+  // 6. 对子
+  _.each(countedCards, function(value, key){
+    if(value == 2){
+      riffledCards.push([key,key]);
+      delete countedCards[key];
+    }
+  });
+
+
+
+  // 7. 一句话
+  _.each(countedCards, function(value, key){
+    if(value && countedCards[key+1] && countedCards[key+2]){
+      riffledCards.push([key, key+1, key+2]);
+      countedCards[key]--;
+      countedCards[key+1]--;
+      countedCards[key+2]--;
+    }
+  });
+
+
+  // 6. 散牌
+  var countedCardsArray = [];
+  _.each(countedCards, function(value, key){
+    if (value){
+      countedCardsArray.push(key);
+      if(countedCardsArray.length === 3){
+        riffledCards.push(countedCardsArray);
+        countedCardsArray = [];
+      }
     } else {
-      smallCards.push(card);
+      delete countedCards[key];
     }
   });
+  if(countedCardsArray.length > 0){
+    riffledCards.push(countedCardsArray);
+  }
 
-
-  // 1 相同的牌一组
-  var bigGroup = _.groupBy(bigCards, function(card){
-    var number = card % 10;
-    if (number === 0){
-      number = 10;
-    }
-    return number;
-  });
-
-  var smallGroup = _.groupBy(smallCards, function(card){
-    var number = card % 10;
-    if (number === 0){
-      number = 10;
-    }
-    return number;
-  });
-
-  var restCards = [];
-  _.each(bigGroup, function(value, key){
-    if (value.length > 1){
-      riffledCards.push(value);
-    }else{
-      restCards.push(value[0]);
-    }
-  });
-  _.each(smallGroup, function(value, key){
-    if (value.length > 1){
-      riffledCards.push(value);
-    }else{
-      restCards.push(value[0]);
-    }
-  });
-
-  var tempCards = [];
-  var restGroup = _.groupBy(restCards, function(card){return card % 10;});
-  _.each(restGroup, function(value, key){
-    if (value.length > 1){
-      riffledCards.push(value);
-    }else{
-      tempCards.push(value[0]);
-    }
-  });
-
-
-  // 2 按顺序相邻3张一组。
-  var group1 = [];
-  var group2 = [];
-  var group3 = [];
-  _.each(tempCards, function(card){
-    number = card % 10;
-    if (number === 0){
-      number = 10;
-    }
-    if (number < 4){
-      group1.push(card);
-    }else if (number > 6 ){
-      group2.push(card);
-    } else {
-      group3.push(card);
-    }
-  });
-
-  riffledCards.push(group1);
-  riffledCards.push(group2);
-  riffledCards.push(group3);
-  riffledCards = _.reject(riffledCards, function (group){
-    return !group.length;
-  });
+  console.log('riffledCards: ', riffledCards, countedCards);
   return riffledCards;
 };
 

@@ -7,7 +7,7 @@ var Round = {
   //     onHand: [Number...],    // 玩家手里的牌
   //     onTrash: [Number...],   // 玩家打出的牌
   //     unFollow: [Number],     // 玩家没有吃的牌
-  //     unTouch: [Number],       // 玩家没有碰的牌
+  //     unTouch: [Number],      // 玩家没有碰的牌
   //   }
   // ]
   // onTable: [] // 桌上的底牌
@@ -21,7 +21,9 @@ var Round = {
 
     var players = [{num: 0}, {num: 1}, {num: 2}];
 
-    var onTable = _.shuffle(_.range(1,81));
+    var cardRange = _.range(1,21);
+    var cards = cardRange.concat(cardRange).concat(cardRange).concat(cardRange);
+    var onTable = _.shuffle(cards);
 
     var bankerNumer = bankerNumer;
 
@@ -64,7 +66,8 @@ var Round = {
 
       nextPlayer = getOtherPlayerCards(players[(player.num+1)%3]);
       previousPlayer = getOtherPlayerCards(players[(player.num + 2)%3]);
-
+      // console.log(player.onHand);
+      CardUtil.riffle(player.onHand);
       return [previousPlayer, player, nextPlayer];
     };
 
