@@ -109,10 +109,41 @@ CardUtil.riffle = function(cards) {
  * @param drag
  */
 CardUtil.updateSort = function(CardSprite,onHandleCardSpriteArr,drag) {
+    var sortFun = function(){
+        var behaveNum = checkint(onHandleCardSpriteArr.length/2)
+        for(var i=0;i<onHandleCardSpriteArr.length;i++) {
+            var oneOutputCardArr = onHandleCardSpriteArr[i]
+            var x = display.cx;
+            if (i < behaveNum) {
+                x = x - (behaveNum - i) * 75;
+            } else {
+                x = x + (i - behaveNum) * 75;
+            }
+
+            for (var j = 0; j < oneOutputCardArr.length; j++) {
+                var y = display.bottom + 115 + j * 115 / 2;
+                var cardSprite = oneOutputCardArr[j];
+                cardSprite.setCardArrayIndex(i, j);
+                cardSprite.setPosition(x, y);
+                cardSprite.setLocalZOrder(oneOutputCardArr.length - j);
+            }
+        }
+    }
+
+
+
+
+
+
+
+
     if(y > display.cy - 115/2 ) {
         var isSendCard = that.isSendCard_; //当前是否是出牌
         if (!isSendCard) {
+            sortFun()
             return onHandleCardSpriteArr;
+        }else{
+
         }
     }else {//根据自己需求的牌进行排列的操作
         var startX = drag.startX;
@@ -172,27 +203,10 @@ CardUtil.updateSort = function(CardSprite,onHandleCardSpriteArr,drag) {
 
 
 
+    sortFun()
 
-    var behaveNum = checkint(onHandleCardSpriteArr.length/2)
-    for(var i=0;i<onHandleCardSpriteArr.length;i++) {
-        var oneOutputCardArr = onHandleCardSpriteArr[i]
-        var x = display.cx;
-        if (i < behaveNum) {
-            x = x - (behaveNum - i) * 75;
-        } else {
-            x = x + (i - behaveNum) * 75;
-        }
 
-        for (var j = 0; j < oneOutputCardArr.length; j++) {
-            var y = display.bottom + 115 + j * 115 / 2;
-            var cardSprite = oneOutputCardArr[j];
-            cardSprite.setCardArrayIndex(i, j);
-            cardSprite.setPosition(x, y);
-            cardSprite.setLocalZOrder(oneOutputCardArr.length - j);
-        }
-    }
-
-    var userCard1 = FightVo.userCard1;
-    userCard1.onHandleCardSpriteArr_ = onHandleCardSpriteArr;
+//    var userCard1 = FightVo.userCard1;
+//    userCard1.onHandleCardSpriteArr_ = onHandleCardSpriteArr;
     return onHandleCardSpriteArr;
 }

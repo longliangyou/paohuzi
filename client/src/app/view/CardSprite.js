@@ -87,34 +87,6 @@ var CardSprite = cc.Sprite.extend({
                 var userCard1 = FightVo.userCard1;
                 var onHandleCardSpriteArr = userCard1.onHandleCardSpriteArr_;
                 var newonHandleCardSpriteArr = CardUtil.updateSort(that,onHandleCardSpriteArr,that.drag) ;
-
-//                    var currentBigIndexCardSpriteArray = onHandleCardSpriteArr[that.bigArrayIndex_];
-//
-//                    var startOnHandleCardSprite = onHandleCardSpriteArr[0][0];
-//                    var startOnHandleCardSpriteX = startOnHandleCardSprite.getPositionX();
-//                    if(startOnHandleCardSprite == that){
-//                        startOnHandleCardSpriteX = that.drag.startX;
-//                    }
-//                    if(x < startOnHandleCardSpriteX){
-//                        if(startOnHandleCardSprite != that){
-//                            currentBigIndexCardSpriteArray.splice(that.smallArrayIndex_,1)
-//                            if(currentBigIndexCardSpriteArray.length>0)
-//                                onHandleCardSpriteArr.splice(that.bigArrayIndex_,1,currentBigIndexCardSpriteArray);
-//                            else
-//                                onHandleCardSpriteArr.splice(that.bigArrayIndex_,1);
-//                            onHandleCardSpriteArr.splice(0,0,[startOnHandleCardSprite]);
-//                        }
-//                    }
-
-//                    var endOnHandleCardSprite = onHandleCardSpriteArr[onHandleCardSpriteArr.length-1][0];
-//                    if(){
-//
-//                    }
-
-
-
-
-
                 that.drag = null
             }
         }
