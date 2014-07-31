@@ -106,16 +106,33 @@ CardUtil.riffle = function(cards) {
 
   // 7. 一句话
   _.each(countedCards, function(value, key){
-    if(value && countedCards[key+1] && countedCards[key+2]){
-      riffledCards.push([key, key+1, key+2]);
-      countedCards[key]--;
-      countedCards[key+1]--;
-      countedCards[key+2]--;
+    k = parseInt(key, 10);
+    if(value && countedCards[k+1] && countedCards[k+2]){
+      riffledCards.push([k, k+1, k+2]);
+      countedCards[k]--;
+      countedCards[k+1]--;
+      countedCards[k+2]--;
+
+    } else if (!value){
+      delete countedCards[k];
     }
   });
 
 
-  // 6. 散牌
+  // 8. 两张
+  _.each(countedCards, function(value, key){
+    k = parseInt(key, 10);
+    if(value && countedCards[k+1]){
+      riffledCards.push([k, k+1]);
+      countedCards[k]--;
+      countedCards[k+1]--;
+    } else if (!value){
+      delete countedCards[k];
+    }
+  });
+
+
+  // 9. 散牌
   var countedCardsArray = [];
   _.each(countedCards, function(value, key){
     if (value){
@@ -132,7 +149,7 @@ CardUtil.riffle = function(cards) {
     riffledCards.push(countedCardsArray);
   }
 
-  console.log('riffledCards: ', riffledCards, countedCards);
+  console.log('#riffledCards: ', riffledCards, _.sortBy(cards,function(c){return c;}));
   return riffledCards;
 };
 

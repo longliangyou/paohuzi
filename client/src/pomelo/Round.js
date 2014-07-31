@@ -34,7 +34,7 @@ var Round = {
 
     _.each (players, function(player, index){
       player.uid = userIds[index];
-      player.onHand = _.first(onTable, 20);
+      player.onHand = _.sortBy(_.first(onTable, 20), function(c){return c;});
       player.onTable = [];
       player.onTrash = [];
       player.unFollow = [];
