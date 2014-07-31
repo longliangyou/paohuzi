@@ -183,7 +183,6 @@ CardUtil.updateSort = function(CardSprite,onHandleCardSpriteArr,drag) {
             x = x + (i - behaveNum) * 75;
         }
 
-        cc.log(oneOutputCardArr.length,x);
         for (var j = 0; j < oneOutputCardArr.length; j++) {
             var y = display.bottom + 115 + j * 115 / 2;
             var cardSprite = oneOutputCardArr[j];
