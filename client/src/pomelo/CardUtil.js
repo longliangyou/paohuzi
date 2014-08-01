@@ -1,5 +1,24 @@
 var CardUtil = {};
 
+// Ti: 提
+// Pao: 跑
+// Wei: 偎
+
+// Peng: 碰
+// Hu: 胡牌
+// Chi: 吃牌
+// Cancel: 取消
+CardUtil.Actions = {
+  Ti: "ti",         // 提
+  Pao: "pao",       // 跑
+  Wei: "wei",       // 偎
+
+  Peng: "peng",     // 碰
+  Hu: "hu",         // 胡牌
+  Chi: "chi",       // 吃牌
+  Cancel: "cancel"  // 取消 
+};
+
 // 组牌
 // example: [75, 13, 5, 28, 35, 54, 22, 19, 62, 51, 3, 42, 59, 79, 73, 24, 57, 10, 58, 44]
 // =>
@@ -155,6 +174,93 @@ CardUtil.riffle = function(cards) {
   return riffledCards;
 };
 
+
+/**
+ * 返回胡息数, 最小单位是四张，三张，一句话(二七十，一二三; 壹贰叁、贰柒拾)
+ * @param cards 
+ * @param type: CardUtil.Actions 中的一种，包括: 提，跑，偎，碰，吃
+ * @return huxi
+ */
+// 1. 四张大牌--提 12 胡息
+// 2. 四张小牌--提 9 胡
+// 3. 四张大牌--跑 9 胡息
+// 4. 四张小牌--跑 6 胡
+
+// 5. 三张大牌--偎 6 胡
+// 6. 三张小牌--偎 3 胡
+// 7. 三张大牌-碰 3 胡
+// 8. 三张小牌-碰 1 胡
+
+// 9. 壹贰叁、贰柒拾--吃 6 胡
+// 10. 一二三、二七十--吃 3 胡
+CardUtil.getHuXi = function(cards, type){
+  var huxi = 0;
+  if ((_.union(cards, [])).length === 1){
+  // 1. 四张大牌--提 12 胡息
+  // 2. 四张小牌--提 9 胡
+  // 3. 四张大牌--跑 9 胡息
+  // 4. 四张小牌--跑 6 胡
+    if (cards.length === 4){
+      switch (type){
+        case CardUtil.Actions.Ti:
+          if (cards[0] > 10 && cards[0] < 21){
+            huxi = 12;
+          } else if (cards[0] > 0){
+            huxi = 9;
+          }
+          break;
+        case CardUtil.Actions.Pao:
+          if (cards[0] > 10 && cards[0] < 21){
+            huxi = 9;
+          } else if (cards[0] > 0){
+            huxi = 6;
+          }
+          break;
+        default:
+          break;
+      }
+    }
+
+    // 5. 三张大牌--偎 6 胡
+    // 6. 三张小牌--偎 3 胡
+    // 7. 三张大牌-碰 3 胡
+    // 8. 三张小牌-碰 1 胡
+    if (cards.length === 3){
+      switch (type){
+        case CardUtil.Actions.Wei:
+          if (cards[0] > 10 && cards[0] < 21){
+            huxi = 6;
+          } else if (cards[0] > 0){
+            huxi = 3;
+          }
+          break;
+        case CardUtil.Actions.Peng:
+          if (cards[0] > 10 && cards[0] < 21){
+            huxi = 3;
+          } else if (cards[0] > 0){
+            huxi = 1;
+          }
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+
+  if (cards.length === 3 && type === CardUtil.Actions.Chi){
+    // 9. 壹贰叁、贰柒拾 6 胡
+    if (_.difference(cards, [11,12,13]).length === 0 || _.difference(cards, [12,17,20]).length === 0){
+      huxi = 6;
+    }
+
+    // 10. 一二三、二七十 3 胡
+    if ((_.difference(cards, [1,2,3]).length === 0) || (_.difference(cards, [2,7,10]).length === 0)){
+      huxi = 3;
+    }
+  }
+  return huxi;
+};
 
 /**
  * 返回一个重新组合好的 onHandleCardSpriteArr
