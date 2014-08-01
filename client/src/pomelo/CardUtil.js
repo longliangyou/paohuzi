@@ -175,6 +175,7 @@ CardUtil.riffle = function(cards) {
 };
 
 
+
 /**
  * 返回胡息数, 最小单位是四张，三张，一句话(二七十，一二三; 壹贰叁、贰柒拾)
  * @param cards 
@@ -261,6 +262,67 @@ CardUtil.getHuXi = function(cards, type){
   }
   return huxi;
 };
+
+
+
+
+CardUtil.canPeng = function(cardsOnHand, currentCard){
+  var canPeng = false;
+  var countedCards = _.countBy(cardsOnHand, function(c){return c;});
+  if(countedCards[currentCard] === 2){
+    canPeng = true;
+  }
+  return canPeng;
+};
+
+
+
+CardUtil.canGangOnHand = function(cardsOnHand, currentCard){
+  var canGang = false;
+  var countedCards = _.countBy(cards, function(c){return c;});
+  if(countedCards[currentCard] === 3){
+    canGang = true;
+  }
+  return canGang;
+};
+
+
+
+CardUtil.canGangOnTable = function(cardsOnTable, currentCard){
+  var canGang = false;
+  if (_.contains(cardsOnTable.thricePeng, currentCard) || _.contains(cardsOnTable.thriceWei, currentCard)){
+    canGang = true;
+  }
+  return canGang;
+};
+
+
+
+// CardUtil.canChi = function(cards, currentCard){
+//   var canChi = false;
+//   var countedCards = _.countBy(cards, function(c){return c;});
+//   _.each(countedCards, function(value, key){
+//     if(value === 3){
+//       delete countedCards[key];
+//     }
+//   });
+
+//   if (countedCards[currentCard-1]){
+//     if (countedCards[currentCard-2] || countedCards[currentCard+1]){
+//       canChi = true;
+//     }
+//   } else if (countedCards[currentCard+2]){
+//     if (countedCards[currentCard-1] || countedCards[currentCard+1]){
+//       canChi = true;
+//     }
+//   }
+
+
+//   return canChi;
+// };
+
+
+
 
 /**
  * 返回一个重新组合好的 onHandleCardSpriteArr
