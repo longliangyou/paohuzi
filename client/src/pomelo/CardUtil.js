@@ -107,7 +107,7 @@ CardUtil.riffle = function(cards) {
   // 7. 一句话
   _.each(countedCards, function(value, key){
     k = parseInt(key, 10);
-    if(value && countedCards[k+1] && countedCards[k+2]){
+    if(value && countedCards[k+1] && countedCards[k+2] && (k!==10) && (k!==9)){
       riffledCards.push([k, k+1, k+2]);
       countedCards[k]--;
       countedCards[k+1]--;
@@ -119,10 +119,11 @@ CardUtil.riffle = function(cards) {
   });
 
 
+
   // 8. 两张
   _.each(countedCards, function(value, key){
     k = parseInt(key, 10);
-    if(value && countedCards[k+1]){
+    if(value && countedCards[k+1] && (k!==10)){
       riffledCards.push([k, k+1]);
       countedCards[k]--;
       countedCards[k+1]--;
@@ -130,6 +131,7 @@ CardUtil.riffle = function(cards) {
       delete countedCards[k];
     }
   });
+
 
 
   // 9. 散牌
