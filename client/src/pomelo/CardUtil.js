@@ -176,6 +176,7 @@ CardUtil.riffle = function(cards) {
 
 
 
+
 /**
  * 返回胡息数, 最小单位是四张，三张，一句话(二七十，一二三; 壹贰叁、贰柒拾)
  * @param cards 
@@ -265,6 +266,163 @@ CardUtil.getHuXi = function(cards, type){
 
 
 
+CardUtil.canHu = function(cardsOnHand, cardsOnTable, currentCard){
+  var huxi = 0;
+  var copyedCards = _.clone(cardsOnHand);
+  if (currentCard !== 0){
+    copyedCards.push(currentCard);
+  }
+
+  var onHand = CardUtil.shouShun(cardsOnHand);
+  if (onHand && onHand.length){
+    _.each(onHand, function(cards){
+      if ((_.union(cards, [])).length === 1){
+        huxi += CardUtil.getHuXi(cards, CardUtil.Actions.Wei);
+      } else {
+        huxi += CardUtil.getHuXi(cards, CardUtil.Actions.Chi);
+      }
+    });
+    _.each(cardsOnTable.thricePeng, function(c){
+      huxi += CardUtil.getHuXi([c,c,c], CardUtil.Actions.Peng);
+    });
+    _.each(cardsOnTable.thriceWei, function(c){
+      huxi += CardUtil.getHuXi([c,c,c], CardUtil.Actions.Wei);
+    });
+    _.each(cardsOnTable.fourfoldTi, function(c){
+      huxi += CardUtil.getHuXi([c,c,c,c], CardUtil.Actions.Ti);
+    });
+    _.each(cardsOnTable.fourfoldPao, function(c){
+      huxi += CardUtil.getHuXi([c,c,c,c], CardUtil.Actions.Pao);
+    });
+    _.each(cardsOnTable.shunzi, function(cards){
+      huxi += CardUtil.getHuXi(cards, CardUtil.Actions.Chi);
+    });
+  }
+  var canHu = (huxi >= 15);
+
+  return [canHu, huxi, onHand];
+};
+
+
+
+/**
+ * 玩家的牌是否无单牌。
+ * @param cards: 手中的牌，或者手中的牌加新翻开的底牌。
+ */
+CardUtil.shouShun = function(cards){
+  var countedCards = _.countBy(cards, function(c){return c;});
+
+  var results = [];
+  var singleCards = [];
+
+  // 1. 处理三张，并找出所有单张
+  _.each(countedCards, function(value, key){
+    if (value === 3){
+      results.push([key, key, key]);
+      delete countedCards[key];
+    } else if (value === 1){
+      singleCards.push(key);
+    }
+  });
+
+  var findShunzi = function(singleCard){
+    // 贰柒拾
+    var diff = _.difference([12,17,20], singleCard);
+    if (diff.length !== 3 && countedCards[diff[0]] && countedCards[diff[1]]){
+       countedCards[singleCard]--;
+       countedCards[diff[1]]--;
+       countedCards[diff[0]]--;
+       return [singleCard, diff[0], diff[1]];
+    }
+
+    // 二七十
+    diff = _.difference([2,7,10], singleCard);
+    if (diff.length !== 3 && countedCards[diff[0]] && countedCards[diff[1]]){
+       countedCards[singleCard]--;
+       countedCards[diff[1]]--;
+       countedCards[diff[0]]--;
+       return [singleCard, diff[0], diff[1]];
+    }
+
+    // 顺子
+    if(countedCards[singleCard + 1] && countedCards[singleCard+2]){
+      countedCards[singleCard]--;
+      countedCards[singleCard+1]--;
+      countedCards[singleCard+2]--;
+      return [singleCard, singleCard+1, singleCard+2];
+    }
+    if (countedCards[singleCard+1] && countedCards[singleCard-1]){
+      countedCards[singleCard]--;
+      countedCards[singleCard+1]--;
+      countedCards[singleCard-1]--;
+      return [singleCard-1, singleCard, singleCard+1];
+    }
+
+    if (countedCards[singleCard-1] && countedCards[singleCard-2]){
+      countedCards[singleCard]--;
+      countedCards[singleCard-1]--;
+      countedCards[singleCard-2]--;
+      return [singleCard-2, singleCard-1, singleCard];
+    }
+
+    // 大小混搭
+    if (singleCard > 10 && (countedCards[singleCard-10] > 1)){
+      countedCards[singleCard]--;
+      countedCards[singleCard-10] -= 2;
+      return [singleCard, singleCard-10, singleCard-10];
+    }
+    if (singleCard < 11 && (countedCards[singleCard+10] > 1)){
+      countedCards[singleCard]--;
+      countedCards[singleCard+10] -= 2;
+      return [singleCard, singleCard+10, singleCard+10];
+    }
+    return false;
+  };
+
+  var shunzi;
+  var isSuccess = true;
+  _.each(singleCards, function(sCard){
+    shunzi = findShunzi(sCard);
+    if (shunzi && shunzi.length){
+      results.push(shunzi);
+    } else {
+      isSuccess = false;
+    }
+  });
+
+  if (!isSuccess){
+    return false;
+  }
+
+
+  // 去掉所有组合掉的牌
+  _.each(countedCards, function(value, key){
+    if(value === 0){
+      delete countedCards[key];
+    }
+  });
+
+  var keys = _.keys(countedCards);
+  if (keys.length > 1){
+    _.each(countedCards, function(value, key){
+      if (value === 2){
+        shunzi = findShunzi(key);
+        if (shunzi && shunzi.length){{
+          results.push(shunzi);
+        }}
+        shunzi = findShunzi(key);
+        if (shunzi && shunzi.length){{
+          results.push(shunzi);
+        }}
+      }
+    });
+  } else if(keys.length === 1){
+    results.push([keys[0], keys[0]]);
+  }
+
+  return results;
+};
+
 
 CardUtil.canPeng = function(cardsOnHand, currentCard){
   var canPeng = false;
@@ -296,30 +454,57 @@ CardUtil.canGangOnTable = function(cardsOnTable, currentCard){
   return canGang;
 };
 
+/**
+ * 玩家是否能吃拍
+ * @param cards: 手中的牌。
+ * @param currentCard: 新翻开的底牌，或者上家出的牌。
+ */
+// 1. 顺子
+// 2. 2、7、10
+// 3. 大小混搭
+CardUtil.canChi = function(cards, currentCard){
+  var canChi = false;
+  var countedCards = _.countBy(cards, function(c){return c;});
+  _.each(countedCards, function(value, key){
+    if(value === 3){
+      delete countedCards[key];
+    }
+  });
 
-
-// CardUtil.canChi = function(cards, currentCard){
-//   var canChi = false;
-//   var countedCards = _.countBy(cards, function(c){return c;});
-//   _.each(countedCards, function(value, key){
-//     if(value === 3){
-//       delete countedCards[key];
-//     }
-//   });
-
-//   if (countedCards[currentCard-1]){
-//     if (countedCards[currentCard-2] || countedCards[currentCard+1]){
-//       canChi = true;
-//     }
-//   } else if (countedCards[currentCard+2]){
-//     if (countedCards[currentCard-1] || countedCards[currentCard+1]){
-//       canChi = true;
-//     }
-//   }
-
-
-//   return canChi;
-// };
+  var smallCount, bigCount, diff;
+  if (countedCards[currentCard-1]){
+    if (countedCards[currentCard-2] && currentCard !== 11 && currentCard !== 12){
+      canChi = true;
+    } else if (countedCards[currentCard+1] && currentCard !== 10 && currentCard !== 11){
+      canChi = true;
+    }
+  } else if (countedCards[currentCard+1]){
+    if (countedCards[currentCard-1] && currentCard !== 10 && currentCard > 11){
+      canChi = true;
+    } else if (countedCards[currentCard+2] && currentCard  !==  9 && currentCard > 10){
+      canChi = true;
+    }
+  } else if (currentCard < 11){
+    smallCount = countedCards[currentCard] || 0;
+    bigCount = countedCards[currentCard + 10] || 0;
+    diff = _.difference([2,7,10], currentCard);
+    if (smallCount + bigCount > 1){
+      canChi = true;
+    } else if (diff.length !== 3 && countedCards[diff[0]] && countedCards[diff[1]]){
+      canChi = true;
+    }
+  } else if (currentCard > 10){
+    smallCount = countedCards[currentCard - 10] || 0;
+    bigCount = countedCards[currentCard] || 0;
+    diff = _.difference([12,17,20], currentCard);
+    if (smallCount + bigCount > 1){
+      canChi = true;
+    } else if (diff.length !== 3 && countedCards[diff[0]] && countedCards[diff[1]]){
+      canChi = true;
+    }
+  }
+  return canChi;
+};
 
 
 
