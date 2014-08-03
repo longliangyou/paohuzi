@@ -35,7 +35,7 @@ var Round = {
     _.each (players, function(player, index){
       player.uid = userIds[index];
       player.onHand = _.sortBy(_.first(onTable, 20), function(c){return c;});
-      player.onTable = {word: [], thricePeng: [], thriceWei: [], fourfoldTi: [], fourfoldPao: []};
+      player.onTable = {shunzi: [], thricePeng: [], thriceWei: [], fourfoldTi: [], fourfoldPao: []};
       player.onTrash = [];
       player.unFollow = [];
       player.unTouch = [];
