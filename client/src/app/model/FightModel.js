@@ -12,14 +12,12 @@ var FightModel = BaseModel.extend({
 
     onMessageHandle:function(event){
         var cmd = event.cmd;
-        if(cmd == CardUtil.ServerCommand.onNewRound){ // 开局
+        if(cmd == CardUtil.ServerNotify.onNewRound){ // 开局
           //这里无论是网络还是单机  都统一到这个回调   然后我在吧牌写到fightvo内存中 在fightvo中吧array解析出来
           var onComplete = function(result){
               if(result.success){
                   var data = result.data;
                   FightVo.init(data);
-
-                  callBack(result);
               }
           };
           onComplete(event.result);
@@ -34,11 +32,10 @@ var FightModel = BaseModel.extend({
      */
     joinDesk:function(userId, callBack){
         if(FightVo.deskType === 0) {//单机版
-
             var round = Round.createNew([userId, "user2", "user3"], 1);
             FightVo.round = round;
             var event = {
-              cmd: CardUtil.ServerCommand.onNewRound,
+              cmd: CardUtil.ServerNotify.onNewRound,
               result: {
                 data: FightVo.round.getCardsByUserId(userId),
                 success: true,
@@ -46,8 +43,9 @@ var FightModel = BaseModel.extend({
               previousUser: 'user3',
               nextUser: 'user2'
             };
-            this.onMessageHandle(event);
             callback({previousUser: "user3", nextUser: "user3"});
+            this.onMessageHandle(event);
+
         }else if(FightVo.deskType == 2) {//三人网络场
             //onComplete(result);
         }

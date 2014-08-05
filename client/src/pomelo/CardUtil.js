@@ -16,13 +16,13 @@ CardUtil.Actions = {
   Peng: "peng",     // 碰
   Hu: "hu",         // 胡牌
   Chi: "chi",       // 吃牌
-  Cancel: "cancel"  // 取消 
+  Cancel: "cancel", // 取消 
+  Idle: "idle"      // 无操作
 };
 
 
-CardUtil.ServerCommand = {
-  onNewRound: 1, // 开局通知
-
+CardUtil.ServerNotify = {
+  onNewRound: 1 // 开局通知
 
 }
 // 组牌
@@ -441,24 +441,19 @@ CardUtil.canPeng = function(cardsOnHand, currentCard){
 
 
 
-CardUtil.canGangOnHand = function(cardsOnHand, currentCard){
+CardUtil.canGang = function(cardsOnHand, cardsOnTable, currentCard){
   var canGang = false;
   var countedCards = _.countBy(cards, function(c){return c;});
   if(countedCards[currentCard] === 3){
     canGang = true;
   }
-  return canGang;
-};
-
-
-
-CardUtil.canGangOnTable = function(cardsOnTable, currentCard){
-  var canGang = false;
   if (_.contains(cardsOnTable.thricePeng, currentCard) || _.contains(cardsOnTable.thriceWei, currentCard)){
     canGang = true;
   }
   return canGang;
 };
+
+
 
 /**
  * 玩家是否能吃拍

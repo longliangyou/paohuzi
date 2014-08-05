@@ -26,7 +26,9 @@ var Round = {
     var onTable = _.shuffle(cards);
 
     var bankerNumer = bankerNumer;
-
+    var currentPlayer = function(uid){
+      return _.find(players, function(player){return player.uid == uid;});
+    };
 
     // if (userIds.length !== 3 || (bankerNum > 2 && bankerNum < 0)){
     //   return false;
@@ -62,7 +64,7 @@ var Round = {
     };
 
     round.getCardsByUserId = function(uid) {
-      player = _.find(players, function(player){return player.uid == uid;});
+      var player = currentPlayer(uid);
 
       nextPlayer = getOtherPlayerCards(players[(player.num+1)%3]);
       previousPlayer = getOtherPlayerCards(players[(player.num + 2)%3]);
@@ -71,6 +73,61 @@ var Round = {
       return [previousPlayer, player, nextPlayer];
     };
 
+    // 碰牌
+    round.peng = function(uid, card){
+      var player = currentPlayer(uid);
+      if (CardUtil.canPeng(player.onHand, card.currentCard)){
+        player.onHand = _.reject(player.onHand, function(card){ return card.currentCard == card;});
+        player.onTable.thricePeng.push(card.currentCard);
+        return CardUtil.Actions.Peng;
+      }
+      return CardUtil.Actions.Idle;
+    };
+
+    // 偎牌
+    round.wei = function(uid, card){
+      var player = currentPlayer(uid);
+      if (CardUtil.canPeng(player.onHand, card.currentCard)){
+        player.onHand = _.reject(player.onHand, function(card){ return card.currentCard == card;});
+        player.onTable.thriceWei.push(card.currentCard);
+        return CardUtil.Actions.Wei;
+      }
+      return CardUtil.Actions.Idle;
+
+    };
+
+    // 提牌或者跑牌
+    round.gang = function(uid, card){
+      var action = CardUtil.Actions.Idle;
+      var player = currentPlayer(uid);
+      if (CardUtil.canGang(player.onHand, player.onTable, card.currentCard)){
+        var isOnHand = _.find(player.onHand, card.currentCard);
+        if (isOnHand){
+          player.onHand = _.reject(player.onHand, function(card){ return card.currentCard == card;});
+          if(card.uid === uid){
+            player.onTable.fourfoldTi.push(currentCard);
+            action = CardUtil.Actions.Ti;
+          } else {
+            player.onTable.fourfoldPao.push(currentCard);
+            action = CardUtil.Actions.Pao;
+          }
+        } else if (!!(isOnPeng = _.find(player.onTable.thricePeng, card.currentCard))){
+          player.onTable.thricePeng = _.reject(player.onTable.thricePeng, function(card){ return card.currentCard == card;});
+          player.onTable.fourfoldPao.push(currentCard);
+          action = CardUtil.Actions.Pao;
+        } else if (!!(isOnWei = _.find(player.onTable.thriceWei, card.currentCard))){
+          player.onTable.thriceWei = _.reject(player.onTable.thriceWei, function(card){ return card.currentCard == card;});
+          if(card.uid === uid){
+            player.onTable.fourfoldTi.push(currentCard);
+            action = CardUtil.Actions.Ti;
+          } else {
+            player.onTable.fourfoldPao.push(currentCard);
+            action = CardUtil.Actions.Pao;
+          }
+        }
+      }
+      return action;
+    };
     return round;
   }
 };
