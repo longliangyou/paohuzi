@@ -9,9 +9,20 @@ var FightModel = BaseModel.extend({
         //监听后台消息
         //PomeloApi.addEventListener("onMessageHandle",this.onMessageHandle)
     },
+
     onMessageHandle:function(event){
         var cmd = event.cmd;
-        if(cmd == "EAT_CARD"){ //吃牌
+        if(cmd == CardUtil.ServerCommand.onNewRound){ // 开局
+          //这里无论是网络还是单机  都统一到这个回调   然后我在吧牌写到fightvo内存中 在fightvo中吧array解析出来
+          var onComplete = function(result){
+              if(result.success){
+                  var data = result.data;
+                  FightVo.init(data);
+
+                  callBack(result);
+              }
+          };
+          onComplete(event.result);
 
         }
     },
@@ -21,32 +32,22 @@ var FightModel = BaseModel.extend({
      * 配卓成功 需要返回其他人的角色信息 以及 大家的手上的牌
      * @return
      */
-    joinDesk:function(callBack){
+    joinDesk:function(userId, callBack){
+        if(FightVo.deskType === 0) {//单机版
 
-
-        //这里无论是网络还是单机  都统一到这个回调   然后我在吧牌写到fightvo内存中 在fightvo中吧array解析出来
-        var onComplete = function(result){
-            if(result.success){
-                var data = result.data;
-                FightVo.init(data);
-
-                callBack(result);
-            }
-        }
-
-
-
-
-        var result = {};
-
-        if(FightVo.deskType == 0) {//单机版
-            var round = Round.createNew(["user1", "user2", "user3"], 1);
+            var round = Round.createNew([userId, "user2", "user3"], 1);
             FightVo.round = round;
-            //return getCardsByUserId("user1");
-            result.data = round.getCardsByUserId("user1");
-            result.success = true;
-
-            onComplete(result);
+            var event = {
+              cmd: CardUtil.ServerCommand.onNewRound,
+              result: {
+                data: FightVo.round.getCardsByUserId(userId),
+                success: true,
+              },
+              previousUser: 'user3',
+              nextUser: 'user2'
+            };
+            this.onMessageHandle(event);
+            callback({previousUser: "user3", nextUser: "user3"});
         }else if(FightVo.deskType == 2) {//三人网络场
             //onComplete(result);
         }

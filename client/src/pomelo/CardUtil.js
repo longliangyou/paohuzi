@@ -19,6 +19,12 @@ CardUtil.Actions = {
   Cancel: "cancel"  // 取消 
 };
 
+
+CardUtil.ServerCommand = {
+  onNewRound: 1, // 开局通知
+
+
+}
 // 组牌
 // example: [75, 13, 5, 28, 35, 54, 22, 19, 62, 51, 3, 42, 59, 79, 73, 24, 57, 10, 58, 44]
 // =>
