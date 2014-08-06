@@ -136,6 +136,30 @@ var FightModel = BaseModel.extend({
       }else if(FightVo.deskType == 2) { //三人网络场
         // callback()
       }
-    }
+    },
 
+    // 用户出牌
+    card: function(userId, card, callback){
+
+    },
+
+    // 吃牌
+    eat: function(userId, card, callback){
+
+    },
+
+    // 碰牌
+    peng: function(userId, card, callback){
+
+    },
+
+    // 胡牌
+    win: function(userId, card, callback){
+
+    },
+
+    // 取消操作
+    cancel: function(userId, card, callback){
+
+    }
 });
