@@ -28,6 +28,7 @@
         "src/engin/transition.js",
         "src/engin/util/Decoration.js",
         "src/engin/util/Singleton.js",
+        "src/engin/util/EventProtocol.js",
         "src/engin/util/Util.js",
         "src/engin/components/ccstableview/CCSTableView.js",
         "src/engin/components/ccslistview/CCSListView.js",

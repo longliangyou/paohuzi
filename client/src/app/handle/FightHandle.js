@@ -4,15 +4,35 @@
  */
 var FightHandle = BaseHandle.extend({
 
-    joinDesk:function(){
-        var callBack = function(result){
-            if(result.success){
-                this.sceneLayer_.sendCard();
-            }
+
+    ctor:function(){
+        this._super();
+
+        //监听model的相关cmd事件
+        var fightModel = Singleton.getInstance("FightModel");
+        fightModel.addEventListener("CMD",this.onMessageHandle())
+    },
+
+    onMessageHandle:function(event){
+        var data = event.data;
+        var cmd = data.cmd;
+        if(cmd == CardUtil.ServerNotify.onNewRound){
+
         }
+    },
+
+
+
+
+    joinDesk:function(){
+//        var callBack = function(result){
+//            if(result.success){
+//                this.sceneLayer_.sendCard();
+//            }
+//        }
 
         var fightModel = Singleton.getInstance("FightModel");
-        var info = fightModel.joinDesk(Util.proxy(callBack,this));
+        var info = fightModel.joinDesk();
 //        var info = fightModel.joinDesk(callBack.bind(this));
     }
 
