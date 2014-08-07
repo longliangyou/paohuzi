@@ -20,8 +20,9 @@ var AvatarSprite = cc.Node.extend({
         userInfoImage.addChild(fight_userinfo_circle_bg);
 
         //加载一张默认的用户头像
-        var avatarSpt = display.newSprite("res/avatar/avatar1.png");
+        var avatarSpt = display.newSprite();
         avatarSpt.setScale(0.4);
+        this.avatarSpt_ = avatarSpt;
         userInfoImage.addChild(avatarSpt);
 
         var phz_userinfoback1FG = display.newSprite("#phz_userinfoback1FG.png",0,-27)
@@ -37,8 +38,12 @@ var AvatarSprite = cc.Node.extend({
 
 
         return true;
-    }
+    },
 
+    initViw:function(oneUserVo){
+        var avatarImageName = oneUserVo.avatarImageName;
+        this.avatarSpt_.setTexture(avatarImageName);
+    }
 
 
 

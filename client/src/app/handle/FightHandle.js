@@ -4,36 +4,40 @@
  */
 var FightHandle = BaseHandle.extend({
 
-
     ctor:function(){
-        this._super();
-
         //监听model的相关cmd事件
         var fightModel = Singleton.getInstance("FightModel");
-        fightModel.addEventListener("CMD",this.onMessageHandle())
+
+        var callBack = Util.proxy(this.onMessageHandle,this)
+        fightModel.addEventListener("CMD",callBack)
     },
 
+
     onMessageHandle:function(event){
+
         var data = event.data;
         var cmd = data.cmd;
-        if(cmd == CardUtil.ServerNotify.onNewRound){
 
+        cc.log("接受到命令：",cmd);
+        if(cmd == CardUtil.ServerNotify.onNewRound){
+            this.sceneLayer_.sendCard();
         }
     },
 
 
 
 
-    joinDesk:function(){
-//        var callBack = function(result){
-//            if(result.success){
-//                this.sceneLayer_.sendCard();
-//            }
-//        }
 
+    joinRoom:function(){
+        var callBack = function(result){
+            var data = result.data;
+            if(data.previousUser)
+                this.sceneLayer_.initOneUserInfo("previousUser",FightVo.previousUser);
+            if(data.nextUser)
+                this.sceneLayer_.initOneUserInfo("nextUser",FightVo.nextUser);
+        }
         var fightModel = Singleton.getInstance("FightModel");
-        var info = fightModel.joinDesk();
-//        var info = fightModel.joinDesk(callBack.bind(this));
+        var info = fightModel.joinRoom(Util.proxy(callBack,this));
     }
 
 

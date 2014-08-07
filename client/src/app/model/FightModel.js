@@ -9,130 +9,118 @@ var FightModel = BaseModel.extend({
         this._super();
         //监听后台消息
         //PomeloApi.addEventListener("onMessageHandle",this.onMessageHandle)
+        return true;
     },
 
 
     onMessageHandle: function(event){
       var cmd = event.cmd;
-
+      var data = event.data;
       //这里无论是网络还是单机  都统一到这个回调   然后我在吧牌写到fightvo内存中 在fightvo中吧array解析出来
-      // TODO 华哥
+      // TODO
       // 开局之后，用户会收到牌的信息
       // 可以在 joinRoom 里面查看 data 的结构。
       // 这种结构由你来定，可以自己改为适合你的方式。
-      var onNewRound = function(data){
-        FightVo.init(data);
-      };
-
-
-      var onJoinRoom = function(data){
-
-      };
-
-      var onCard = function(data){
-
-      };
-
-      var onEat = function(data){
-
-      };
-
-      var onPeng = function(data){
-
-      };
-
-      var onWei = function(data){
-
-      };
-
-      var onWin = function(data){
-
-      };
-
-      var onTi = function(data){
-
-      };
-
-      var onPao = function(data){
-
-      };
-
-      var onNewCard = function(data){
-
-      };
-
 
       switch (cmd){
         case CardUtil.ServerNotify.onNewRound:
-          // TODO 华哥
+          // TODO
           //  你按照这里写的data 结构把要传给你的 data 的完整数据都列出来
           //  所有的 case 都要，我就知道要传什么数据了。
 
           // data 结构
           // [previousPlayer, player, nextPlayer]
-          onNewRound(event.data);
+          FightVo.initUserCard(data);
           break;
         case CardUtil.ServerNotify.onJoinRoom:
-          onJoinRoom(event.data);
+          //onJoinRoom(data);
           break;
 
         case CardUtil.ServerNotify.onCard:    // 玩家出牌
-          onCard(event.data);
+          //onCard(data);
           break;
 
         case CardUtil.ServerNotify.onEat:     // 玩家吃牌
-          onEat(event.data);
+          //onEat(data);
           break;
 
         case CardUtil.ServerNotify.onPeng:    // 玩家碰牌
-          onPeng(event.data);
+          //onPeng(data);
           break;
 
         case CardUtil.ServerNotify.onWei:     // 玩家偎牌
-          onWei(event.data);
+          //onWei(data);
           break;
 
         case CardUtil.ServerNotify.onWin:     // 玩家胡牌
-          onWin(event.data);
+          //onWin(data);
           break;
 
         case CardUtil.ServerNotify.onTi:      // 玩家提牌
-          onTi(event.data);
+          //onTi(data);
           break;
 
         case CardUtil.ServerNotify.onPao:     // 玩家跑牌
-          onPao(event.data);
+          //onPao(data);
           break;
 
         case CardUtil.ServerNotify.onNewCard: // 新底牌
-          onNewCard(event.data);
+          //onNewCard(data);
           break;
 
         default:
           break;
       }
+
+
+      var event = {name:"CMD",data:{data:data,cmd:cmd}};
+      this.dispatchEvent(event);
     },
+
+
+
 
 
     /**
      * 进入到战斗以后  然后配卓发牌
      * 配卓成功 需要返回其他人的角色信息
      * 等待服务器通知 CardUtil.ServerNotify.onNewRound 才是开局
-     * @return
+     * @return {rect:1,data:data}  rect为0表示失败，1表示成功
      */
-    joinRoom: function(userId, callBack){
+    joinRoom: function( callBack){
+      var userId = null;
       if(FightVo.deskType === 0) {//单机版
           var round = Round.createNew([userId, "user2", "user3"], 1);
           FightVo.round = round;
-          var event = {
-            cmd: CardUtil.ServerNotify.onNewRound,
-            data: FightVo.round.getCardsByUserId(userId),
-          };
-          // TODO 华哥，这里的参数你定一下结构，你需要什么我就传什么
-          // 这里第一个参数是 error, 为 null 表示没有错误，服务器返回正确数据。
-          callback(null, {previousUser: "user3", nextUser: "user3"});
 
-          this.onMessageHandle(event);
+          // 这里第一个参数是 error, 为 null 表示没有错误，服务器返回正确数据。
+          var result = {
+              rect : 1,
+              data :{
+                  previousUser: {nickName:"user1",gold:200,userId:1},
+                  nextUser: {nickName:"user3",gold:500,userId:3}
+              }
+          }
+
+
+          if(result.rect==1){//成功
+              var data = result.data;
+              if(data.previousUser)
+                  FightVo.initOneUserInfo("previousUser",data.previousUser);
+              if(data.nextUser)
+                  FightVo.initOneUserInfo("nextUser",data.nextUser);
+
+              callBack(result);
+
+              //触发开桌
+              var event = {
+                  cmd: CardUtil.ServerNotify.onNewRound,
+                  data: FightVo.round.getCardsByUserId(userId)
+              };
+              this.onMessageHandle(event);
+          }
+
+
       }else if(FightVo.deskType == 2) { //三人网络场
         // callback()
       }

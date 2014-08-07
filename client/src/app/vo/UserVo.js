@@ -8,4 +8,18 @@
 var UserVo = {}
 
 
+/**
+ * 获取用户的信息
+ */
+UserVo.getUserInfoData = function(){
+    var data = {
+        nickName:"自己",
+        gold:2000,
+        userId:2,
+        avatarImageName:null
+    }
+    return data;
+}
+
+
 

@@ -50,6 +50,7 @@ var SceneConstants = {
             backScene:"HallScene",
             loadResources:[
                 //image
+                "res/avatar/avatar1.png",
                 "res/Sheet_Fight.png",
 
                 //plist

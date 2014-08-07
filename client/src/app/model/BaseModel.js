@@ -9,6 +9,7 @@ var BaseModel = cc.Class.extend({
 
     ctor:function(){
         EventProtocol.extend(this);
+        return true;
     }
 
 

@@ -7,9 +7,9 @@
 
 
 //某一家的牌
-var oneUserCard = {
+var oneUserVo = {
     //初始化数据
-    initData:function(data){
+    initUserCard:function(data){
         //num 自己家编号
         //uid 自己家的uid
         this.onHandleLength = data.onHandleLength // 手里牌的数量
@@ -22,8 +22,20 @@ var oneUserCard = {
         this.onHandleCardSpriteArr_ =[];//自己手上排好序的
 
         return this;
+    },
+
+    initUserInfo:function(data){
+        this.nickName = data.nickName;
+        this.avatarImageName = data.avatarImageName || "res/avatar/avatar1.png";
+        this.gold = data.gold;
+        this.userId = data.userId;
+
+        return this;
     }
 };
+
+
+
 
 
 
@@ -32,11 +44,32 @@ var FightVo = {}
 FightVo.deskType = 0; //0表示单机 1表示私人场  2表示三人网络场
 
 /**
+ * 初始化 某个用户的角色信息
+ * @param key 用户比如：
+                 previousUser
+                 nextUser
+                 myUser
+ * @param data 角色的相关信息
+                 {nickName:"user1",gold:200,userId:1,avatarImageName:""}
+ */
+FightVo.initOneUserInfo = function(key,data){
+    if(this[key] == null){
+        this[key] = cc.clone(oneUserVo);
+    }
+
+    this[key].initUserInfo(data);
+
+    return this[key]
+}
+
+
+/**
  * 初始化 fightvo 的牌的数据信息
  * @param info
  */
-FightVo.init = function(data){
-    this.userCard0 = cc.clone(oneUserCard.initData(data[0]));
-    this.userCard1 = cc.clone(oneUserCard.initData(data[1]));
-    this.userCard2 = cc.clone(oneUserCard.initData(data[2]));
+FightVo.initUserCard = function(data){
+    this.previousUser.initUserCard(data[0]);
+    this.nextUser.initUserCard(data[2]);
+    this.myUser.initUserCard(data[1]);
+
 }

@@ -16,7 +16,7 @@ EventProtocol.extend = function(object){
     object.listenerHandleIndex_ = 0
 
 
-    object.addListener = function(eventName, listener, target){
+    object.addEventListener = function(eventName, listener, target){
 //        eventName = string.upper(eventName)
         if(object.listeners_[eventName] == null){
             object.listeners_[eventName] = [];
@@ -38,7 +38,7 @@ EventProtocol.extend = function(object){
         var allListener = object.listeners_[eventName]
         for(var handle in allListener){
             var listener = allListener[handle];
-            var ret = listener(event, a)
+            var ret = listener(event)
             if(ret == false)
                 break
             else if(ret == "__REMOVE__")

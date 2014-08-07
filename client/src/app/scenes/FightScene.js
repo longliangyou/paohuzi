@@ -29,28 +29,37 @@ var FightLayer =  BaseScene.extend({
 
 
         //加载三个头像显示
+
         var flysLayer = this.flysLayer_
         var avatarSprite0 = new AvatarSprite();
         avatarSprite0.setPosition(display.cx,display.bottom + 40);
         flysLayer.addChild(avatarSprite0);
-        this.avatarSprite0_ = avatarSprite0
-
+        this.myUserAvatarSprite_ = avatarSprite0
+        //自己的数据马上就初始化
+        var oneUserVo = FightVo.initOneUserInfo("myUser",UserVo.getUserInfoData());
+        this.myUserAvatarSprite_.initViw(oneUserVo);
 
         var avatarSprite1 = new AvatarSprite();
         avatarSprite1.setPosition(display.left + 120,display.top - 40);
         flysLayer.addChild(avatarSprite1);
-        this.avatarSprite1_ = avatarSprite1
+        this.previousUserAvatarSprite_ = avatarSprite1
 
         var avatarSprite2 = new AvatarSprite(1);
         avatarSprite2.setPosition(display.right - 120,display.top - 40);
         flysLayer.addChild(avatarSprite2);
-        this.avatarSprite2_ = avatarSprite2
+        this.nextUserAvatarSprite_ = avatarSprite2
 
 
         this.shuffleCard();
 
         return true;
     },
+
+    initOneUserInfo:function(key,oneUserVo){
+        var keySptName = key + "AvatarSprite_";
+        this[keySptName].initViw(oneUserVo);
+    },
+
     /**
      * 洗牌 动画
      */
@@ -80,7 +89,7 @@ var FightLayer =  BaseScene.extend({
         var that =this;
         var onComplete = function(){
             //请求服务器配卓
-            that.callMethod("joinDesk")
+            that.callMethod("joinRoom")
         }
         this.backgroundLayer_.performWithDelay(onComplete,2);
     },
@@ -103,9 +112,9 @@ var FightLayer =  BaseScene.extend({
 
 
         //开始发牌
-        var userCard0 = FightVo.userCard0;
-        var userCard1 = FightVo.userCard1;
-        var userCard2 = FightVo.userCard2;
+//        var previousUser = FightVo.previousUser;
+        var myUser = FightVo.myUser;
+//        var nextUser = FightVo.nextUser;
         for(var i=0;i<20;i++){
             var index = i*3;
             var delay = i * 0.04;
@@ -121,7 +130,7 @@ var FightLayer =  BaseScene.extend({
             cardSprite1.initView(false,"fight_big_card.png");
             transition.moveTo(cardSprite1,{delay:delay,time:0.2,y:display.bottom - 115});
 //            transition.moveTo(cardSprite1,{delay:delay,time:0.2,y:display.bottom + 10});
-            userCard1.onHandleCardSprite_.push(cardSprite1);
+            myUser.onHandleCardSprite_.push(cardSprite1);
 //            clickFun(cardSprite1);
 
             var cardSprite2 = this.allCardSpt_[index+2];
@@ -129,11 +138,11 @@ var FightLayer =  BaseScene.extend({
             cardSprite2.setRotation(90);
             transition.moveTo(cardSprite2,{delay:delay,time:0.2,x:display.left - 100})
         }
-        if(userCard1.isBanker){//如果我是庄家
+        if(myUser.isBanker){//如果我是庄家
             var cardSprite1 = this.allCardSpt_[60];
             cardSprite1.initView(false,"fight_big_card.png");
             transition.moveTo(cardSprite1,{delay:20*0.04,time:0.2,y:display.bottom - 115});
-            userCard1.onHandleCardSprite_.push(cardSprite1);
+            myUser.onHandleCardSprite_.push(cardSprite1);
         }
 
 
@@ -149,9 +158,9 @@ var FightLayer =  BaseScene.extend({
      */
     orderMyCard:function(){
         //排列我的牌
-        var userCard1 = FightVo.userCard1;
-        var onHandleCardSprite =  userCard1.onHandleCardSprite_;
-        var outputCard = CardUtil.riffle(userCard1.onHand);
+        var myUser = FightVo.myUser;
+        var onHandleCardSprite =  myUser.onHandleCardSprite_;
+        var outputCard = CardUtil.riffle(myUser.onHand);
         var behaveNum = checkint(outputCard.length/2)
 
 
@@ -184,7 +193,7 @@ var FightLayer =  BaseScene.extend({
             onHandleCardSpriteArr.push(oneonHandleCardSpriteArr)
         }
         //存储起来
-        userCard1.onHandleCardSpriteArr_ = onHandleCardSpriteArr;
+        myUser.onHandleCardSpriteArr_ = onHandleCardSpriteArr;
     },
 
 
