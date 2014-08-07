@@ -17,39 +17,33 @@ var FightModel = BaseModel.extend({
       var cmd = event.cmd;
       var data = event.data;
       //这里无论是网络还是单机  都统一到这个回调   然后我在吧牌写到fightvo内存中 在fightvo中吧array解析出来
-      // TODO
       // 开局之后，用户会收到牌的信息
       // 可以在 joinRoom 里面查看 data 的结构。
       // 这种结构由你来定，可以自己改为适合你的方式。
 
       switch (cmd){
         case CardUtil.ServerNotify.onNewRound:
-          // TODO
-          //  你按照这里写的data 结构把要传给你的 data 的完整数据都列出来
-          //  所有的 case 都要，我就知道要传什么数据了。
-
-          // data 结构
-          // [previousPlayer, player, nextPlayer]
+          // [previousUser, myUser, nextUser]
           FightVo.initUserCard(data);
           break;
         case CardUtil.ServerNotify.onJoinRoom:
           //onJoinRoom(data);
           break;
 
-        case CardUtil.ServerNotify.onCard:    // 玩家出牌
-          //onCard(data);
+          case CardUtil.ServerNotify.onCard:    // 玩家出牌
+          //{   cardId:牌的数字,user:谁出的，分别有三种情况(previousUser/myUser/nextUser) }
           break;
 
-        case CardUtil.ServerNotify.onEat:     // 玩家吃牌
-          //onEat(data);
+          case CardUtil.ServerNotify.onEat:     // 玩家吃牌
+          //{   cardArray:[[cardId,cardId,cardId],[cardId,cardId,cardId],...],user:谁出的，分别有三种情况(previousUser/myUser/nextUser) }
           break;
 
         case CardUtil.ServerNotify.onPeng:    // 玩家碰牌
-          //onPeng(data);
+            //{   cardId:牌的数字,user:谁出的，分别有三种情况(previousUser/myUser/nextUser) }
           break;
 
         case CardUtil.ServerNotify.onWei:     // 玩家偎牌
-          //onWei(data);
+            //{   cardId:牌的数字,user:谁出的，分别有三种情况(previousUser/myUser/nextUser) }
           break;
 
         case CardUtil.ServerNotify.onWin:     // 玩家胡牌
@@ -65,7 +59,7 @@ var FightModel = BaseModel.extend({
           break;
 
         case CardUtil.ServerNotify.onNewCard: // 新底牌
-          //onNewCard(data);
+            //{   cardId:牌的数字 }
           break;
 
         default:
@@ -125,6 +119,8 @@ var FightModel = BaseModel.extend({
         // callback()
       }
     },
+
+
 
     // 用户出牌
     card: function(userId, card, callback){

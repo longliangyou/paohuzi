@@ -53,6 +53,11 @@ FightVo.deskType = 0; //0表示单机 1表示私人场  2表示三人网络场
                  {nickName:"user1",gold:200,userId:1,avatarImageName:""}
  */
 FightVo.initOneUserInfo = function(key,data){
+    //这里分别存储三个玩家的用户角色信息 以及 用户的牌
+    //this.previousUser
+    //this.myUser
+    //this.nextUser
+
     if(this[key] == null){
         this[key] = cc.clone(oneUserVo);
     }
