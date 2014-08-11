@@ -30,7 +30,7 @@ var FightLayer =  BaseScene.extend({
         fingerTips.addChild(display.newSprite("#fight_txt_finger_tips.png"));
         tipLayer.addChild(fingerTips);
         fingerTips.setPosition(display.cx,display.cy);
-
+        this.fingerTips_ = fingerTips;//提示出牌的动画
 
 
 
@@ -162,7 +162,7 @@ var FightLayer =  BaseScene.extend({
         this.backgroundLayer_.performWithDelay(onComplete,1);
     },
     /**
-     * 排列牌
+     * 第一次排列牌
      */
     orderMyCard:function(){
         //排列我的牌

@@ -38,11 +38,13 @@ EventProtocol.extend = function(object){
         var allListener = object.listeners_[eventName]
         for(var handle in allListener){
             var listener = allListener[handle];
-            var ret = listener(event)
-            if(ret == false)
-                break
-            else if(ret == "__REMOVE__")
-                object.listeners_[eventName][handle] = null;
+            if(listener) {
+                var ret = listener(event)
+                if (ret == false)
+                    break
+                else if (ret == "__REMOVE__")
+                    object.listeners_[eventName][handle] = null;
+            }
         }
     }
 
@@ -53,7 +55,7 @@ EventProtocol.extend = function(object){
         var allListener = object.listeners_[eventName]
         for(var handle in allListener){
             var listener = allListener[handle];
-            if(key == handle || key == listener)
+            if (key == handle || key == listener)
                 object.listeners_[eventName][handle] = null;
         }
     }

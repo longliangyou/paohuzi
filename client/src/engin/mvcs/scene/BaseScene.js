@@ -49,7 +49,9 @@ var BaseScene = cc.Layer.extend({
         cc.eventManager.addListener(this.onKeyboard, this);
 
         //tick帧开启
+        this.timer_ = new Timer();
         this.schedule(this.tick);
+
 
         return true;
     },
@@ -162,9 +164,11 @@ var BaseScene = cc.Layer.extend({
      * @param dt
      */
     tick:function(dt){
-
+        this.timer_.tick(dt);
     },
     onCleanUp:function(){
+        cc.log("onCleanUp 销毁");
+        this.timer_.dispose();
 //        cc.TextureCache.getInstance().removeAllTextures();
 //        cc.TextureCache.getInstance().dumpCachedTextureInfo();//test 打印仍然在使用的纹理
 //        cc.TextureCache.purgeSharedTextureCache();
