@@ -21,15 +21,20 @@ var FightLayer =  BaseScene.extend({
         backgroundLayer.addChild(bg_down);
 
 
-
-
-
+        //提示出牌
+        var tipLayer = this.tipLayer_;
+        var fingerTips = display.newNode();
+        var fight_finger_tips = display.newSprite("#fight_finger_tips.png");
+        TransitionEffect.backAndForth(fight_finger_tips);
+        fingerTips.addChild(fight_finger_tips);
+        fingerTips.addChild(display.newSprite("#fight_txt_finger_tips.png"));
+        tipLayer.addChild(fingerTips);
+        fingerTips.setPosition(display.cx,display.cy);
 
 
 
 
         //加载三个头像显示
-
         var flysLayer = this.flysLayer_
         var avatarSprite0 = new AvatarSprite();
         avatarSprite0.setPosition(display.cx,display.bottom + 40);
@@ -150,8 +155,11 @@ var FightLayer =  BaseScene.extend({
         var that =this;
         var onComplete = function(){
             that.orderMyCard();
+            if(myUser.isBanker) {//如果我是庄家
+
+            }
         }
-        this.backgroundLayer_.performWithDelay(onComplete,4);
+        this.backgroundLayer_.performWithDelay(onComplete,1);
     },
     /**
      * 排列牌
@@ -195,6 +203,8 @@ var FightLayer =  BaseScene.extend({
         //存储起来
         myUser.onHandleCardSpriteArr_ = onHandleCardSpriteArr;
     },
+
+
 
 
     /**

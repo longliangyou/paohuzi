@@ -19,8 +19,13 @@ var FightHandle = BaseHandle.extend({
         var cmd = data.cmd;
 
         cc.log("接受到命令：",cmd);
-        if(cmd == CardUtil.ServerNotify.onNewRound){
-            this.sceneLayer_.sendCard();
+        switch (cmd){
+            case CardUtil.ServerNotify.onNewRound:
+                this.sceneLayer_.sendCard();
+                break;
+
+            default :
+                break;
         }
     },
 

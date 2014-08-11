@@ -304,10 +304,13 @@ transition.sequence=function(actions) {
     if (actions.length < 1) return
     if (actions.length < 2) return actions[0]
 
-    var prev = actions[0]
-    for (var i = 1; i < actions.length; i++) {
-        prev = cc.Sequence.create(prev, actions[i])
-    }
+//    var prev = actions[0]
+//    for (var i = 1; i < actions.length; i++) {
+//        prev = cc.Sequence.create(prev, actions[i])
+//    }
+    var prev = cc.Sequence.create(actions);
+
+
     return prev
 }
 

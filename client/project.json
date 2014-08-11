@@ -30,6 +30,7 @@
         "src/engin/util/Singleton.js",
         "src/engin/util/EventProtocol.js",
         "src/engin/util/Util.js",
+        "src/engin/effect/TransitionEffect.js",
         "src/engin/components/ccstableview/CCSTableView.js",
         "src/engin/components/ccslistview/CCSListView.js",
         "src/engin/components/ccsscrollView/CCSScrollView.js",
