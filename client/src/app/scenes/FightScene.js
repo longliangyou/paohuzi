@@ -21,7 +21,7 @@ var FightLayer =  BaseScene.extend({
         backgroundLayer.addChild(bg_down);
 
 
-        //提示出牌
+        //提示出牌的tips
         var tipLayer = this.tipLayer_;
         var fingerTips = display.newNode();
         var fight_finger_tips = display.newSprite("#fight_finger_tips.png");
@@ -32,6 +32,13 @@ var FightLayer =  BaseScene.extend({
         fingerTips.setPosition(display.cx,display.cy);
         this.fingerTips_ = fingerTips;//提示出牌的动画
 
+
+        //数字倒计时的tips
+        var countDownTimerSprite = new CountDownTimerSprite();
+        countDownTimerSprite.setPosition(display.cx,display.cy);
+        this.countDownTimerSprite_ = countDownTimerSprite;
+        tipLayer.addChild(countDownTimerSprite);
+        countDownTimerSprite.start(10)
 
 
         //加载三个头像显示

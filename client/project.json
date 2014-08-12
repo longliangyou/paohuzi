@@ -61,7 +61,7 @@
         "src/app/vo/UserVo.js",
 
 
-
+        "src/app/view/CountDownTimerSprite.js",
         "src/app/view/AvatarSprite.js",
         "src/app/view/CardSprite.js",
         "src/app/util/CardAnimation.js",

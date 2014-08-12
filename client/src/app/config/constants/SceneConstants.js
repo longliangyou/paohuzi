@@ -50,6 +50,7 @@ var SceneConstants = {
             backScene:"HallScene",
             loadResources:[
                 //image
+                "res/font/Sheet_Timer_Number.png",
                 "res/avatar/avatar1.png",
                 "res/Sheet_Fight.png",
 

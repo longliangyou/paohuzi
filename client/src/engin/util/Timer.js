@@ -8,7 +8,6 @@
 var Timer = cc.Class.extend({
 
     ctor:function(){
-        this._super();
         EventProtocol.extend(this);
 
 
