@@ -62,6 +62,9 @@ var FightModel = BaseModel.extend({
             //{   cardId:牌的数字 }
           break;
 
+        case CardUtil.ServerNotify.onDiscard: // 等待玩家出牌
+          break;
+
         default:
           break;
       }
@@ -84,6 +87,7 @@ var FightModel = BaseModel.extend({
     joinRoom: function( callBack){
       var userId = null;
       if(FightVo.deskType === 0) {//单机版
+          userId = "我";
           var round = Round.createNew([userId, "user2", "user3"], 1);
           FightVo.round = round;
 
@@ -94,7 +98,7 @@ var FightModel = BaseModel.extend({
                   previousUser: {nickName:"user1",gold:200,userId:1},
                   nextUser: {nickName:"user3",gold:500,userId:3}
               }
-          }
+          };
 
 
           if(result.rect==1){//成功
@@ -112,6 +116,15 @@ var FightModel = BaseModel.extend({
                   data: FightVo.round.getCardsByUserId(userId)
               };
               this.onMessageHandle(event);
+
+              // 等待庄家出牌
+              var cardEvent = {
+                cmd: CardUtil.ServerNotify.onDiscard,
+                data: {
+                  userId: userId
+                }
+              };
+              this.onMessageHandle(event);
           }
 
 
@@ -124,12 +137,33 @@ var FightModel = BaseModel.extend({
 
     // 用户出牌
     card: function(userId, card, callback){
+      var cardEvent = {
+        cmd: CardUtil.ServerNotify.onCard,
+        data: {
+          userId: userId,
+          card: card
+        }
+      };
+      if (FightVo.deskType == 1){
+        this.onMessageHandle(event);
+      }
+      var result = {
 
+      };
+      callback(result);
     },
+
 
     // 吃牌
     eat: function(userId, card, callback){
-
+      var cardEvent = {
+        cmd: CardUtil.ServerNotify.onEat,
+        data: {
+          userId: userId,
+          card: card
+        }
+      };
+      this.onMessageHandle(event);
     },
 
     // 碰牌

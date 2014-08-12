@@ -24,13 +24,15 @@ CardUtil.Actions = {
 CardUtil.ServerNotify = {
   onNewRound: 1,    // 开局通知
   onJoinRoom: 2,    // 新玩家加入通知
-  onCard:     3,    // 玩家出牌
+  onCard:     3,    // 玩家出的牌
   onEat:      4,    // 玩家吃牌
   onPeng:     5,    // 玩家碰牌
   onWei:      6,    // 玩家偎牌
   onWin:      7,    // 玩家胡牌
   onTi:       8,    // 玩家提牌
-  onPao:      9     // 玩家跑牌
+  onPao:      9,    // 玩家跑牌
+  onNewCard:  10,   // 新底牌
+  onDiscard:  11    // 等待玩家出牌
 };
 // 组牌
 // example: [75, 13, 5, 28, 35, 54, 22, 19, 62, 51, 3, 42, 59, 79, 73, 24, 57, 10, 58, 44]
