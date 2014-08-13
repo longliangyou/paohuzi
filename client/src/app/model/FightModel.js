@@ -63,6 +63,7 @@ var FightModel = BaseModel.extend({
           break;
 
         case CardUtil.ServerNotify.onDiscard: // 等待玩家出牌
+            //等待那个玩家 {user:谁出的，分别有三种情况(previousUser/myUser/nextUser) ，}
           break;
 
         default:

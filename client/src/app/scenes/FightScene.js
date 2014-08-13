@@ -36,9 +36,9 @@ var FightLayer =  BaseScene.extend({
         //数字倒计时的tips
         var countDownTimerSprite = new CountDownTimerSprite();
         countDownTimerSprite.setPosition(display.cx,display.cy);
-        this.countDownTimerSprite_ = countDownTimerSprite;
         tipLayer.addChild(countDownTimerSprite);
         countDownTimerSprite.start(10)
+        this.countDownTimerSprite_ = countDownTimerSprite;
 
 
         //加载三个头像显示
