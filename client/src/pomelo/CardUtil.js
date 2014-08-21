@@ -20,6 +20,10 @@ CardUtil.Actions = {
   Idle: "idle"      // 无操作
 };
 
+// 用户出牌倒计时，单位为秒，默认值为 15 秒
+CardUtil.cardInterval = 15;
+
+
 // CMD
 CardUtil.ServerNotify = {
   onNewRound: 1,    // 开局通知
