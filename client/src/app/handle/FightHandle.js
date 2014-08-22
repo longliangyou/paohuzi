@@ -49,7 +49,14 @@ var FightHandle = BaseHandle.extend({
         var fightModel = Singleton.getInstance("FightModel");
         var info = fightModel.joinRoom(Util.proxy(callBack,this));
     },
+    card: function(card){
+        var onComplete = function(){
 
+        }
+        var myUser =  FightVo.myUser;
+        var fightModel = Singleton.getInstance("FightModel");
+        fightModel.card(myUser.userId,card,onComplete)
+    },
 
 
 

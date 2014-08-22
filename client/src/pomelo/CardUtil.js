@@ -569,6 +569,9 @@ CardUtil.updateSort = function(CardSprite,onHandleCardSpriteArr,drag) {
         if (isSendCard) {
             deleteOrgion();
             CardSprite.setPosition(display.cx,display.cy);
+            var handle = Singleton.getInstance("FightHandle");
+            handle.card(card);
+
         }else{
             sortFun();
             return onHandleCardSpriteArr;

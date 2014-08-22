@@ -147,12 +147,12 @@ var FightModel = BaseModel.extend({
 
 
     // 用户出牌
-    card: function(userId, card, callback){
+    card: function(userId, cardId, callback){
       var cardEvent = {
         cmd: CardUtil.ServerNotify.onCard,
         data: {
           userId: userId,
-          card: card
+          cardId: cardId //定义牌的标记 0-79
         }
       };
       if (FightVo.deskType == 1){
@@ -166,29 +166,29 @@ var FightModel = BaseModel.extend({
 
 
     // 吃牌
-    eat: function(userId, card, callback){
+    eat: function(userId, cardId, callback){
       var cardEvent = {
         cmd: CardUtil.ServerNotify.onEat,
         data: {
           userId: userId,
-          card: card
+          cardId: cardId //定义牌的标记 0-79
         }
       };
       this.onMessageHandle(event);
     },
 
     // 碰牌
-    peng: function(userId, card, callback){
+    peng: function(userId, cardId, callback){
 
     },
 
     // 胡牌
-    win: function(userId, card, callback){
+    win: function(userId, cardId, callback){
 
     },
 
     // 取消操作
-    cancel: function(userId, card, callback){
+    cancel: function(userId, cardId, callback){
 
     }
 });

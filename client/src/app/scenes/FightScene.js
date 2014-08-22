@@ -253,7 +253,7 @@ var FightScene = cc.Scene.extend({
         this.addChild(layer);
 
         //依赖注入mvc中的视图
-        var handle = new FightHandle();
+        var handle = Singleton.getInstance("FightHandle");
         handle.setView(layer);
         layer.setHandle(handle);
     }
