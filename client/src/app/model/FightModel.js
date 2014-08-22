@@ -31,11 +31,20 @@ var FightModel = BaseModel.extend({
           break;
 
           case CardUtil.ServerNotify.onCard:    // 玩家出牌
-          //{   cardId:牌的数字,user:谁出的，分别有三种情况(previousUser/myUser/nextUser) }
+          /**
+           * data: {
+                  userId: userId,
+                  cardId: cardId //定义牌的标记 0-79
+                }
+           */
           break;
 
           case CardUtil.ServerNotify.onEat:     // 玩家吃牌
-          //{   cardArray:[[cardId,cardId,cardId],[cardId,cardId,cardId],...],user:谁出的，分别有三种情况(previousUser/myUser/nextUser) }
+          /** data: {
+                  userId: userId,
+            cardId: cardId //定义牌的标记 0-79
+          }
+           **/
           break;
 
         case CardUtil.ServerNotify.onPeng:    // 玩家碰牌

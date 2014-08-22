@@ -29,6 +29,14 @@ var FightHandle = BaseHandle.extend({
                 var position = this.getPositionByUserId(userId)
                 this.sceneLayer_.onDiscard(position,interval);
                 break;
+            case CardUtil.ServerNotify.onCard:    // 玩家出牌
+                var userId = data.userId;
+                var cardId = data.cardId;//定义牌的标记 0-79
+                var myUser =  FightVo.myUser;
+                if(userId != myUser.userId){//不是自己
+
+                }
+                break;
             default :
                 break;
         }
