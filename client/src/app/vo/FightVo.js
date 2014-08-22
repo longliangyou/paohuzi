@@ -42,7 +42,7 @@ var oneUserVo = {
 
 var FightVo = {}
 FightVo.deskType = 0; //0表示单机 1表示私人场  2表示三人网络场
-
+FightVo.isSendCard = false;
 /**
  * 初始化 某个用户的角色信息
  * @param key 用户比如：

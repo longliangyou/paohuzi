@@ -21,25 +21,6 @@ var FightLayer =  BaseScene.extend({
         backgroundLayer.addChild(bg_down);
 
 
-        //提示出牌的tips
-        var tipLayer = this.tipLayer_;
-        var fingerTips = display.newNode();
-        var fight_finger_tips = display.newSprite("#fight_finger_tips.png");
-        TransitionEffect.backAndForth(fight_finger_tips);
-        fingerTips.addChild(fight_finger_tips);
-        fingerTips.addChild(display.newSprite("#fight_txt_finger_tips.png"));
-        tipLayer.addChild(fingerTips);
-        fingerTips.setPosition(display.cx,display.cy);
-        this.fingerTips_ = fingerTips;//提示出牌的动画
-
-
-        //数字倒计时的tips
-        var countDownTimerSprite = new CountDownTimerSprite();
-        countDownTimerSprite.setPosition(display.cx,display.cy);
-        tipLayer.addChild(countDownTimerSprite);
-        countDownTimerSprite.start(10)
-        this.countDownTimerSprite_ = countDownTimerSprite;
-
 
         //加载三个头像显示
         var flysLayer = this.flysLayer_
@@ -66,11 +47,45 @@ var FightLayer =  BaseScene.extend({
 
         return true;
     },
-
+    //有人加入桌子 ，初始化该人的信息
     initOneUserInfo:function(key,oneUserVo){
         var keySptName = key + "AvatarSprite_";
         this[keySptName].initViw(oneUserVo);
     },
+    //开始出牌倒计时
+    onDiscard:function(position,interval){
+        if(this.fingerTips_ == null){
+            //提示出牌的tips
+            var tipLayer = this.tipLayer_;
+            var fingerTips = display.newNode();
+            var fight_finger_tips = display.newSprite("#fight_finger_tips.png");
+            TransitionEffect.backAndForth(fight_finger_tips);
+            fingerTips.addChild(fight_finger_tips);
+            fingerTips.addChild(display.newSprite("#fight_txt_finger_tips.png"));
+            tipLayer.addChild(fingerTips);
+            fingerTips.setPosition(display.cx,display.cy);
+            this.fingerTips_ = fingerTips;//提示出牌的动画
+
+
+            //数字倒计时的tips
+            var countDownTimerSprite = new CountDownTimerSprite();
+            countDownTimerSprite.setPosition(display.cx,display.cy);
+            tipLayer.addChild(countDownTimerSprite);
+            this.countDownTimerSprite_ = countDownTimerSprite;
+        }
+
+        var onComplete = function(){
+
+        }
+        this.fingerTips_.setPosition(position.x,position.y);
+        this.countDownTimerSprite_.setPosition(position.x,position.y);
+        this.countDownTimerSprite_.start(15,onComplete)
+    },
+
+
+
+
+
 
     /**
      * 洗牌 动画

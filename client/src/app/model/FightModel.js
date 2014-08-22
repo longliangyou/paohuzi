@@ -63,9 +63,6 @@ var FightModel = BaseModel.extend({
           break;
 
         case CardUtil.ServerNotify.onDiscard: // 等待玩家出牌
-<<<<<<< HEAD
-            //等待那个玩家 {user:谁出的，分别有三种情况(previousUser/myUser/nextUser) ，interval 以及倒计时时间}
-=======
             //等待那个玩家 {user:谁出的，分别有三种情况(previousUser/myUser/nextUser) ，}
 
             // 结构如下
@@ -76,7 +73,6 @@ var FightModel = BaseModel.extend({
             // 比较 userId, 如果 参数 userId 等于自己的 userId，那么就是自己出牌。
             // 出牌 调用 下面的card 方法
             // 如 interval 时间内，用户没有选择任何牌出牌，则随机自动出一张牌。
->>>>>>> 0601da8b9958c6ec12d5cf9c8abec979f1cd64b4
           break;
 
         default:
@@ -132,7 +128,7 @@ var FightModel = BaseModel.extend({
               this.onMessageHandle(event);
 
               // 等待庄家出牌
-              var cardEvent = {
+              var event = {
                 cmd: CardUtil.ServerNotify.onDiscard,
                 data: {
                   userId: userId,

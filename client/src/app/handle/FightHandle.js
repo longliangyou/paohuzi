@@ -20,10 +20,15 @@ var FightHandle = BaseHandle.extend({
 
         cc.log("接受到命令：",cmd);
         switch (cmd){
-            case CardUtil.ServerNotify.onNewRound:
+            case CardUtil.ServerNotify.onNewRound://开桌发牌
                 this.sceneLayer_.sendCard();
                 break;
-
+            case CardUtil.ServerNotify.onDiscard: // 等待玩家出牌 倒计时
+                var userId = data.userId;
+                var interval = data.interval;
+                var position = this.getPositionByUserId(userId)
+                this.sceneLayer_.onDiscard(position,interval);
+                break;
             default :
                 break;
         }
@@ -43,8 +48,34 @@ var FightHandle = BaseHandle.extend({
         }
         var fightModel = Singleton.getInstance("FightModel");
         var info = fightModel.joinRoom(Util.proxy(callBack,this));
+    },
+
+
+
+
+
+    //一些handle的工具
+    /**
+     * 根据用户userid获取相应对应的坐标
+     * @param userId
+     */
+    getPositionByUserId: function (userId) {
+        var fightModel = Singleton.getInstance("FightModel");
+        var previousUser =  FightVo.previousUser;
+        var nextUser =  FightVo.nextUser;
+        var myUser =  FightVo.myUser;
+
+
+        var position = {x:display.cx,y:display.cy};
+        FightVo.isSendCard = false;
+        if(myUser.previousUser == userId ){
+            position = {x:display.left + 200,y:display.top - 200}
+        }else if (myUser.userId == userId){
+            FightVo.isSendCard = true;
+        }else if (nextUser.userId == userId){
+            position = {x:display.right - 200,y:display.top - 200}
+        }
+
+        return position
     }
-
-
-
 })

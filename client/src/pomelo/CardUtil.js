@@ -530,6 +530,7 @@ CardUtil.canChi = function(cards, currentCard){
  * @param drag
  */
 CardUtil.updateSort = function(CardSprite,onHandleCardSpriteArr,drag) {
+    //重新整理排序
     var sortFun = function(){
         var behaveNum = checkint(onHandleCardSpriteArr.length/2)
         for(var i=0;i<onHandleCardSpriteArr.length;i++) {
@@ -551,12 +552,24 @@ CardUtil.updateSort = function(CardSprite,onHandleCardSpriteArr,drag) {
         }
     }
 
+    //删除当前卡
+    var deleteOrgion = function(){
+        //首先移除当前的这个卡牌
+        var  bigIndex = CardSprite.bigArrayIndex_;
+        var smallIndex = CardSprite.smallArrayIndex_;
+        var oneSmallArr = onHandleCardSpriteArr[bigIndex];
+        oneSmallArr.splice(smallIndex,1);
+    }
+
 
     var lastX = drag.lastX;
     var lastY = drag.lastY;
     if(lastY > display.cy - 115/2 ) {
-        var isSendCard = this.isSendCard_; //当前是否是出牌
-        if (!isSendCard) {
+        var isSendCard = FightVo.isSendCard ; //当前是否是出牌
+        if (isSendCard) {
+            deleteOrgion();
+            CardSprite.setPosition(display.cx,display.cy);
+        }else{
             sortFun();
             return onHandleCardSpriteArr;
         }
@@ -579,15 +592,6 @@ CardUtil.updateSort = function(CardSprite,onHandleCardSpriteArr,drag) {
             }
             return false;
         }
-
-        var deleteOrgion = function(){
-            //首先移除当前的这个卡牌
-            var  bigIndex = CardSprite.bigArrayIndex_;
-            var smallIndex = CardSprite.smallArrayIndex_;
-            var oneSmallArr = onHandleCardSpriteArr[bigIndex];
-            oneSmallArr.splice(smallIndex,1);
-        }
-
 
         if(lastX<leftX){
             deleteOrgion();
