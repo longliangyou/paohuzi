@@ -77,8 +77,8 @@ var FightLayer =  BaseScene.extend({
         var onComplete = function(){
 
         }
-        this.sceneLayer_.countDownTimerSprite_.setVisible(true);
-        this.sceneLayer_.fingerTips_.setVisible(true);
+        this.countDownTimerSprite_.setVisible(true);
+        this.fingerTips_.setVisible(true);
         this.fingerTips_.setPosition(position.x,position.y);
         this.countDownTimerSprite_.setPosition(position.x,position.y);
         this.countDownTimerSprite_.start(15,onComplete)
