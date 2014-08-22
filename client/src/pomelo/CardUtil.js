@@ -571,7 +571,7 @@ CardUtil.updateSort = function(CardSprite,onHandleCardSpriteArr,drag) {
             CardSprite.setPosition(display.cx,display.cy);
             var handle = Singleton.getInstance("FightHandle");
             handle.card(card);
-
+            handle.setVisibleByCountDownTimerSprite();
         }else{
             sortFun();
             return onHandleCardSpriteArr;

@@ -92,5 +92,13 @@ var FightHandle = BaseHandle.extend({
         }
 
         return position
+    },
+    /** 隐藏倒计时 **/
+    setVisibleByCountDownTimerSprite:function(){
+        if(this.sceneLayer_.countDownTimerSprite_){
+            this.sceneLayer_.countDownTimerSprite_.setVisible(false);
+            this.sceneLayer_.fingerTips_.setVisible(false);
+        }
     }
+
 })
