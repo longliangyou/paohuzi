@@ -34,7 +34,7 @@ var FightModel = BaseModel.extend({
           /**
            * data: {
                   userId: userId,
-                  cardId: cardId //定义牌的标记 0-79
+                  cardId: cardId //定义牌的标记 1-20  1-10 表示小写  11-20表示大写
                 }
            */
           break;
@@ -42,7 +42,7 @@ var FightModel = BaseModel.extend({
           case CardUtil.ServerNotify.onEat:     // 玩家吃牌
           /** data: {
                   userId: userId,
-            cardId: cardId //定义牌的标记 0-79
+            cardId: cardId //定义牌的标记 1-20  1-10 表示小写  11-20表示大写
           }
            **/
           break;
@@ -68,7 +68,7 @@ var FightModel = BaseModel.extend({
           break;
 
         case CardUtil.ServerNotify.onNewCard: // 新底牌
-            //{   cardId:牌的数字 }
+            //{   cardId:牌的数字 }// cardId 定义牌的标记 1-20  1-10 表示小写  11-20表示大写
           break;
 
         case CardUtil.ServerNotify.onDiscard: // 等待玩家出牌
@@ -161,7 +161,7 @@ var FightModel = BaseModel.extend({
         cmd: CardUtil.ServerNotify.onCard,
         data: {
           userId: userId,
-          cardId: cardId //定义牌的标记 0-79
+          cardId: cardId // cardId 定义牌的标记 1-20  1-10 表示小写  11-20表示大写
         }
       };
       if (FightVo.deskType == 1){
@@ -184,7 +184,7 @@ var FightModel = BaseModel.extend({
         cmd: CardUtil.ServerNotify.onEat,
         data: {
           userId: userId,
-          cardId: cardId //定义牌的标记 0-79
+          cardId: cardId // cardId 定义牌的标记 1-20  1-10 表示小写  11-20表示大写
         }
       };
       this.onMessageHandle(event);

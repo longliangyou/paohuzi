@@ -15,7 +15,7 @@ var CardSprite = cc.Sprite.extend({
     initData:function(param){
         if(param == null) param ={}
 
-        this.cardId_ = param.cardId;//定义牌的标记 0-79
+        this.cardId_ = param.cardId;//定义牌的标记 1-20  1-10 表示小写  11-20表示大写
 
         this.cardType_ = this.cardId_> 10 ? "d":"x" ;//定义大小 d 或者 x
         this.cardNum_ = checkint((this.cardId_ )%10);//定义卡片的数字
