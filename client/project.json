@@ -44,6 +44,7 @@
 
         "src/config.js",
         "src/app/config/constants/SceneConstants.js",
+        "src/app/config/constants/FightConstants.js",
         "src/app/scenes/HallScene.js",
         "src/app/scenes/FightScene.js",
 

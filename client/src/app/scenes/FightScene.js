@@ -212,7 +212,7 @@ var FightLayer =  BaseScene.extend({
                 var cardSprite = onHandleCardSprite[index];
                 cardSprite.setCardArrayIndex(i,j);
                 cardSprite.initData({cardId:oneOutputCard});
-                cardSprite.initView(true,"big_card");
+                cardSprite.initView(true,FightConstants.big_card);
                 cardSprite.setPosition(x,y);
                 cardSprite.setLocalZOrder(oneOutputCardArr.length-j);
                 cardSprite.setTouch();

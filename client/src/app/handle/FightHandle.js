@@ -26,19 +26,30 @@ var FightHandle = BaseHandle.extend({
             case CardUtil.ServerNotify.onDiscard: // 等待玩家出牌 倒计时
                 var userId = data.userId;
                 var interval = data.interval;
+                FightVo.isSendCard = false;
                 var position = this.getPositionByUserId(userId)
-                var onComplete = function(){
-                    var myUser =  FightVo.myUser;
-                    if(userId == myUser.userId) {
-                        this.card();
+                if(userId == FightVo.myUser.userId) {//如果是我自动随机出一张牌
+                    FightVo.isSendCard = true;
+                    var onComplete = function () {
+                        var myUser = FightVo.myUser;
+                        if (userId == myUser.userId) {
+                            this.card();
+                        }
                     }
                 }
-                this.sceneLayer_.onDiscard(position,interval);
+                this.sceneLayer_.onDiscard(position,interval,onComplete);
                 break;
             case CardUtil.ServerNotify.onCard:    // 玩家出牌
                 var userId = data.userId;
                 var cardId = data.cardId;//定义牌的标记
-
+                var startPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_START_POS)
+                var middlePos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_MIDDLE_POS)
+                var endPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_END_POS)
+                var cardSprite = new CardSprite();
+                cardSprite.initData({cardId:cardId});
+                cardSprite.initView(true,FightConstants.full_card);
+                this.sceneLayer_.batch_.addChild(cardSprite);
+                CardAnimation.sendOutCardByUser(cardSprite,startPos,middlePos,endPos)
                 //var myUser =  FightVo.myUser;
                 //if(userId != myUser.userId){//不是自己
                 //}
@@ -87,21 +98,39 @@ var FightHandle = BaseHandle.extend({
      * 根据用户userid获取相应对应的坐标
      * @param userId
      */
-    getPositionByUserId: function (userId) {
+    getPositionByUserId: function (userId,mark) {
         var fightModel = Singleton.getInstance("FightModel");
         var previousUser =  FightVo.previousUser;
         var nextUser =  FightVo.nextUser;
         var myUser =  FightVo.myUser;
 
+        var position = {x: display.cx, y: display.cy};
+        if(mark == FightConstants.SEND_CARD_START_POS ) {
 
-        var position = {x:display.cx,y:display.cy};
-        FightVo.isSendCard = false;
-        if(myUser.previousUser == userId ){
-            position = {x:display.left + 200,y:display.top - 200}
-        }else if (myUser.userId == userId){
-            FightVo.isSendCard = true;
-        }else if (nextUser.userId == userId){
-            position = {x:display.right - 200,y:display.top - 200}
+            if (myUser.previousUser == userId) {
+                position = {x: display.left - 50, y: display.top - 100}
+            } else if (myUser.userId == userId) {
+                position = {x: 0, y: 0};
+            } else if (nextUser.userId == userId) {
+                position = {x: display.right + 50, y: display.top - 100}
+            }
+        }else  if(mark == FightConstants.SEND_CARD_END_POS ) {
+
+            if (myUser.previousUser == userId) {
+                position = {x : display.left,y:display.top - 200 };
+            } else if (myUser.userId == userId) {
+                position = {x : display.right,y:display.bottom + 10 };
+            } else if (nextUser.userId == userId) {
+                position = {x : display.right,y:display.top - 200 };
+            }
+        }else {
+            if (myUser.previousUser == userId) {
+                position = {x: display.left + 200, y: display.top - 200}
+            } else if (myUser.userId == userId) {
+                position = {x: display.cx, y: display.cy};
+            } else if (nextUser.userId == userId) {
+                position = {x: display.right - 200, y: display.top - 200}
+            }
         }
 
         return position
