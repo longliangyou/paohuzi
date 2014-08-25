@@ -167,10 +167,14 @@ var FightModel = BaseModel.extend({
       if (FightVo.deskType == 1){
         this.onMessageHandle(event);
       }
-      var result = {
 
-      };
-      callback(result);
+
+      if(callback) {
+          var result = {
+              rect: 1
+          };
+          callback(result);
+      }
     },
 
 

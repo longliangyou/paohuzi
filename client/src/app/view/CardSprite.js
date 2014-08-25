@@ -84,9 +84,7 @@ var CardSprite = cc.Sprite.extend({
                 that.drag.lastX = x;
                 that.drag.lastY = y;
 
-                var userCard1 = FightVo.userCard1;
-                var onHandleCardSpriteArr = userCard1.onHandleCardSpriteArr_;
-                var newonHandleCardSpriteArr = CardUtil.updateSort(that,onHandleCardSpriteArr,that.drag) ;
+                var newonHandleCardSpriteArr = CardTool.updateSort(that,that.drag) ;
                 that.drag = null
             }
         }

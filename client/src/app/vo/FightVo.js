@@ -31,6 +31,18 @@ var oneUserVo = {
         this.userId = data.userId;
 
         return this;
+    },
+
+
+    //随机获取一张卡牌 一般会从右边获取 只是获取 并没去删除
+    getMathCard:function(){
+        var onHandleCardSpriteArr = this.onHandleCardSpriteArr_;
+        var length = onHandleCardSpriteArr.length
+        var bigArr = onHandleCardSpriteArr[length-1];
+        var smallLength = bigArr.length;
+        var cardSprite = bigArr[smallLength-1]
+
+        return cardSprite;
     }
 };
 
@@ -69,7 +81,7 @@ FightVo.initOneUserInfo = function(key,data){
 
 
 /**
- * 初始化 fightvo 的牌的数据信息
+ * 配卓时  初始化 fightvo 的牌的数据信息
  * @param info
  */
 FightVo.initUserCard = function(data){

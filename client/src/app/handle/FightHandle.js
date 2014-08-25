@@ -57,13 +57,20 @@ var FightHandle = BaseHandle.extend({
         var fightModel = Singleton.getInstance("FightModel");
         var info = fightModel.joinRoom(Util.proxy(callBack,this));
     },
+    //用户主动出牌
     card: function(card){
-        var onComplete = function(){
-
+        var myUser = FightVo.myUser;
+        if(card == null){
+            card = myUser.getMathCard();
         }
-        var myUser =  FightVo.myUser;
+
         var fightModel = Singleton.getInstance("FightModel");
-        fightModel.card(myUser.userId,card,onComplete)
+        fightModel.card(myUser.userId,card);
+
+        card.setPosition(display.cx,display.cy);
+        CardTool.deleteOrgionByCardSprite(card);
+        CardTool.sort();
+        this.setVisibleByCountDownTimerSprite();//隐藏tips
     },
 
 
