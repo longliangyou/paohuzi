@@ -27,6 +27,12 @@ var FightHandle = BaseHandle.extend({
                 var userId = data.userId;
                 var interval = data.interval;
                 var position = this.getPositionByUserId(userId)
+                var onComplete = function(){
+                    var myUser =  FightVo.myUser;
+                    if(userId == myUser.userId) {
+                        this.card();
+                    }
+                }
                 this.sceneLayer_.onDiscard(position,interval);
                 break;
             case CardUtil.ServerNotify.onCard:    // 玩家出牌

@@ -53,7 +53,7 @@ var FightLayer =  BaseScene.extend({
         this[keySptName].initViw(oneUserVo);
     },
     //开始出牌倒计时
-    onDiscard:function(position,interval){
+    onDiscard:function(position,interval,onComplete){
         if(this.fingerTips_ == null){
             //提示出牌的tips
             var tipLayer = this.tipLayer_;
@@ -74,9 +74,7 @@ var FightLayer =  BaseScene.extend({
             this.countDownTimerSprite_ = countDownTimerSprite;
         }
 
-        var onComplete = function(){
 
-        }
         this.countDownTimerSprite_.setVisible(true);
         this.fingerTips_.setVisible(true);
         this.fingerTips_.setPosition(position.x,position.y);
