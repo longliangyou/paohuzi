@@ -45,12 +45,12 @@ var CardSprite = cc.Sprite.extend({
         }
     },
 
-    /**
-     * 设置能够点击  点击拖动
-     */
-    setIsSendCard:function(isSendCard){//设置当前状态是不是滑动出牌状态还是其他状态
-        this.isSendCard_ = isSendCard;
-    },
+//    /**
+//     * 设置能够点击  点击拖动
+//     */
+//    setIsSendCard:function(isSendCard){//设置当前状态是不是滑动出牌状态还是其他状态
+//        this.isSendCard_ = isSendCard;
+//    },
     setCardArrayIndex:function(bigIndex,smallIndex){//记录当前卡牌所在的数组索引
         this.bigArrayIndex_ = bigIndex;
         this.smallArrayIndex_ = smallIndex;

@@ -32,6 +32,7 @@
         "src/engin/util/Util.js",
         "src/engin/util/Timer.js",
         "src/engin/config/TimerEvent.js",
+        "src/engin/config/MapConstants.js",
         "src/engin/effect/TransitionEffect.js",
         "src/engin/components/ccstableview/CCSTableView.js",
         "src/engin/components/ccslistview/CCSListView.js",

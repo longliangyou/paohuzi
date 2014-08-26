@@ -85,10 +85,15 @@ var FightHandle = BaseHandle.extend({
             card = myUser.getMathCard();
         }
 
-        var fightModel = Singleton.getInstance("FightModel");
-        fightModel.card(myUser.userId,card);
-
-        card.setPosition(display.cx,display.cy);
+        var onComplete = function() {
+            var userId = myUser.userId;
+            var fightModel = Singleton.getInstance("FightModel");
+            fightModel.card(userId, card);
+        }
+        var startPos = card.getPosition();//this.getPositionByUserId(userId,FightConstants.SEND_CARD_START_POS)
+        var middlePos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_MIDDLE_POS)
+        var endPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_END_POS)
+        CardAnimation.sendOutCardByUser(card,startPos,middlePos,endPos,onComplete)
         CardTool.deleteOrgionByCardSprite(card);
         CardTool.sort();
         this.setVisibleByCountDownTimerSprite();//隐藏tips

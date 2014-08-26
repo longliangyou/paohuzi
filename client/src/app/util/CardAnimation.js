@@ -29,32 +29,11 @@ var CardAnimation = {};
  * @param middlePos
  * @param endPos
  */
-CardAnimation.sendOutCardByUser = function(cardSprite,startPos,middlePos,endPos){
+CardAnimation.sendOutCardByUser = function(cardSprite,startPos,middlePos,onComplete){
     cardSprite.setPosition(startPos.x,startPos.y);
-    cardSprite.setScale(0);
+    cardSprite.setLocalZOrder(MapConstants.MAX_OBJECT_ZORDER);
 
-
-    var onMiddleComplete = function(){
-        var onComplete = function(){
-            cardSprite.initView(true,FightConstants.small_card);
-            cardSprite.setScale(1);
-        }
-        var sequence = transition.sequence([
-            cc.ScaleTo.create(1, 0.5, 0.5),
-            cc.CallFunc.create(onComplete)
-        ])
-        cardSprite.runAction(sequence)
-        transition.moveTo(cardSprite, {x : endPos.x, y:endPos.y, time : 1})
-    }
-
-
-    var sequence = transition.sequence([
-        cc.ScaleTo.create(1, 1, 1),
-        cc.CallFunc.create(onMiddleComplete)
-    ])
-    cardSprite.runAction(sequence)
-    transition.moveTo(cardSprite, {x : middlePos.x, y:middlePos.y, time : 1})
-
+    transition.moveTo(cardSprite, {x : middlePos.x, y:middlePos.y, time : 0.5,onComplete: onComplete})
 }
 
 
@@ -64,7 +43,14 @@ CardAnimation.sendOutCardByUser = function(cardSprite,startPos,middlePos,endPos)
 
 
 
-
+CardAnimation.loseSendOutCardByUser = function(cardSprite,endPos){
+    var onComplete = function(){
+        cardSprite.initView(true,FightConstants.small_card);
+        cardSprite.setScale(1);
+    }
+    transition.scaleTo(cardSprite, {scale : 0.5, time : 0.5});
+    transition.moveTo(cardSprite, {x : endPos.x, y:endPos.y, time : 0.5,onComplete:onComplete})
+}
 
 
 
