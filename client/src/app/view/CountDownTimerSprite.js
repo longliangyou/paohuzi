@@ -27,7 +27,7 @@ var CountDownTimerSprite = cc.LabelAtlas.extend({
      * @param isLess 表示是否是倒计时 是加还是减
      * @param allDt 所有的dt所需
      */
-    start:function(allDt,isLess,onComplete){
+    start:function(allDt,onComplete,isLess){
         this.isLess_ = isLess || true;
         this.allDt_ = allDt || 15;
         this.onComplete_ = onComplete;

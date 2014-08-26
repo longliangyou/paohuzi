@@ -15,8 +15,10 @@ var FightHandle = BaseHandle.extend({
 
     onMessageHandle:function(event){
 
-        var data = event.data;
-        var cmd = data.cmd;
+        var eventData = event.data;
+        var cmd = eventData.cmd;
+        var data = eventData.data;
+        var that = this;
 
         cc.log("接受到命令：",cmd);
         switch (cmd){
@@ -28,12 +30,14 @@ var FightHandle = BaseHandle.extend({
                 var interval = data.interval;
                 FightVo.isSendCard = false;
                 var position = this.getPositionByUserId(userId)
+
+                var onComplete = null;
                 if(userId == FightVo.myUser.userId) {//如果是我自动随机出一张牌
                     FightVo.isSendCard = true;
-                    var onComplete = function () {
+                    onComplete = function () {
                         var myUser = FightVo.myUser;
                         if (userId == myUser.userId) {
-                            this.card();
+                            that.card();
                         }
                     }
                 }
