@@ -72,7 +72,7 @@ var FightHandle = BaseHandle.extend({
                 this.sceneLayer_.initOneUserInfo("nextUser",FightVo.nextUser);
         }
         var fightModel = Singleton.getInstance("FightModel");
-        var info = fightModel.joinRoom(Util.proxy(callBack,this));
+        var info = fightModel.joinRoom(FightVo.myUser.userId,Util.proxy(callBack,this));
     },
     //用户主动出牌
     card: function(card){

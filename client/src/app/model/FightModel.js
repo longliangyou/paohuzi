@@ -103,10 +103,8 @@ var FightModel = BaseModel.extend({
      * 等待服务器通知 CardUtil.ServerNotify.onNewRound 才是开局
      * @return {rect:1,data:data}  rect为0表示失败，1表示成功
      */
-    joinRoom: function( callBack){
-      var userId = null;
+    joinRoom: function(userId,callBack){
       if(FightVo.deskType === 0) {//单机版
-          userId = "我";
           var round = Round.createNew([userId, "user2", "user3"], 1);
           FightVo.round = round;
 
