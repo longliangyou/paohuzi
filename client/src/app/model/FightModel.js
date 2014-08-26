@@ -163,7 +163,7 @@ var FightModel = BaseModel.extend({
           cardId: cardId // cardId 定义牌的标记 1-20  1-10 表示小写  11-20表示大写
         }
       };
-      if (FightVo.deskType == 1){
+      if (FightVo.deskType == 1){ //0表示单机 1表示私人场  2表示三人网络场    这里应该是1和2都要转发吧
         this.onMessageHandle(event);
       }
 
