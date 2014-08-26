@@ -107,7 +107,7 @@ var FightHandle = BaseHandle.extend({
         var position = {x: display.cx, y: display.cy};
         if(mark == FightConstants.SEND_CARD_START_POS ) {
 
-            if (myUser.previousUser == userId) {
+            if (previousUser.userId == userId) {
                 position = {x: display.left - 50, y: display.top - 100}
             } else if (myUser.userId == userId) {
                 position = {x: 0, y: 0};
@@ -116,15 +116,15 @@ var FightHandle = BaseHandle.extend({
             }
         }else  if(mark == FightConstants.SEND_CARD_END_POS ) {
 
-            if (myUser.previousUser == userId) {
+            if (previousUser.userId == userId) {
                 position = {x : display.left,y:display.top - 200 };
             } else if (myUser.userId == userId) {
                 position = {x : display.right,y:display.bottom + 10 };
             } else if (nextUser.userId == userId) {
                 position = {x : display.right,y:display.top - 200 };
             }
-        }else {
-            if (myUser.previousUser == userId) {
+        }else {  //FightConstants.SEND_CARD_MIDDLE_POS
+            if (previousUser.userId == userId) {
                 position = {x: display.left + 200, y: display.top - 200}
             } else if (myUser.userId == userId) {
                 position = {x: display.cx, y: display.cy};

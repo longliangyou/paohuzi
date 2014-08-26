@@ -82,7 +82,7 @@ CardTool.updateSort = function(CardSprite,drag) {
 
     var lastX = drag.lastX;
     var lastY = drag.lastY;
-    if(lastY > display.cy - 115/2 ) {
+    if(lastY > display.cy  ) {
         var isSendCard = FightVo.isSendCard ; //当前是否是出牌
         if (isSendCard) {
             var handle = Singleton.getInstance("FightHandle");

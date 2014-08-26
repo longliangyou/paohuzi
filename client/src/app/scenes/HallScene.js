@@ -62,7 +62,6 @@ var HallLayer =  BaseScene.extend({
 
     joinHallRoom:function(deskType){
         this.callMethod("joinHallRoom",deskType);
-
     },
     /**
      * 帧刷新事件

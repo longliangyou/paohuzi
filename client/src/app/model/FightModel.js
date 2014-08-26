@@ -105,7 +105,7 @@ var FightModel = BaseModel.extend({
      */
     joinRoom: function(userId,callBack){
       if(FightVo.deskType === 0) {//单机版
-          var round = Round.createNew([userId, "user2", "user3"], 1);
+          var round = Round.createNew([userId, "user2", "user3"], 2);
           FightVo.round = round;
 
           // 这里第一个参数是 error, 为 null 表示没有错误，服务器返回正确数据。
