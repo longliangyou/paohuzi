@@ -139,19 +139,19 @@ var BaseScene = cc.Layer.extend({
     getLayerBySceneLayerName: function (parentLayerName) {
         var currentLayer;
 
-        if (parentLayerName == SceneConstants.BACKGROUND_LAYER)//背景层
+        if (parentLayerName == MapConstants.BACKGROUND_LAYER)//背景层
             currentLayer = this.backgroundLayer_
-        else if (parentLayerName == SceneConstants.FLOORS_LAYER)//地板层
+        else if (parentLayerName == MapConstants.FLOORS_LAYER)//地板层
             currentLayer = this.floorsLayer_
-        else if (parentLayerName == SceneConstants.FLY_LAYER) //飞行层
+        else if (parentLayerName == MapConstants.FLY_LAYER) //飞行层
             currentLayer = this.flysLayer_
-        else if (parentLayerName == SceneConstants.TOUCH_LAYER) //触摸层
+        else if (parentLayerName == MapConstants.TOUCH_LAYER) //触摸层
             currentLayer = this
-        else if (parentLayerName == SceneConstants.UI_LAYER) //ui层
+        else if (parentLayerName == MapConstants.UI_LAYER) //ui层
             currentLayer = this.uiLayer_
-        else if (parentLayerName == SceneConstants.LOADING_LAYER) //地图的loading层
+        else if (parentLayerName == MapConstants.LOADING_LAYER) //地图的loading层
             currentLayer = this.loadingLayer_
-        else if (parentLayerName == SceneConstants.TIP_LAYER)//tips层
+        else if (parentLayerName == MapConstants.TIP_LAYER)//tips层
             currentLayer = this.tipLayer_
         else
             currentLayer = this.batch_

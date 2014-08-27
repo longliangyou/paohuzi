@@ -114,19 +114,6 @@ var SceneConstants = {
 
 
 
-/*SceneConstants 常量**/
 
-//指定父类的显示层
-SceneConstants.BACKGROUND_LAYER="backgroundLayer";//返回背景图
-SceneConstants.DEBUG_LAYER="debugLayer";//debug层
-
-SceneConstants.FLOORS_LAYER="floorsLayer";//地板层
-SceneConstants.FLY_LAYER="flysLayer";//建筑的上一飞行层
-SceneConstants.BATCH_LAYER="batchLayer";//中间建筑层
-
-SceneConstants.TOUCH_LAYER="touchLayer";//触摸层
-SceneConstants.UI_LAYER="uiLayer";//ui层
-SceneConstants.LOADING_LAYER="loadingLayer"; //地图的loading层
-SceneConstants.TIP_LAYER="tipLayer";//tips层
 
 
