@@ -33,7 +33,7 @@
             <key>fight_big_card.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{582,1137},{75,111}}</string>
+                <string>{{225,1323},{75,111}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -59,7 +59,7 @@
             <key>fight_big_card_d10.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{153,1323},{75,111}}</string>
+                <string>{{113,1317},{75,111}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -72,20 +72,7 @@
             <key>fight_big_card_d2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{265,1247},{75,111}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{75,111}}</string>
-                <key>sourceSize</key>
-                <string>{75,111}</string>
-            </dict>
-            <key>fight_big_card_d3.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{1,1301},{75,111}}</string>
+                <string>{{225,1247},{75,111}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -95,10 +82,23 @@
                 <key>sourceSize</key>
                 <string>{75,111}</string>
             </dict>
+            <key>fight_big_card_d3.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{395,1193},{75,111}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{75,111}}</string>
+                <key>sourceSize</key>
+                <string>{75,111}</string>
+            </dict>
             <key>fight_big_card_d4.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{153,1247},{75,111}}</string>
+                <string>{{486,1137},{75,111}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -111,32 +111,6 @@
             <key>fight_big_card_d5.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{393,1174},{75,111}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{75,111}}</string>
-                <key>sourceSize</key>
-                <string>{75,111}</string>
-            </dict>
-            <key>fight_big_card_d6.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{470,1137},{75,111}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{75,111}}</string>
-                <key>sourceSize</key>
-                <string>{75,111}</string>
-            </dict>
-            <key>fight_big_card_d7.png</key>
-            <dict>
-                <key>frame</key>
                 <string>{{822,1106},{75,111}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
@@ -147,7 +121,7 @@
                 <key>sourceSize</key>
                 <string>{75,111}</string>
             </dict>
-            <key>fight_big_card_d8.png</key>
+            <key>fight_big_card_d6.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{710,1061},{75,111}}</string>
@@ -160,10 +134,36 @@
                 <key>sourceSize</key>
                 <string>{75,111}</string>
             </dict>
-            <key>fight_big_card_d9.png</key>
+            <key>fight_big_card_d7.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{598,1061},{75,111}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <true/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{75,111}}</string>
+                <key>sourceSize</key>
+                <string>{75,111}</string>
+            </dict>
+            <key>fight_big_card_d8.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{1,1301},{75,111}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <true/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{75,111}}</string>
+                <key>sourceSize</key>
+                <string>{75,111}</string>
+            </dict>
+            <key>fight_big_card_d9.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{113,1241},{75,111}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -306,7 +306,7 @@
             <key>fight_card_storage.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{415,1120},{53,54}}</string>
+                <string>{{180,1187},{53,54}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -618,7 +618,7 @@
             <key>fight_small_card _d1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{734,1170},{32,39}}</string>
+                <string>{{820,1215},{32,39}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -631,11 +631,11 @@
             <key>fight_small_card _d10.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{694,1170},{32,39}}</string>
+                <string>{{900,1182},{32,39}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{0,0},{32,39}}</string>
                 <key>sourceSize</key>
@@ -644,7 +644,7 @@
             <key>fight_small_card _d2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{774,1137},{32,39}}</string>
+                <string>{{860,1182},{32,39}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -657,7 +657,7 @@
             <key>fight_small_card _d3.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{734,1137},{32,39}}</string>
+                <string>{{820,1182},{32,39}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -670,7 +670,7 @@
             <key>fight_small_card _d4.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{694,1137},{32,39}}</string>
+                <string>{{747,1203},{32,39}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -683,7 +683,7 @@
             <key>fight_small_card _d5.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{341,1270},{32,39}}</string>
+                <string>{{707,1203},{32,39}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -696,11 +696,11 @@
             <key>fight_small_card _d6.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{113,1390},{32,39}}</string>
+                <string>{{787,1177},{32,39}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{0,0},{32,39}}</string>
                 <key>sourceSize</key>
@@ -709,7 +709,7 @@
             <key>fight_small_card _d7.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{113,1357},{32,39}}</string>
+                <string>{{747,1170},{32,39}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -722,7 +722,7 @@
             <key>fight_small_card _d8.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{113,1324},{32,39}}</string>
+                <string>{{707,1170},{32,39}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -735,11 +735,11 @@
             <key>fight_small_card _d9.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{113,1291},{32,39}}</string>
+                <string>{{787,1137},{32,39}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{0,0},{32,39}}</string>
                 <key>sourceSize</key>
@@ -748,7 +748,7 @@
             <key>fight_small_card.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{113,1258},{32,39}}</string>
+                <string>{{747,1137},{32,39}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -761,7 +761,7 @@
             <key>fight_small_card_x1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{353,1237},{32,39}}</string>
+                <string>{{707,1137},{32,39}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -774,7 +774,7 @@
             <key>fight_small_card_x10.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{353,1204},{32,39}}</string>
+                <string>{{337,1297},{32,39}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -787,7 +787,7 @@
             <key>fight_small_card_x2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{113,1225},{32,39}}</string>
+                <string>{{337,1264},{32,39}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -800,7 +800,7 @@
             <key>fight_small_card_x3.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{353,1171},{32,39}}</string>
+                <string>{{353,1231},{32,39}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -813,7 +813,7 @@
             <key>fight_small_card_x4.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{180,1214},{32,39}}</string>
+                <string>{{353,1198},{32,39}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -917,7 +917,7 @@
             <key>fight_up_card_storage.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{180,1187},{41,26}}</string>
+                <string>{{353,1171},{41,26}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -992,6 +992,58 @@
                 <key>sourceSize</key>
                 <string>{173,69}</string>
             </dict>
+            <key>oprate_chi0.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{598,1137},{104,108}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <true/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{104,108}}</string>
+                <key>sourceSize</key>
+                <string>{104,108}</string>
+            </dict>
+            <key>oprate_close0.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{415,1120},{70,72}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{70,72}}</string>
+                <key>sourceSize</key>
+                <string>{70,72}</string>
+            </dict>
+            <key>oprate_hu0.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{1,1453},{104,108}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <true/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{104,108}}</string>
+                <key>sourceSize</key>
+                <string>{104,108}</string>
+            </dict>
+            <key>oprate_peng0.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{113,1393},{104,108}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <true/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{104,108}}</string>
+                <key>sourceSize</key>
+                <string>{104,108}</string>
+            </dict>
             <key>phz_userinfoback1FG.png</key>
             <dict>
                 <key>frame</key>
@@ -1015,7 +1067,7 @@
             <key>size</key>
             <string>{1024,2048}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:6ce7aa37b5e3f77552f6ed574a154754:95f2862531dbdcfffdb39f16a2227eb0:476fcd4873c1984eefe6c7e206ec713e$</string>
+            <string>$TexturePacker:SmartUpdate:cb46e004c2c5649639d4827df1a13c4d:c076dd394a7fb8f4dea77431f48f888f:476fcd4873c1984eefe6c7e206ec713e$</string>
             <key>textureFileName</key>
             <string>Sheet_Fight.png</string>
         </dict>

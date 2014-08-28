@@ -25,16 +25,17 @@ var Round = {
     var cards = cardRange.concat(cardRange).concat(cardRange).concat(cardRange);
     var onTable = _.shuffle(cards);
 
-    var bankerNumer = bankerNumer;
+    var bankerNumer = bankerNum;
     var currentPlayer = function(uid){
       return _.find(players, function(player){return player.uid == uid;});
     };
+
 
     // if (userIds.length !== 3 || (bankerNum > 2 && bankerNum < 0)){
     //   return false;
     // }
 
-    _.each (players, function(player, index){
+    _.each (players, function(player, index){//遍历每个玩家都初始化牌
       player.uid = userIds[index];
       player.onHand = _.sortBy(_.first(onTable, 20), function(c){return c;});
       player.onTable = {shunzi: [], thricePeng: [], thriceWei: [], fourfoldTi: [], fourfoldPao: []};
@@ -50,12 +51,13 @@ var Round = {
       onTable = _.rest(onTable, 20);
     });
 
-    players[bankerNum].onHand.push(onTable.pop());
+    players[bankerNum].onHand.push(onTable.pop());//庄家在给多一张牌
 
     var getOtherPlayerCards = function(player){
       var otherPlayer = {
         num: player.num,
         uid: player.uid,
+        onHand:player.onHand,
         onHandLength: player.onHand.length,
         onTable: player.onTable,
         onTrash: player.onTrash
@@ -70,6 +72,8 @@ var Round = {
       previousPlayer = getOtherPlayerCards(players[(player.num + 2)%3]);
       // console.log(player.onHand);
       CardUtil.riffle(player.onHand);
+      CardUtil.riffle(nextPlayer.onHand);
+      CardUtil.riffle(previousPlayer.onHand);
       return [previousPlayer, player, nextPlayer];
     };
 

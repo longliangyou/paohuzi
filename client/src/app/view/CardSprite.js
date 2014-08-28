@@ -88,7 +88,7 @@ var CardSprite = cc.Sprite.extend({
                 that.drag = null
             }
         }
-        TouchUtil.addTouchEventListener(this,param,this);
+        TouchUtil.addTouchEventListener(this,param);
         this.setTouchEnabled(true);
     }
 //    setRotation:function(newRotation){

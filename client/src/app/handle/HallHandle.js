@@ -4,6 +4,8 @@
  */
 var HallHandle = BaseHandle.extend({
 
+
+
     /**
      * 在大厅hall中  去加入大厅的某个房间
      * @param deskType //0表示单机 1表示私人场  2表示三人网络场

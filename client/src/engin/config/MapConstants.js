@@ -25,4 +25,4 @@ MapConstants.TIP_LAYER="tipLayer";//tips层
 
 
 MapConstants.DEFAULT_OBJECT_ZORDER  = 200
-MapConstants.MAX_OBJECT_ZORDER      = 20000
+MapConstants.MAX_OBJECT_ZORDER      = 20000 //最高物体的zorder

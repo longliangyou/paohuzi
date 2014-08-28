@@ -5,6 +5,38 @@
 
 
 /**
+ * 判断一个array中是否含有某个元素
+ * 使用
+ * var arr=["a","b"];
+ alert(arr.in_array("a"))
+ * @type {string}
+ */
+//Array.prototype.S=String.fromCharCode(2);
+//Array.prototype.in_array=function(e){
+//    var r=new RegExp(this.S+e+this.S);
+//    return (r.test(this.S+this.join(this.S)+this.S));
+//}
+
+/**
+ * 判断某个element 是否在数组 array 中
+ * @param array
+ * @param element
+ */
+isInArray = function(array,element){
+    if(array){
+        for(var i=0;i<array.length;i++){
+            if(array[i] == element){
+                return true
+            }
+        }
+
+        return true;
+    }
+    return false;
+}
+
+
+/**
  * 转化为string函数
  *
  * @param str

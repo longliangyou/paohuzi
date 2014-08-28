@@ -69,7 +69,11 @@ CardTool.deleteOrgionByCardSprite = function(cardSprite){
 
 
 
+
+
+
 /**
+ * 当自己组装牌事
  * 返回一个重新组合好的 onHandleCardSpriteArr
  * @param CardSprite  onHandleCardSpriteArr其中的一个 cardsprite
  * @param onHandleCardSpriteArr 结构类似 CardUtil.riffle 返回的数组结构，不过最小单位是 cardsprite
@@ -86,7 +90,7 @@ CardTool.updateSort = function(CardSprite,drag) {
         var isSendCard = FightVo.isSendCard ; //当前是否是出牌
         if (isSendCard) {
             var handle = Singleton.getInstance("FightHandle");
-            handle.card(card);
+            handle.card(myUser.userId,CardSprite);
         }else{
             onHandleCardSpriteArr = CardTool.sort(onHandleCardSpriteArr);
             return onHandleCardSpriteArr;

@@ -38,7 +38,7 @@ EventProtocol.extend = function(object){
         var allListener = object.listeners_[eventName]
         for(var handle in allListener){
             var listener = allListener[handle];
-            if(listener) {
+            if(listener ) {
                 var ret = listener(event)
                 if (ret == false)
                     break

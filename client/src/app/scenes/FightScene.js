@@ -21,6 +21,9 @@ var FightLayer =  BaseScene.extend({
         backgroundLayer.addChild(bg_down);
 
 
+        var cardOprateTipsSprite = new CardOprateTipsSprite();
+        cardOprateTipsSprite.setPosition(display.cx,display.cy);
+        backgroundLayer.addChild(cardOprateTipsSprite);
 
         //加载三个头像显示
         var flysLayer = this.flysLayer_
@@ -81,7 +84,16 @@ var FightLayer =  BaseScene.extend({
         this.countDownTimerSprite_.setPosition(position.x,position.y);
         this.countDownTimerSprite_.start(15,onComplete)
     },
-
+    //提示用户 吃、碰、胡等
+    cardOprateTipsShow:function(enableSpriteArray){
+        if(!this.cardOprateTipsSprite_){
+            var cardOprateTipsSprite = new CardOprateTipsSprite();
+            cardOprateTipsSprite.setPosition(display.cx,display.cy);
+            this.tipLayer_.addChild(cardOprateTipsSprite);
+            this.cardOprateTipsSprite_ = cardOprateTipsSprite;
+        }
+        this.cardOprateTipsSprite_.initView(enableSpriteArray);
+    },
 
 
 
@@ -157,7 +169,7 @@ var FightLayer =  BaseScene.extend({
             cardSprite1.initView(false,"fight_big_card.png");
             transition.moveTo(cardSprite1,{delay:delay,time:0.2,y:display.bottom - 115});
 //            transition.moveTo(cardSprite1,{delay:delay,time:0.2,y:display.bottom + 10});
-            myUser.onHandleCardSprite_.push(cardSprite1);
+            myUser.onHandleCardSpriteArr_.push(cardSprite1);
 //            clickFun(cardSprite1);
 
             var cardSprite2 = this.allCardSpt_[index+2];
@@ -169,7 +181,7 @@ var FightLayer =  BaseScene.extend({
             var cardSprite1 = this.allCardSpt_[60];
             cardSprite1.initView(false,"fight_big_card.png");
             transition.moveTo(cardSprite1,{delay:20*0.04,time:0.2,y:display.bottom - 115});
-            myUser.onHandleCardSprite_.push(cardSprite1);
+            myUser.onHandleCardSpriteArr_.push(cardSprite1);
         }
 
 
@@ -189,7 +201,7 @@ var FightLayer =  BaseScene.extend({
     orderMyCard:function(){
         //排列我的牌
         var myUser = FightVo.myUser;
-        var onHandleCardSprite =  myUser.onHandleCardSprite_;
+        var onHandleCardSprite =  myUser.onHandleCardSpriteArr_;
         var outputCard = CardUtil.riffle(myUser.onHand);
         var behaveNum = checkint(outputCard.length/2)
 

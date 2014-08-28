@@ -14,6 +14,7 @@
         "src/pomelo/PomeloApi.js",
         "src/pomelo/Round.js",
         "src/pomelo/CardUtil.js",
+        "src/pomelo/FightCmdTime.js",
         "src/underscore-min.js",
         "src/engin/cocos2dx/NodeEx.js",
         "src/engin/cocos2dx/LayerEx.js",
@@ -66,6 +67,7 @@
         "src/app/view/CountDownTimerSprite.js",
         "src/app/view/AvatarSprite.js",
         "src/app/view/CardSprite.js",
+        "src/app/view/CardOprateTipsSprite.js",
         "src/app/util/CardAnimation.js",
         "src/app/util/CardTool.js",
 
