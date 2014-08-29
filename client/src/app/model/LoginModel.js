@@ -4,7 +4,7 @@
  */
 var LoginModel = BaseModel.extend({
 
-
+    userVo:null,
     /**
      *  连接
       * @param ip
@@ -22,14 +22,19 @@ var LoginModel = BaseModel.extend({
      * @return 当前用户的角色等各种信息
      */
    login:function(userName,passWord,callBack){
+        var data = null;
         if(FightVo.deskType == 0 ){ //单机
-            var myUser =  {nickName:"user2",gold:10000,userId:2};
-            FightVo.initOneUserInfo("myUser",myUser);
-            if(callBack){
-                callBack({success:true});
-            }
+            data =  {nickName:"user2",gold:10000,userId:2};
         }else if(FightVo.deskType == 2){
             alert("网络连接失败！")
+        }
+
+
+        userVo = new UserVo();
+        userVo.initData(data);
+
+        if(callBack){
+            callBack({success:true});
         }
    },
 

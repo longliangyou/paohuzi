@@ -91,27 +91,22 @@ var FightModel = BaseModel.extend({
 
     // 用户出牌
     card: function(userId, cardId, callback){
-//        FightCmdTime.stop();//任何一个操作停掉计时器
     },
 
 
     // 吃牌
     eat: function(userId, cardId, callback){
-//      FightCmdTime.stop();//任何一个操作停掉计时器
     },
 
     // 碰牌
     peng: function(userId, cardId, callback){
-//        FightCmdTime.stop();//任何一个操作停掉计时器
     },
 
     // 胡牌
     win: function(userId, cardId, callback){
-//        FightCmdTime.stop();//任何一个操作停掉计时器
     },
 
     // 取消操作
     cancel: function(userId, cardId, callback){
-//        FightCmdTime.stop();//任何一个操作停掉计时器
     }
 });
