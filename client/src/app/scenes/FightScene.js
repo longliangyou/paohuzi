@@ -21,10 +21,6 @@ var FightLayer =  BaseScene.extend({
         backgroundLayer.addChild(bg_down);
 
 
-        var cardOprateTipsSprite = new CardOprateTipsSprite();
-        cardOprateTipsSprite.setPosition(display.cx,display.cy);
-        backgroundLayer.addChild(cardOprateTipsSprite);
-
         //加载三个头像显示
         var flysLayer = this.flysLayer_
         var avatarSprite0 = new AvatarSprite();

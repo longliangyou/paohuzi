@@ -28,7 +28,11 @@ var FightModel = BaseModel.extend({
           break;
         case CardUtil.ServerNotify.onDiscard: // 等待玩家出牌 data:{userId:,interval:};
             break;
-        case CardUtil.ServerNotify.onCard:    // 玩家出牌 data:{userId: userId,cardId: cardId}
+          case CardUtil.ServerNotify.onCard:    // 玩家出牌 data:{userId: userId,cardId: cardId}
+          var userId = data.userId;
+          var cardId = data.cardId;
+          var userVo = FightVo.getUserVoByUserId(userId);
+          userVo.deleteCardByCardId(cardId,"onHand");
           break;
 
           case CardUtil.ServerNotify.onEat:     // 玩家吃牌
@@ -65,9 +69,40 @@ var FightModel = BaseModel.extend({
       }
 
 
+      var myUser = FightVo.myUser;
+      if(! isInArray(notSendUserIdArray,myUser.userId)){
+        var event = {name:"CMD",data:{data:data,cmd:cmd}};
+        this.dispatchEvent(event);
+      }
 
-      var event = {name:"CMD",data:{data:data,cmd:cmd}};
-      this.dispatchEvent(event);
+
+
+      //根据是否是npc 做ai相关的操作
+      switch (cmd){
+          case CardUtil.ServerNotify.onDiscard: // 等待玩家出牌 data:{userId:,interval:};
+              var userId = data.userId;
+              var interval = data.interval;
+              var userVo = FightVo.getUserVoByUserId(userId);
+              var callBackFun = function(){
+                  that.card(userId,null,null);
+              }
+              if(userVo.isNpc){
+                  callBackFun();
+              }else{
+                  FightCmdTime.start(interval,callBackFun)
+              }
+              break;
+          case CardUtil.ServerNotify.onCard:    // 玩家出牌 data:{userId: userId,cardId: cardId}
+              var userId = data.userId;
+              var cardId = data.cardId;
+//              var nextUser = FightVo.getNextUserByCurrentUserId(userId)//下一家
+//              var nextNextUser = FightVo.getNextUserByCurrentUserId(nextUser.userId);//下下一家
+//              var canPeng = CardUtil.canPeng(nextUser.onHand,cardId);
+//              if(canPeng){
+//
+//              }
+              break;
+      }
     },
 
 
@@ -85,34 +120,23 @@ var FightModel = BaseModel.extend({
           var previousUserUserId = 1;//写死上一个玩家的userId
           var nextUserUserId = 3;//写死下一个玩家的userId
 
-
-          //第一个用户加入房间
-          var data = {key:"previousUser",value:{nickName:"user1",gold:200,userId:previousUserUserId,isNpc:true}};
-          //这里 龙哥要做的是 创建一个user对象 吧这个用户的信息也存储起来 这样能和真实用户的模型保持一致，一个user对象，不仅有一些userInfo的信息，分卓后也会有牌的信息
-          //...to do..
-          var event = {
-              cmd: CardUtil.ServerNotify.onJoinRoom,
-              data:data
-          };
-          this.onMessageHandle(event);
-
-          //第二个用户加入房间
-          var data = {key:"nextUser",value:{nickName:"user3",gold:500,userId:nextUserUserId,isNpc:true}}
-          //这里 龙哥要做的是 创建一个user对象 吧这个用户的信息也存储起来 这样能和真实用户的模型保持一致，一个user对象，不仅有一些userInfo的信息，分卓后也会有牌的信息
-          //...to do..
-          var event = {
-              cmd: CardUtil.ServerNotify.onJoinRoom,
-              data: data
-          };
-          this.onMessageHandle(event);
-
-
-          //配牌
           var isBankerIndex = 0;
           var round = Round.createNew([userId, nextUserUserId,previousUserUserId], isBankerIndex);
           FightVo.round = round;
 
+          //第一个用户加入房间
+          var event = {
+              cmd: CardUtil.ServerNotify.onJoinRoom,
+              data:{key:"previousUser",value:{nickName:"user1",gold:200,userId:previousUserUserId,isNpc:true}}
+          };
+          this.onMessageHandle(event);
 
+          //第二个用户加入房间
+          var event = {
+              cmd: CardUtil.ServerNotify.onJoinRoom,
+              data: {key:"nextUser",value:{nickName:"user3",gold:500,userId:nextUserUserId,isNpc:true}}
+          };
+          this.onMessageHandle(event);
 
 
           if(callBack)
@@ -130,18 +154,15 @@ var FightModel = BaseModel.extend({
 
 
           // 等待庄家出牌
-          var bankerUserId = userId
-          var onDiscardInterval = CardUtil.cardInterval
           var event = {
             cmd: CardUtil.ServerNotify.onDiscard,
             data: {
-              userId: bankerUserId,
-              interval: onDiscardInterval
+              userId: FightVo.bankerUser.userId,
+              interval: CardUtil.cardInterval
             }
           };
           this.onMessageHandle(event);
-          //这里 龙哥要做的是：调用ai  然后下面我写了一个 FightAiAction 你看看我的思路 然后你自己觉得可以学的就学 不好的 就丢弃掉
-          FightAiAction.onDiscardAction(bankerUserId,onDiscardInterval) //...to do..
+
 
 
       }else if(FightVo.deskType == 2) { //三人网络场
@@ -153,13 +174,44 @@ var FightModel = BaseModel.extend({
 
     // 用户出牌
     card: function(userId, cardId, callback){
-//        FightCmdTime.stop();//任何一个操作停掉计时器
+        FightCmdTime.stop();
+
+        if (FightVo.deskType == 0) { //0表示单机 1表示私人场  2表示三人网络场    这里应该是1和2都要转发吧
+            var user = FightVo.getUserVoByUserId(userId);
+            var event = {
+                cmd: CardUtil.ServerNotify.onCard,
+                data: {
+                    userId: userId,
+                    cardId: cardId || user.getMathCardId() // cardId 定义牌的标记 1-20  1-10 表示小写  11-20表示大写
+                }
+            };
+
+            var notSendUserIdArray = null
+            if(cardId)
+                notSendUserIdArray = [userId];
+            this.onMessageHandle(event,notSendUserIdArray);
+        }
+
+        if(callback) {
+            var result = {
+                rect: 1
+            };
+          callback(result);
+        }
     },
 
 
     // 吃牌
     eat: function(userId, cardId, callback){
 //      FightCmdTime.stop();//任何一个操作停掉计时器
+//      var cardEvent = {
+//        cmd: CardUtil.ServerNotify.onEat,
+//        data: {
+//          userId: userId,
+//          cardId: cardId // cardId 定义牌的标记 1-20  1-10 表示小写  11-20表示大写
+//        }
+//      };
+//      this.onMessageHandle(event);
     },
 
     // 碰牌
