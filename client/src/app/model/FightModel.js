@@ -21,10 +21,8 @@ var FightModel = BaseModel.extend({
 
       switch (cmd){
         case CardUtil.ServerNotify.onNewRound:
-          FightVo.initUserCard(data);//data是大家牌的数据
           break;
         case CardUtil.ServerNotify.onJoinRoom:
-          FightVo.initOneUserInfo(data.key,data.value);//data:{key:"",value:{}}
           break;
         case CardUtil.ServerNotify.onDiscard: // 等待玩家出牌 data:{userId:,interval:};
             break;
@@ -89,6 +87,7 @@ var FightModel = BaseModel.extend({
           //第一个用户加入房间
           var data = {key:"previousUser",value:{nickName:"user1",gold:200,userId:previousUserUserId,isNpc:true}};
           //这里 龙哥要做的是 创建一个user对象 吧这个用户的信息也存储起来 这样能和真实用户的模型保持一致，一个user对象，不仅有一些userInfo的信息，分卓后也会有牌的信息
+          //通过userId，能取到用户user info，也能取到自己手上的card info 即可，
           //...to do..
           var event = {
               cmd: CardUtil.ServerNotify.onJoinRoom,
@@ -99,6 +98,7 @@ var FightModel = BaseModel.extend({
           //第二个用户加入房间
           var data = {key:"nextUser",value:{nickName:"user3",gold:500,userId:nextUserUserId,isNpc:true}}
           //这里 龙哥要做的是 创建一个user对象 吧这个用户的信息也存储起来 这样能和真实用户的模型保持一致，一个user对象，不仅有一些userInfo的信息，分卓后也会有牌的信息
+          //通过userId，能取到用户user info，也能取到自己手上的card info 即可
           //...to do..
           var event = {
               cmd: CardUtil.ServerNotify.onJoinRoom,
@@ -141,6 +141,7 @@ var FightModel = BaseModel.extend({
           };
           this.onMessageHandle(event);
           //这里 龙哥要做的是：调用ai  然后下面我写了一个 FightAiAction 你看看我的思路 然后你自己觉得可以学的就学 不好的 就丢弃掉
+          //理论来说任何一个onMessageHandle命令后 都要调用ai模拟用户操作，所以ai可以和onMessageHandle命令一一对应
           FightAiAction.onDiscardAction(bankerUserId,onDiscardInterval) //...to do..
 
 
