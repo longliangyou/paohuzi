@@ -80,6 +80,69 @@ var FightModel = BaseModel.extend({
      */
     joinRoom: function(userId,callBack){
       if(FightVo.deskType === 0) {//单机版
+          var previousUserUserId = 1;//写死上一个玩家的userId
+          var nextUserUserId = 3;//写死下一个玩家的userId
+
+
+          //第一个用户加入房间
+          var data = {key:"previousUser",value:{nickName:"user1",gold:200,userId:previousUserUserId,isNpc:true}};
+          //这里 龙哥要做的是 创建一个user对象 吧这个用户的信息也存储起来 这样能和真实用户的模型保持一致，一个user对象，不仅有一些userInfo的信息，分卓后也会有牌的信息
+          //通过userId，能取到用户user info，也能取到自己手上的card info 即可，
+          //...to do..
+          var event = {
+              cmd: CardUtil.ServerNotify.onJoinRoom,
+              data:data
+          };
+          this.onMessageHandle(event);
+
+          //第二个用户加入房间
+          var data = {key:"nextUser",value:{nickName:"user3",gold:500,userId:nextUserUserId,isNpc:true}}
+          //这里 龙哥要做的是 创建一个user对象 吧这个用户的信息也存储起来 这样能和真实用户的模型保持一致，一个user对象，不仅有一些userInfo的信息，分卓后也会有牌的信息
+          //通过userId，能取到用户user info，也能取到自己手上的card info 即可
+          //...to do..
+          var event = {
+              cmd: CardUtil.ServerNotify.onJoinRoom,
+              data: data
+          };
+          this.onMessageHandle(event);
+
+
+          //配牌
+          var isBankerIndex = 0;
+          var round = Round.createNew([userId, nextUserUserId,previousUserUserId], isBankerIndex);
+          FightVo.round = round;
+
+
+
+
+          if(callBack)
+            callBack();
+
+
+
+          //发送牌  触发开桌
+          var data = FightVo.round.getCardsByUserId(userId);
+          var event = {
+              cmd: CardUtil.ServerNotify.onNewRound,
+              data: data //获取这个用户的牌
+          };
+          this.onMessageHandle(event);
+
+
+          // 等待庄家出牌
+          var bankerUserId = userId
+          var onDiscardInterval = CardUtil.cardInterval
+          var event = {
+            cmd: CardUtil.ServerNotify.onDiscard,
+            data: {
+              userId: bankerUserId,
+              interval: onDiscardInterval
+            }
+          };
+          this.onMessageHandle(event);
+          //这里 龙哥要做的是：调用ai  然后下面我写了一个 FightAiAction 你看看我的思路 然后你自己觉得可以学的就学 不好的 就丢弃掉
+          //理论来说任何一个onMessageHandle命令后 都要调用ai模拟用户操作，所以ai可以和onMessageHandle命令一一对应
+          FightAiAction.onDiscardAction(bankerUserId,onDiscardInterval) //...to do..
 
 
       }else if(FightVo.deskType == 2) { //三人网络场
