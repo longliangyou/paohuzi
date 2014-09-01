@@ -91,11 +91,19 @@ var FightModel = BaseModel.extend({
 
     // 用户出牌
     card: function(userId, cardId, callback){
+      // 用户出牌
+      // 1. 发送消息到服务器，收到response，调用callback
+      if (FightVo.deskType === 0){
+        callback();
+        // 单机情况下， 发一个 onCard 消息，然后由 onCard 消息处理这个牌的信息。
+
+
+      }
     },
 
 
     // 吃牌
-    eat: function(userId, cardId, callback){
+    eat: function(userId, cardIds, callback){
     },
 
     // 碰牌

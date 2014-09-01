@@ -5,13 +5,18 @@
  */
 var RoomAction = {
 
-    //加入房间
-    joinRoom: function(userId,callBack){
-        //加入房间 你看看是否有三个人都请求加入房间
+    // 1. 查找 room list，查找空房间加入，如果没有空房间，新建房间。
+    // 2. 当前玩家人数为 1 人。创建round，创建定时器，定时加入NPC。
+    // 3. 当前玩家人数为 2 人。开局游戏。
+    // 4. 玩家数据保存到 round。
+    joinRoom: function(user, callBack){
+      // 1. 查找 room list，查找空房间加入，如果没有空房间，新建房间。
+      // 2. 当前玩家人数为 1 人。创建round，创建定时器，定时加入NPC。
+      // 3. 当前玩家人数为 2 人。开局游戏。
+      // 4. 玩家数据保存到 round。
 
+      if (_.isFunction(callback)) {
+        callback();
+      }
     }
-
-
-
-
-}
+};
