@@ -14,7 +14,6 @@ var FightHandle = BaseHandle.extend({
 
 
     onMessageHandle:function(event){
-
         var eventData = event.data;
         var cmd = eventData.cmd;
         var data = eventData.data;
@@ -85,7 +84,7 @@ var FightHandle = BaseHandle.extend({
     //后台相关服务 请求
     joinRoom:function(){
         var fightModel = Singleton.getInstance("FightModel");
-        var info = fightModel.joinRoom(FightVo.myUser.userId,null);
+        var info = fightModel.joinRoom(UserVo.userId,null);
     },
     //用户出牌
     card: function(userId,cardSprite){

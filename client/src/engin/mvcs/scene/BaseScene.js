@@ -164,7 +164,7 @@ var BaseScene = cc.Layer.extend({
      * @param dt
      */
     tick:function(dt){
-        FightCmdTime.tick(dt);
+        //FightCmdTime.tick(dt);
         //this.timer_.tick(dt);
     },
     onCleanUp:function(){

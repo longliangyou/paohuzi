@@ -6,19 +6,14 @@
  */
 var ServerNotifyManager = {
 
-    ctor:function(){
-        //让其继承事件类
-        EventProtocol.extend(this);
-    },
-
-    //发送消息给clent客户端
-    sendNotifyToClient:function(){
-
-    },
-
     // 发送命令给客户端。
-    sendCmdResponse: function(event){
+    sendCmdResponse: function(event){//event结构 {cmd:,data:}
+        var cmd = event.cmd;
+        var data = event.data;
 
+
+        var event = {name:"CMD",data:event};
+        this.dispatchEvent(event);
     },
 
     sendAdminMessage: function(event){
@@ -29,3 +24,6 @@ var ServerNotifyManager = {
       
     }
 };
+
+
+EventProtocol.extend(ServerNotifyManager);

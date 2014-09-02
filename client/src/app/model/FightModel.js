@@ -7,14 +7,22 @@ var FightModel = BaseModel.extend({
 
     ctor:function(){
         this._super();
-        //监听后台消息
+
+        //网络场 通过服务器的http请求监听服务器的 ServerNotifyManager 消息
         //PomeloApi.addEventListener("onMessageHandle",this.onMessageHandle)
+
+        //单机场时 通过事件监听后台 ServerNotifyManager 消息
+        var callBack = function(event){
+            var eventData = event.data;
+            this.onMessageHandle(eventData)
+        }
+        ServerNotifyManager.addEventListener("CMD",callBack)
         return true;
     },
 
 
 
-    onMessageHandle: function(event,notSendUserIdArray){
+    onMessageHandle: function(event){
       var cmd = event.cmd;
       var data = event.data;
       var that = this;

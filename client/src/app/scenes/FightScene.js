@@ -28,8 +28,8 @@ var FightLayer =  BaseScene.extend({
         flysLayer.addChild(avatarSprite0);
         this.myUserAvatarSprite_ = avatarSprite0
         //自己的数据马上就初始化
-        var oneUserVo = FightVo.initOneUserInfo("myUser",UserVo.getUserInfoData());
-        this.myUserAvatarSprite_.initViw(oneUserVo);
+//        var oneUserVo = FightVo.initOneUserInfo("myUser",UserVo.getUserInfoData());
+//        this.myUserAvatarSprite_.initViw(oneUserVo);
 
         var avatarSprite1 = new AvatarSprite();
         avatarSprite1.setPosition(display.left + 120,display.top - 40);
