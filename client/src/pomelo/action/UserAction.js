@@ -17,8 +17,5 @@ var UserAction = {
           nickName: nickName,
           isNpc: true
       };
-
-      // 2. 调用 joinRoom.
-      RoomAction.joinRoom(user);
     }
 };
