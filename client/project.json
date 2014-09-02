@@ -40,7 +40,7 @@
         "src/pomelo/PomeloApi.js",
         "src/pomelo/Round.js",
         "src/pomelo/CardUtil.js",
-        "src/pomelo/action/ServerNotifyManager.js",
+        "src/pomelo/ServerNotifyManager.js",
         "src/underscore-min.js",
 
 
