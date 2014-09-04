@@ -65,6 +65,17 @@ var Round = {
       return otherPlayer;
     };
 
+
+    round.getBankerId = function(){
+      player = _.find(players, function(player, index){
+        if (bankerNumber === index){
+          return true;
+        }
+      });
+      return player.uid;
+    };
+
+
     round.getCardsByUserId = function(uid) {
       var player = currentPlayer(uid);
 
