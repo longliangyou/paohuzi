@@ -18,6 +18,7 @@ var LoginAction = {
         }else{
             var userId = 2;
             var user = UserAction.createUser(myUserId,userName);
+            //todo 将我自己即user 保持到一个数据实体里面
         }
     }
 };
