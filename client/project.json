@@ -42,6 +42,7 @@
         "src/pomelo/CardUtil.js",
         "src/pomelo/RoomList.js",
         "src/pomelo/action/ServerNotifyManager.js",
+        "src/pomelo/action/LoginAction.js",
         "src/pomelo/action/CancleAction.js",
         "src/pomelo/action/CardAction.js",
         "src/pomelo/action/EatAction.js",
