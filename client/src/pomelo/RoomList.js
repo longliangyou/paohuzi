@@ -105,9 +105,21 @@ RoomList.getUserIdsByRoomId = function(roomId){
   return this.rooms[roomId].userIds;
 };
 
+// public 通过userID获取其在房间所在的方位
+RoomList.getDirectByUserId = function(userId){
+    var roomId = this.getRoomIdByUserId(userId);
+    var userIds = this.rooms[roomId].userIds;
+
+    for(var i=0;i<userIds.length;i++){
+        if(userIds[i] == userId){
+            return i;
+        }
+    }
+    return false
+};
 
 // public
-RoomsList.isFull = function(roomId){
+RoomList.isFull = function(roomId){
   return this.rooms[roomId].userIds.length === 3;
 };
 

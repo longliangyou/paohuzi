@@ -15,6 +15,7 @@ var UserAction = {
             userId:userId,
             nickName:nickName,
             gold:gold,
+            avatarImageName:"avatar/avatar1.png",
             isNpc:isNpc
         }
         UserList.login(user);

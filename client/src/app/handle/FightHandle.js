@@ -18,11 +18,14 @@ var FightHandle = BaseHandle.extend({
         var eventData = event.data;
         var cmd = eventData.cmd;
         var data = eventData.data;
-        var that = this;
+        var self = this;
 
         cc.log("接受到命令：",cmd);
         switch (cmd){
             case CardUtil.ServerNotify.onJoinRoom:
+                var direct = data.direct;
+                var user = data.user;
+                this.sceneLayer_.joinRoom(direct,user);
                 break;
             default :
                 break;

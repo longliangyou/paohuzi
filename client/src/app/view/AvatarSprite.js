@@ -40,8 +40,8 @@ var AvatarSprite = cc.Node.extend({
         return true;
     },
 
-    initViw:function(oneUserVo){
-        var avatarImageName = oneUserVo.avatarImageName;
+    initViw:function(user){
+        var avatarImageName = user.avatarImageName;
         this.avatarSpt_.setTexture(avatarImageName);
     }
 

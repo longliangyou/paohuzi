@@ -13,6 +13,7 @@ var FightModel = BaseModel.extend({
 
         //单机场时 通过事件监听后台 ServerNotifyManager 消息
         var callBack = function(event){
+            cc.log("aaaaaaaaaaa",event);
             var eventData = event.data;
             this.onMessageHandle(eventData)
         }
@@ -25,13 +26,14 @@ var FightModel = BaseModel.extend({
     onMessageHandle: function(event){
       var cmd = event.cmd;
       var data = event.data;
-      var that = this;
+      var self = this;
 
       switch (cmd){
-        case CardUtil.ServerNotify.onNewRound:
-          break;
+
         case CardUtil.ServerNotify.onJoinRoom:
           break;
+        case CardUtil.ServerNotify.onNewRound:
+              break;
         case CardUtil.ServerNotify.onDiscard: // 等待玩家出牌 data:{userId:,interval:};
             break;
         case CardUtil.ServerNotify.onCard:    // 玩家出牌 data:{userId: userId,cardId: cardId}
@@ -86,9 +88,10 @@ var FightModel = BaseModel.extend({
      * 等待服务器通知 CardUtil.ServerNotify.onNewRound 才是开局
      * @return {rect:1,data:data}  rect为0表示失败，1表示成功
      */
-    joinRoom: function(userId,callBack){
+    joinRoom: function(callBack){
+        var loginModel = Singleton.getInstance("LoginModel");
       if(FightVo.deskType === 0) {//单机版
-            RoomAction.joinRoom(userId,null,callBack)
+            RoomAction.joinRoom(loginModel.userId,null,callBack)
       }else if(FightVo.deskType == 2) { //三人网络场
         // callback()
       }

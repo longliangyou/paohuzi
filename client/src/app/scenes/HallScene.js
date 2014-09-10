@@ -92,7 +92,7 @@ var HallScene = cc.Scene.extend({
         var handle = new HallHandle();
         handle.setView(layer);
         layer.setHandle(handle);
-        layer.init();
+        handle.init();
     }
 });
 

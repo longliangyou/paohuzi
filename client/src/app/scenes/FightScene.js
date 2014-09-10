@@ -23,23 +23,20 @@ var FightLayer =  BaseScene.extend({
 
         //加载三个头像显示
         var flysLayer = this.flysLayer_
-        var avatarSprite0 = new AvatarSprite();
-        avatarSprite0.setPosition(display.cx,display.bottom + 40);
-        flysLayer.addChild(avatarSprite0);
-        this.myUserAvatarSprite_ = avatarSprite0
-        //自己的数据马上就初始化
-//        var oneUserVo = FightVo.initOneUserInfo("myUser",UserVo.getUserInfoData());
-//        this.myUserAvatarSprite_.initViw(oneUserVo);
-
         var avatarSprite1 = new AvatarSprite();
-        avatarSprite1.setPosition(display.left + 120,display.top - 40);
+        avatarSprite1.setPosition(display.cx,display.bottom + 40);
         flysLayer.addChild(avatarSprite1);
-        this.previousUserAvatarSprite_ = avatarSprite1
+        this.avatarSprite1_ = avatarSprite1
+
+        var avatarSprite0 = new AvatarSprite();
+        avatarSprite0.setPosition(display.left + 120,display.top - 40);
+        flysLayer.addChild(avatarSprite0);
+        this.avatarSprite0_ = avatarSprite0
 
         var avatarSprite2 = new AvatarSprite(1);
         avatarSprite2.setPosition(display.right - 120,display.top - 40);
         flysLayer.addChild(avatarSprite2);
-        this.nextUserAvatarSprite_ = avatarSprite2
+        this.avatarSprite2_ = avatarSprite2
 
 
         this.shuffleCard();
@@ -47,9 +44,9 @@ var FightLayer =  BaseScene.extend({
         return true;
     },
     //有人加入桌子 ，初始化该人的信息
-    initOneUserInfo:function(key,oneUserVo){
-        var keySptName = key + "AvatarSprite_";
-        this[keySptName].initViw(oneUserVo);
+    joinRoom:function(direct,user){
+        var keySptName = "avatarSprite" + direct+ "_";
+        this[keySptName].initViw(user);
     },
     //开始出牌倒计时
     onDiscard:function(position,interval,onComplete){
@@ -255,7 +252,7 @@ var FightScene = cc.Scene.extend({
         var handle = Singleton.getInstance("FightHandle");
         handle.setView(layer);
         layer.setHandle(handle);
-        layer.init();
+        handle.init();
     }
 });
 
