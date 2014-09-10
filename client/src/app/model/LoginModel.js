@@ -3,8 +3,8 @@
  * Created by xhl on 2014/7/19.
  */
 var LoginModel = BaseModel.extend({
-
-    userVo:null,
+    userId:null,
+    user:null,
     /**
      *  连接
       * @param ip
@@ -22,19 +22,23 @@ var LoginModel = BaseModel.extend({
      * @return 当前用户的角色等各种信息
      */
    login:function(userName,passWord,callBack){
-        var data = null;
-        if(FightVo.deskType == 0 ){ //单机
-            data =  {nickName:"user2",gold:10000,userId:2};
-        }else if(FightVo.deskType == 2){
-            alert("网络连接失败！")
+        var complete = function(result){
+            var data = result.data;
+            this.user = data;
+            this.userId = data.userId;
+
+            if(callBack){
+                callBack();
+            }
         }
 
-
-        userVo = new UserVo();
-        userVo.initData(data);
-
-        if(callBack){
-            callBack({success:true});
+        var data = null;
+        if(FightVo.deskType == 2){
+            alert("网络连接失败！")
+        }else if(FightVo.deskType == 1){
+            alert("网络连接失败！")
+        }else{//单机
+            LoginAction.login("真实用户-龙哥","123456",complete)
         }
    },
 
@@ -50,10 +54,14 @@ var LoginModel = BaseModel.extend({
     joinHallRoom:function(deskType,callBack){
         if(deskType == 0 ){ //单机
             FightVo.deskType = 0;
-            this.login(null,null,callBack);//如果是单机 手动触发下登陆 伪登陆
+
         }else if(deskType == 2) {//三人网络场
             FightVo.deskType = 2;
-            this.login(null,null,callBack);//如果是单机 手动触发下登陆 伪登陆
+
+        }
+
+        if(callBack){
+            callBack();
         }
     }
 

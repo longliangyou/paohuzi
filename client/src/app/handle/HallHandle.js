@@ -4,7 +4,17 @@
  */
 var HallHandle = BaseHandle.extend({
 
-
+    init:function(){
+        //当没有登陆时  登陆一个默认账户
+        var loginModel = Singleton.getInstance("LoginModel");
+        if(loginModel.user == null){
+            var sceneLayer = this.sceneLayer_;
+            var callBack = function(){
+                sceneLayer.login(loginModel.user);
+            }
+            loginModel.login(null,null,callBack);//如果是单机 手动触发下登陆 伪登陆
+        }
+    },
 
     /**
      * 在大厅hall中  去加入大厅的某个房间
@@ -12,9 +22,7 @@ var HallHandle = BaseHandle.extend({
      */
     joinHallRoom:function(deskType){
         var onComplete = function(result){
-            if(result.success){
-                GameApp.enterScene("FightScene")
-            }
+           GameApp.enterScene("FightScene")
         }
 
         var loginModel = Singleton.getInstance("LoginModel");

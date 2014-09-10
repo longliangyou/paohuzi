@@ -4,12 +4,13 @@
  */
 var FightHandle = BaseHandle.extend({
 
-    ctor:function(){
+    init:function(){
         //监听model的相关cmd事件
         var fightModel = Singleton.getInstance("FightModel");
 
         var callBack = Util.proxy(this.onMessageHandle,this)
         fightModel.addEventListener("CMD",callBack)
+        fightModel.joinRoom();
     },
 
 
@@ -22,30 +23,6 @@ var FightHandle = BaseHandle.extend({
         cc.log("接受到命令：",cmd);
         switch (cmd){
             case CardUtil.ServerNotify.onJoinRoom:
-                var key = data.key;
-                this.sceneLayer_.initOneUserInfo(key,FightVo[key]);
-                break;
-            case CardUtil.ServerNotify.onNewRound://开桌发牌
-                this.sceneLayer_.sendCard();
-                break;
-            case CardUtil.ServerNotify.onDiscard: // 等待玩家出牌 倒计时
-                var userId = data.userId;
-                var interval = data.interval;
-                FightVo.isSendCard = false;
-                var position = this.getPositionByUserId(userId)
-
-                if(userId == FightVo.myUser.userId) {//如果是我自动随机出一张牌
-                    FightVo.isSendCard = true;
-                }
-                this.sceneLayer_.onDiscard(position,interval);
-                break;
-            case CardUtil.ServerNotify.onCard:    // 玩家出牌
-                var userId = data.userId;
-                var cardId = data.cardId;//定义牌的标记
-                var isSend = data.isSend;
-                var userVo = FightVo.getUserVoByUserId(userId);
-                var cardSprite = userVo.getCardSpriteByCardId(cardId);
-                this.card_callBack(userId, cardSprite);
                 break;
             default :
                 break;

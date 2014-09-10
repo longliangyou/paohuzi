@@ -59,7 +59,9 @@ var HallLayer =  BaseScene.extend({
 
         return true;
     },
+    login:function(user){
 
+    },
     joinHallRoom:function(deskType){
         this.callMethod("joinHallRoom",deskType);
     },
@@ -90,7 +92,7 @@ var HallScene = cc.Scene.extend({
         var handle = new HallHandle();
         handle.setView(layer);
         layer.setHandle(handle);
-
+        layer.init();
     }
 });
 

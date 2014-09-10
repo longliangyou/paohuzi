@@ -9,13 +9,16 @@ var UserAction = {
     /**
      * 创建用户
      */
-    createUser:function(userId,nickName){
-        var isNpc = false;
+    createUser:function(userId,nickName,gold,isNpc){
+        var isNpc = isNpc;
         var user = {
-            userId: userId,
-            nickName: nickName,
-            isNpc: isNpc
-        };
+            userId:userId,
+            nickName:nickName,
+            gold:gold,
+            isNpc:isNpc
+        }
+        UserList.login(user);
+        return user;
     },
 
 
@@ -29,10 +32,7 @@ var UserAction = {
       // 1. 生成玩家数据
       var userId = Math.random();
       var nickName = "nickName_ " + userId;
-      var user = {
-          userId: userId,
-          nickName: nickName,
-          isNpc: true
-      };
+      var user = this.createUser(userId,nickName,2000,true);
+      return user;
     }
 };

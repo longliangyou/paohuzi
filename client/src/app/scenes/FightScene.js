@@ -96,7 +96,7 @@ var FightLayer =  BaseScene.extend({
 
 
     /**
-     * 洗牌 动画
+     * 生成80张牌  洗牌 动画
      */
     shuffleCard:function(){
         var batch = this.batch_
@@ -118,15 +118,6 @@ var FightLayer =  BaseScene.extend({
             this.allCardSpt_.push(cardSprite)
             transition.moveTo(cardSprite,{delay:i*0.01,time:0.1,y:display.cy + i*0.5})
         }
-
-
-        //洗牌  太复杂  直接用cocostudio做动画算了
-        var that =this;
-        var onComplete = function(){
-            //请求服务器配卓
-            that.callMethod("joinRoom")
-        }
-        this.backgroundLayer_.performWithDelay(onComplete,2);
     },
     /**
      * 发牌
@@ -264,6 +255,7 @@ var FightScene = cc.Scene.extend({
         var handle = Singleton.getInstance("FightHandle");
         handle.setView(layer);
         layer.setHandle(handle);
+        layer.init();
     }
 });
 

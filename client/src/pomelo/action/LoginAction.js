@@ -11,14 +11,16 @@ var LoginAction = {
      * @param userName
      * @param passWorld
      */
-    login: function(userName, passWorld){
+    login: function(userName, passWorld,callBack){
         var isConnect = false; //这里到时通过pomelo判断是否连接
         if(isConnect){
 
         }else{
             var userId = 2;
-            var user = UserAction.createUser(myUserId,userName);
-            //todo 将我自己即user 保持到一个数据实体里面
+            var user = UserAction.createUser(userId,userName,5000,false);
+
+
+            callBack({rect:STATUS_SUCCESS,data:user}); //rect=0成功
         }
     }
 };

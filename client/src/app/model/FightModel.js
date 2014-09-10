@@ -88,8 +88,7 @@ var FightModel = BaseModel.extend({
      */
     joinRoom: function(userId,callBack){
       if(FightVo.deskType === 0) {//单机版
-
-
+            RoomAction.joinRoom(userId,null,callBack)
       }else if(FightVo.deskType == 2) { //三人网络场
         // callback()
       }
