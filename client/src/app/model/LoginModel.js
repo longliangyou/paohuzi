@@ -22,10 +22,11 @@ var LoginModel = BaseModel.extend({
      * @return 当前用户的角色等各种信息
      */
    login:function(userName,passWord,callBack){
+        var that = this;
         var complete = function(result){
             var data = result.data;
-            this.user = data;
-            this.userId = data.userId;
+            that.user = data;
+            that.userId = data.userId;
 
             if(callBack){
                 callBack();

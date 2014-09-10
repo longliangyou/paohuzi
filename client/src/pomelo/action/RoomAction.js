@@ -33,7 +33,8 @@ var RoomAction = {
         RoomList.clearTimeout(roomId);
       } else {
         RoundList.setTimeout(roomId, setTimeOut(function(){
-          RoomAction.joinRoom(UserAction.createNpcUser(), roomId, function(){});
+          var userId = UserAction.createNpcUser().userId;
+          RoomAction.joinRoom(userId, roomId, function(){});
         }, 5*1000));
       }
 
@@ -45,7 +46,8 @@ var RoomAction = {
 
 
 
-    joinPrivateRoom: function(user, roomId, password, callback) {
+    joinPrivateRoom: function(userId, roomId, password, callback) {
+      var user = UserList.getUserByUserId(userId)
       if(RoomLisst.joinPrivateRoom(user, roomId, password))
       {
         // 发消息通知其他玩家加入房间
@@ -69,7 +71,7 @@ var RoomAction = {
     },
 
 
-    createRoom: function(user, password, callback){
-
+    createRoom: function(userId, password, callback){
+        var user = UserList.getUserByUserId(userId)
     }
 };
