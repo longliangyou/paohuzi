@@ -92,6 +92,8 @@ function isNumber(obj) {
 @return number
 **/
 checknumber=function(value) {
+    if(value==null)
+        value = 0;
     var num = Number(value);
 //    var num =  parseFloat(value).tofixed(1);
     return num

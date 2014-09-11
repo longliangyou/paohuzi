@@ -17,13 +17,14 @@ var RoundAction = {
       var cards;
       _.each(userIds, function(userId){
         cards = round.getCardsByUserId(userId);
-
+        var onHand = cards.onHand;
 
         // 开局发牌
         var newRoundEvent = {
           cmd:CardUtil.ServerNotify.onNewRound,
           data:{
-            cards: cards,
+//            cards: cards,
+            onHand:onHand,
             userId: userId
           }
         };
@@ -41,7 +42,7 @@ var RoundAction = {
         var onDiscardEvent = {
           cmd:CardUtil.ServerNotify.onDisCard,
           data:{
-            userId: userId
+            userId: banker.userId
           }
         };
         ServerNotifyManager.sendCmdResponse(onDiscardEvent);

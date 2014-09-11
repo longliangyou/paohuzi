@@ -14,7 +14,6 @@ var FightModel = BaseModel.extend({
         //单机场时 通过事件监听后台 ServerNotifyManager 消息
         var self = this;
         var callBack = function(event){
-            cc.log("aaaaaaaaaaa",event);
             var eventData = event.data;
             self.onMessageHandle(eventData)
         }
@@ -33,7 +32,7 @@ var FightModel = BaseModel.extend({
 
         case CardUtil.ServerNotify.onJoinRoom:
           break;
-        case CardUtil.ServerNotify.onNewRound:
+        case CardUtil.ServerNotify.onNewRound://开局
               break;
         case CardUtil.ServerNotify.onDiscard: // 等待玩家出牌 data:{userId:,interval:};
             break;

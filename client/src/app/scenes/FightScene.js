@@ -119,7 +119,7 @@ var FightLayer =  BaseScene.extend({
     /**
      * 发牌
      */
-    sendCard:function(){
+    onNewRound:function(onHand){
         //庄家 以及 玩家分配过来并初始化
         //纯牌的夹子安排
         this.fight_card_storage_.setVisible(true);//存牌的夹子
@@ -135,13 +135,10 @@ var FightLayer =  BaseScene.extend({
 
 
         //开始发牌
-//        var previousUser = FightVo.previousUser;
-        var myUser = FightVo.myUser;
-//        var nextUser = FightVo.nextUser;
+        var onHandleCardSpriteArr = [];
         for(var i=0;i<20;i++){
             var index = i*3;
             var delay = i * 0.04;
-
 
             var cardSprite0 = this.allCardSpt_[index];
             cardSprite0.initView(false,"fight_big_card.png");
@@ -152,41 +149,41 @@ var FightLayer =  BaseScene.extend({
             var cardSprite1 = this.allCardSpt_[index+1];
             cardSprite1.initView(false,"fight_big_card.png");
             transition.moveTo(cardSprite1,{delay:delay,time:0.2,y:display.bottom - 115});
-//            transition.moveTo(cardSprite1,{delay:delay,time:0.2,y:display.bottom + 10});
-            myUser.onHandleCardSpriteArr_.push(cardSprite1);
-//            clickFun(cardSprite1);
+            onHandleCardSpriteArr.push(cardSprite1);
 
             var cardSprite2 = this.allCardSpt_[index+2];
             cardSprite2.initView(false,"fight_big_card.png");
             cardSprite2.setRotation(90);
             transition.moveTo(cardSprite2,{delay:delay,time:0.2,x:display.left - 100})
         }
-        if(myUser.isBanker){//如果我是庄家
-            var cardSprite1 = this.allCardSpt_[60];
-            cardSprite1.initView(false,"fight_big_card.png");
-            transition.moveTo(cardSprite1,{delay:20*0.04,time:0.2,y:display.bottom - 115});
-            myUser.onHandleCardSpriteArr_.push(cardSprite1);
+
+        var cardSprite1 = this.allCardSpt_[60];
+        cardSprite1.initView(false,"fight_big_card.png");
+        if(onHand.length > 20){
+            transition.moveTo(cardSprite1,{delay:delay,time:0.2,y:display.bottom - 115});
+            onHandleCardSpriteArr.push(cardSprite1);
+        }else{
+            cardSprite2.setRotation(90);
+            transition.moveTo(cardSprite2,{delay:delay,time:0.2,x:display.left - 100})
         }
 
 
         //排列自己的牌
-        var that =this;
-        var onComplete = function(){
-            that.orderMyCard();
-            if(myUser.isBanker) {//如果我是庄家
-
-            }
+        var self =this;
+        var onComplete = function() {
+            self.orderMyCard(onHandleCardSpriteArr,onHand);
         }
         this.backgroundLayer_.performWithDelay(onComplete,1);
+
     },
     /**
      * 第一次排列牌
      */
-    orderMyCard:function(){
+    orderMyCard:function(onHandleCardSprite,onHand){
         //排列我的牌
-        var myUser = FightVo.myUser;
-        var onHandleCardSprite =  myUser.onHandleCardSpriteArr_;
-        var outputCard = CardUtil.riffle(myUser.onHand);
+        var loginModel = Singleton.getInstance("LoginModel");
+        var me = loginModel.user;
+        var outputCard = CardUtil.riffle(onHand);
         var behaveNum = checkint(outputCard.length/2)
 
 
@@ -219,7 +216,7 @@ var FightLayer =  BaseScene.extend({
             onHandleCardSpriteArr.push(oneonHandleCardSpriteArr)
         }
         //存储起来
-        myUser.onHandleCardSpriteArr_ = onHandleCardSpriteArr;
+        me.onHandleCardSpriteArr_ = onHandleCardSpriteArr;
     },
 
 

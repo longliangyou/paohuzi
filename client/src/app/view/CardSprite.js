@@ -30,7 +30,7 @@ var CardSprite = cc.Sprite.extend({
      * @param showFlag  是否显示卡牌的正面
      * @param imageName 以下两种情况
      *                  当showFlag为true时，imageName 表示牌的大小类型，有 full_card、big_card、small_card 三种类型
-     *                  当showFlag为true时，imageName 表示显示牌的背面的图片(fight_full_card.png、fight_big_card.png、fight_small_card.png、fight_wash_card.png)
+     *                  当showFlag为false时，imageName 表示显示牌的背面的图片(fight_full_card.png、fight_big_card.png、fight_small_card.png、fight_wash_card.png)
      */
     initView:function(showFlag,imageName){
         if(showFlag) {

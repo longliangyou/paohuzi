@@ -12,7 +12,7 @@ var Round = {
   // ]
   // onTable: [] // 桌上的底牌
   // @return []
-  createNew: function(userIds, bankerNum){
+  createNew: function(userIds, bankerNumer){
     // var userIds = ["long", "hua", "zhuang"];
     // var bankerNum = 2;
 
@@ -25,13 +25,12 @@ var Round = {
     var cards = cardRange.concat(cardRange).concat(cardRange).concat(cardRange);
     var onTable = _.shuffle(cards);
 
-    var bankerNumer = bankerNum;
     var currentPlayer = function(uid){
       return _.find(players, function(player){return player.uid == uid;});
     };
 
 
-    // if (userIds.length !== 3 || (bankerNum > 2 && bankerNum < 0)){
+    // if (userIds.length !== 3 || (bankerNumer > 2 && bankerNumer < 0)){
     //   return false;
     // }
 
@@ -51,7 +50,8 @@ var Round = {
       onTable = _.rest(onTable, 20);
     });
 
-    players[bankerNum].onHand.push(onTable.pop());//庄家在给多一张牌
+    cc.log("这里有时会取不到：",bankerNumer);
+    players[bankerNumer].onHand.push(onTable.pop());//庄家在给多一张牌
 
     var getOtherPlayerCards = function(player){
       var otherPlayer = {
@@ -68,7 +68,8 @@ var Round = {
 
     round.getBankerId = function(){
       player = _.find(players, function(player, index){
-        if (bankerNumber === index){
+//        if (bankerNumber === index){
+        if (bankerNumer === index){
           return true;
         }
       });

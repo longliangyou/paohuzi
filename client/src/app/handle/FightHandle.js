@@ -30,21 +30,19 @@ var FightHandle = BaseHandle.extend({
                 if(me.userId == user.userId){//存储自己的风味
                     me.direct = direct;
                 }
-
-                var key = direct;
-                if(me.direct == 0){//我是上位时
-                    key = key + 1;
-                    if(key>2)
-                        key = 0;
-                }else if(me.direct == 2){
-                    key = key - 1;
-                    if(key<0)
-                        key = 2;
-                }
-
-
-
+                var key = this.getSureDirectByServerDirect(direct);
                 this.sceneLayer_.joinRoom(key,user);
+                break;
+            case CardUtil.ServerNotify.onNewRound://开局
+                var onHand = data.onHand;
+                var userId = data.userId;
+                if(me.userId == userId){//存储自己的风味
+                    me.onHand = onHand;
+                }
+                this.onNewRoundNum_ = checkint(this.onNewRoundNum_) + 1;
+                if(this.onNewRoundNum_ == 3 ){
+                    this.sceneLayer_.onNewRound(me.onHand);
+                }
                 break;
             default :
                 break;
@@ -184,6 +182,22 @@ var FightHandle = BaseHandle.extend({
             this.sceneLayer_.countDownTimerSprite_.setVisible(false);
             this.sceneLayer_.fingerTips_.setVisible(false);
         }
+    },
+    /**通过后台的index获取用户相对自己的风味**/
+    getSureDirectByServerDirect:function(serverDirect){
+        var loginModel = Singleton.getInstance("LoginModel");
+        var me = loginModel.user;
+        var key = serverDirect;
+        if(me.direct == 0){//我是上位时
+            key = key + 1;
+            if(key>2)
+                key = 0;
+        }else if(me.direct == 2){
+            key = key - 1;
+            if(key<0)
+                key = 2;
+        }
+        return key;
     }
 
 })

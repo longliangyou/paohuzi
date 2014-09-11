@@ -35,5 +35,13 @@ var UserAction = {
       var nickName = "nickName_ " + userId;
       var user = this.createUser(userId,nickName,2000,true);
       return user;
+    },
+
+
+    isNpc:function(user){
+        if(user.isNpc == true){
+            return true
+        }
+        return false;
     }
 };
