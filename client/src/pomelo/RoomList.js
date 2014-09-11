@@ -66,9 +66,10 @@ RoomList.getNewRoomId = function(){
 RoomList.createRoom = function(){
   var roomId = this.getNewRoomId();
   if(roomId > 0){
-    self.rooms[roomId] = {
+    this.rooms[roomId] = {
       roomId: roomId,
       userIds: [],
+        users:[],
       password: '',
       timerId: null,
       bankerNum: 0
@@ -87,7 +88,7 @@ RoomList.createPrivateRoom = function(user, password){
   }
   var roomId = this.getNewRoomId();
   if(roomId > 0){
-    self.rooms[roomId] = {
+    this.rooms[roomId] = {
       roomId: roomId,
       userIds: [user.userId],
       users: [user],

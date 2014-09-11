@@ -34,7 +34,7 @@ var RoomAction = {
         RoundAction.newRound(roomId, callback);
         RoomList.clearTimeout(roomId);
       } else {
-        RoundList.setTimeout(roomId, setTimeOut(function(){
+        RoomList.setTimeout(roomId, setTimeOut(function(){
           var userId = UserAction.createNpcUser().userId;
           RoomAction.joinRoom(userId, roomId, function(){});
         }, 5*1000));

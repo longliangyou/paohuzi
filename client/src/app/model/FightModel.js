@@ -12,10 +12,11 @@ var FightModel = BaseModel.extend({
         //PomeloApi.addEventListener("onMessageHandle",this.onMessageHandle)
 
         //单机场时 通过事件监听后台 ServerNotifyManager 消息
+        var self = this;
         var callBack = function(event){
             cc.log("aaaaaaaaaaa",event);
             var eventData = event.data;
-            this.onMessageHandle(eventData)
+            self.onMessageHandle(eventData)
         }
         ServerNotifyManager.addEventListener("CMD",callBack)
         return true;
