@@ -19,13 +19,32 @@ var FightHandle = BaseHandle.extend({
         var cmd = eventData.cmd;
         var data = eventData.data;
         var self = this;
+        var loginModel = Singleton.getInstance("LoginModel");
+        var me = loginModel.user;
 
         cc.log("接受到命令：",cmd);
         switch (cmd){
             case CardUtil.ServerNotify.onJoinRoom:
                 var direct = data.direct;
                 var user = data.user;
-                this.sceneLayer_.joinRoom(direct,user);
+                if(me.userId == user.userId){//存储自己的风味
+                    me.direct = direct;
+                }
+
+                var key = direct;
+                if(me.direct == 0){//我是上位时
+                    key = key + 1;
+                    if(key>2)
+                        key = 0;
+                }else if(me.direct == 2){
+                    key = key - 1;
+                    if(key<0)
+                        key = 2;
+                }
+
+
+
+                this.sceneLayer_.joinRoom(key,user);
                 break;
             default :
                 break;

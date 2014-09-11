@@ -148,3 +148,18 @@ stringFormat =function(pattern, index){
     return newStr
 
 }
+
+
+/**
+ * 客户端伪造一个定时器
+ * @param callback
+ * @param inval
+ */
+setTimeOut = function(callback, inval){
+    var scene = display.getRunningScene();
+    var timeId = scene.performWithDelay(callback,inval/1000);
+    return timeId;
+}
+clearTimeout = function(timeId){
+    timeId.stop();
+}

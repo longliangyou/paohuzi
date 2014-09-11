@@ -172,7 +172,14 @@ display.ANCHOR_POINTS = [
 
 
 
+/**
+    返回当前正在运行的场景对象
 
+    @return Scene 场景对象
+**/
+display.getRunningScene =function() {
+    return cc.director.getRunningScene();
+}
 
 
 

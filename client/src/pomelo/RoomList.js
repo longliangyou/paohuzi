@@ -234,7 +234,7 @@ RoomList.getRound = function(roomId){
 
 RoomList.setTimeout = function(roomId, timerId){
   this.rooms[roomId].timerId = timerId;
-  return timeId;
+  return timerId;
 };
 
 

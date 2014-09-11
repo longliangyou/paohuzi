@@ -88,10 +88,8 @@ var SceneConstants = {
     getScene : function(currentSceneName){
         var arr = this.scene[currentSceneName]
         var sceneName = arr.scene;
-//        if(sceneName == "LoginScene" ){
-//            return new LoginScene();
-//        }
         var sceneCla = eval("new "+sceneName +"()");
+        NodeEx.init(sceneCla);
         return sceneCla
 
         return null;

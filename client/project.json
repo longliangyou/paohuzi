@@ -55,6 +55,7 @@
         "src/pomelo/action/RoomAction.js",
         "src/pomelo/action/WeiAction.js",
         "src/pomelo/action/UserAction.js",
+        "src/pomelo/action/RoundAction.js",
         "src/underscore-min.js",
 
 
