@@ -20,9 +20,25 @@ var CardAction = {
          * 2：round中这个userId的牌的数据增删
          * 3：转发给用户出了牌
          */
-        if(cardId == null){ //随机给其出一张牌
+        var roomId = RoomList.getRoomIdByUserId(userId);
+        var round = RoomList.getRound(roomId);
 
+        if(cardId == null){ //随机给其出一张牌
+            cardId = round.discardForNpc(userId);
         }
+
+        round.discard(userId, cardId);
+
+        var onDiscardEvent = {
+            cmd:CardUtil.ServerNotify.onDiscard,
+            data:{
+                userId: userId,
+                cardId: cardId
+            }
+        };
+        ServerNotifyManager.sendCmdResponse(onDiscardEvent);
+
+        RoundAction.newDisard(roomId, userId, cardId);
 
         if ( _.isFunction(callback)) {
             callback({rect:STATUS_SUCCESS,data:null});

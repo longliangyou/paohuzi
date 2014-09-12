@@ -519,7 +519,3 @@ CardUtil.canChi = function(cards, currentCard){
   }
   return canChi;
 };
-
-
-
-

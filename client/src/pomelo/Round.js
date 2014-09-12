@@ -25,6 +25,7 @@ var Round = {
     var cards = cardRange.concat(cardRange).concat(cardRange).concat(cardRange);
     var onTable = _.shuffle(cards);
 
+    var currentRound = {};
     var currentPlayer = function(userId){
       return _.find(players, function(player){return player.userId == userId;});
     };
@@ -142,6 +143,22 @@ var Round = {
         }
       }
       return action;
+    };
+
+    round.discardForNpc = function(userId){
+      var player = currentPlayer(userId);
+      cardId = _.sample(player.onHand);
+      return cardId;
+    };
+
+    round.discard = function(userId, cardId){
+      var player = currentPlayer(userId);
+      var index = player.onHand.indexOf(cardId);
+      player.onHand.splice(index, 1);
+      player.onTrash.push(cardId);
+      currentRound.userId = userId;
+      currentRound.cardId = cardId;
+      return true;
     };
     return round;
   }

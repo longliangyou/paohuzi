@@ -39,4 +39,10 @@ var RoundAction = {
       //启动ai
       FightAIAction.onDisCardAction(round,banker.userId)
     }
+
+
+    // 判断是否能自动杠，自动偎，自动跑
+    newDisard: function(roomId, userId, cardId){
+
+    }
 };
