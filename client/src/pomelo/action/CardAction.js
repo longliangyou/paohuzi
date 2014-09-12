@@ -16,8 +16,8 @@ var CardAction = {
     card: function(userId, cardId, callback){
         /**
          * todo-龙
-         * 1:cardId 如果没有cardId，随机从round用户手中抽取一张牌
-         * 2：round数据增删
+         * 1:cardId 如果没有cardId，随机从round用户手中抽取一张牌 （round中需要新增一个方法，就是随机抽取一张牌）
+         * 2：round中这个userId的牌的数据增删
          * 3：转发给用户出了牌
          */
         if(cardId == null){ //随机给其出一张牌
