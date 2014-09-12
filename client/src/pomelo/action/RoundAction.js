@@ -8,7 +8,7 @@ var RoundAction = {
      * 开桌
      * 
      */
-    newRound: function(roomId, callback){
+    newRound: function(roomId){
 
       var userIds = RoomList.getUserIdsByRoomId(roomId);
       var bankIndex = 0// _.random(2);

@@ -43,8 +43,16 @@ var FightModel = BaseModel.extend({
             }
             break;
         case CardUtil.ServerNotify.onDisCard: // 等待玩家出牌 data:{userId:,interval:};
+            var userId = data.userId;
+            var loginModel = Singleton.getInstance("LoginModel");
+            var me = loginModel.user;
+            if(me.userId == userId)
+                FightVo.isSendCard = true;
+            else
+                FightVo.isSendCard = false;
+
             break;
-        case CardUtil.ServerNotify.onCard:    // 玩家出牌 data:{userId: userId,cardId: cardId}
+        case CardUtil.ServerNotify.onCard:    // 玩家出牌
           break;
 
           case CardUtil.ServerNotify.onEat:     // 玩家吃牌
@@ -109,13 +117,15 @@ var FightModel = BaseModel.extend({
 
     // 用户出牌
     card: function(userId, cardId, callback){
+      var complete = function(result){
+        if ( _.isFunction(callback)) {
+            callback(result);
+        }
+      }
       // 用户出牌
       // 1. 发送消息到服务器，收到response，调用callback
       if (FightVo.deskType === 0){
-        callback();
-        // 单机情况下， 发一个 onCard 消息，然后由 onCard 消息处理这个牌的信息。
-
-
+        CardAction.card(userId, cardId, complete)
       }
     },
 

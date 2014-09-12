@@ -43,5 +43,12 @@ var UserAction = {
             return true
         }
         return false;
+    },
+    isNpcByUserId:function(userId){
+        var user = RoomList.getUserByUserId(userId)
+        if(user.isNpc == true){
+            return true
+        }
+        return false;
     }
 };

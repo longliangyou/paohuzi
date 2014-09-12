@@ -16,10 +16,11 @@ var FightAIAction = {
             var roomId = RoomList.getRoomIdByUserId(userId)
             RoomList.clearTimeout(roomId);
 
-            CardAction.card(userId,cardId, callback)
+            CardAction.card(userId,null)
         }
 
-        if (UserAction.isNpc(banker)){
+
+        if (UserAction.isNpcByUserId(userId)){
             npcHandle();
         } else {
             // 开局发牌

@@ -24,5 +24,8 @@ var CardAction = {
 
         }
 
+        if ( _.isFunction(callback)) {
+            callback({rect:STATUS_SUCCESS,data:null});
+        }
     }
 };

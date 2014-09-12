@@ -46,6 +46,8 @@ var FightHandle = BaseHandle.extend({
                 this.sceneLayer_.setVisibleWithFingerTips(true,position);
                 this.sceneLayer_.setVisibleWithCountDownTimerTips(true,position,null);
                 break;
+            case CardUtil.ServerNotify.onCard:    // 玩家出牌
+                
             default :
                 break;
         }
@@ -53,20 +55,20 @@ var FightHandle = BaseHandle.extend({
 
 
 
-//    //回调
-//    //发牌回调
-//    card_callBack:function(userId,cardSprite){
-//        var startPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_START_POS)
-//        var middlePos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_MIDDLE_POS)
-//        //var endPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_END_POS)
-//        CardAnimation.sendOutCardByUser(cardSprite,startPos,middlePos)
-//        this.setVisibleByCountDownTimerSprite();//隐藏tips
-//
-//        if(userId == FightVo.myUser.userId) {
-//            CardTool.deleteOrgionByCardSprite(cardSprite);
-//            CardTool.sort();
-//        }
-//    },
+    //回调
+    //发牌回调
+    card_callBack:function(userId,cardSprite){
+        var startPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_START_POS)
+        var middlePos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_MIDDLE_POS)
+        //var endPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_END_POS)
+        CardAnimation.sendOutCardByUser(cardSprite,startPos,middlePos)
+        this.setVisibleByCountDownTimerSprite();//隐藏tips
+
+        if(userId == FightVo.myUser.userId) {
+            CardTool.deleteOrgionByCardSprite(cardSprite);
+            CardTool.sort();
+        }
+    },
 
 
 
@@ -85,21 +87,31 @@ var FightHandle = BaseHandle.extend({
         var fightModel = Singleton.getInstance("FightModel");
         var info = fightModel.joinRoom(UserVo.userId,null);
     },
-//    //用户出牌
-//    card: function(userId,cardSprite){
-//        var fightModel = Singleton.getInstance("FightModel");
-//        var info = fightModel.card(userId,cardSprite.cardId_);
-//        this.card_callBack(userId,cardSprite);
-////        var startPos = cardSprite.getPosition();//this.getPositionByUserId(userId,FightConstants.SEND_CARD_START_POS)
-////        var middlePos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_MIDDLE_POS)
-////        var endPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_END_POS)
-////        CardAnimation.sendOutCardByUser(cardSprite,startPos,middlePos,endPos,null)
-////        if(userId == FightVo.myUser.userId) {
-////            CardTool.deleteOrgionByCardSprite(cardSprite);
-////            CardTool.sort();
-////        }
-////        this.setVisibleByCountDownTimerSprite();//隐藏tips
-//    },
+    //用户出牌
+    card: function(cardSprite){
+        FightVo.isSendCard = false;
+        var fightModel = Singleton.getInstance("FightModel");
+        var loginModel = Singleton.getInstance("LoginModel");
+        var userId = loginModel.user.userId;
+        var complete = function(result){
+            if(result.rect == STATUS_SUCCESS){
+
+            }else{
+
+            }
+        }
+        var info = fightModel.card(userId,cardSprite.cardId_,complete);
+        //this.card_callBack(userId,cardSprite);
+//        var startPos = cardSprite.getPosition();//this.getPositionByUserId(userId,FightConstants.SEND_CARD_START_POS)
+//        var middlePos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_MIDDLE_POS)
+//        var endPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_END_POS)
+//        CardAnimation.sendOutCardByUser(cardSprite,startPos,middlePos,endPos,null)
+//        if(userId == FightVo.myUser.userId) {
+//            CardTool.deleteOrgionByCardSprite(cardSprite);
+//            CardTool.sort();
+//        }
+//        this.setVisibleByCountDownTimerSprite();//隐藏tips
+    },
 
 
 

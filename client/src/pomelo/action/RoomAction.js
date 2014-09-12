@@ -30,8 +30,14 @@ var RoomAction = {
       ServerNotifyManager.sendCmdResponse(joinRoomEvent);
 
 
+        // CardUtil.ServerNotify.onJoinRoom:
+        if ( _.isFunction(callback)) {
+            callback({rect:STATUS_SUCCESS,data:null});
+        }
+
+
       if (RoomList.isFull(roomId)){
-        RoundAction.newRound(roomId, callback);
+        RoundAction.newRound(roomId);
         RoomList.clearTimeout(roomId);
       } else {
         RoomList.setTimeout(roomId, setTimeOut(function(){
@@ -40,10 +46,6 @@ var RoomAction = {
         }, 5*1000));
       }
 
-      // CardUtil.ServerNotify.onJoinRoom:
-      if ( _.isFunction(callback)) {
-        callback();
-      }
     },
 
 

@@ -9,8 +9,7 @@ var CardTool = {};
  * 排序
  */
 CardTool.sort = function(){
-    var myUser = FightVo.myUser;
-    var onHandleCardSpriteArr = myUser.onHandleCardSpriteArr_;
+    var onHandleCardSpriteArr = FightVo.onHandleCardSpriteArr_;
 
     onHandleCardSpriteArr = _.select(onHandleCardSpriteArr, function(cardSprite){
         return cardSprite && cardSprite.length;
@@ -42,7 +41,7 @@ CardTool.sort = function(){
     sortFun();
 
 
-    myUser.onHandleCardSpriteArr_ = onHandleCardSpriteArr;
+    FightVo.onHandleCardSpriteArr_ = onHandleCardSpriteArr;
     return onHandleCardSpriteArr;
 }
 
@@ -52,8 +51,8 @@ CardTool.sort = function(){
 
 
 CardTool.deleteOrgionByCardSprite = function(cardSprite){
-    var myUser = FightVo.myUser;
-    var onHandleCardSpriteArr = myUser.onHandleCardSpriteArr_;
+//    var myUser = FightVo.myUser;
+    var onHandleCardSpriteArr = FightVo.onHandleCardSpriteArr_;
 
     //首先移除当前的这个卡牌
     var  bigIndex = cardSprite.bigArrayIndex_;
@@ -61,7 +60,7 @@ CardTool.deleteOrgionByCardSprite = function(cardSprite){
     var oneSmallArr = onHandleCardSpriteArr[bigIndex];
     oneSmallArr.splice(smallIndex,1);
 
-    myUser.onHandleCardSpriteArr_ = onHandleCardSpriteArr;
+    FightVo.onHandleCardSpriteArr_ = onHandleCardSpriteArr;
     return onHandleCardSpriteArr;
 }
 
@@ -80,8 +79,7 @@ CardTool.deleteOrgionByCardSprite = function(cardSprite){
  * @param drag
  */
 CardTool.updateSort = function(CardSprite,drag) {
-    var myUser = FightVo.myUser;
-    var onHandleCardSpriteArr = myUser.onHandleCardSpriteArr_;
+    var onHandleCardSpriteArr = FightVo.onHandleCardSpriteArr_;
 
 
     var lastX = drag.lastX;
@@ -90,7 +88,7 @@ CardTool.updateSort = function(CardSprite,drag) {
         var isSendCard = FightVo.isSendCard ; //当前是否是出牌
         if (isSendCard) {
             var handle = Singleton.getInstance("FightHandle");
-            handle.card(myUser.userId,CardSprite);
+            handle.card(CardSprite);
         }else{
             onHandleCardSpriteArr = CardTool.sort(onHandleCardSpriteArr);
             return onHandleCardSpriteArr;

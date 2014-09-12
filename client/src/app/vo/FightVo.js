@@ -90,6 +90,7 @@
 
 var FightVo = {
     onHandleCardSpriteArr_:null,
+    isSendCard:false,
     cards:null
 //    deskType : 0, //0表示单机 1表示私人场  2表示三人网络场
 //    bankerUser :null,//庄家的用户
