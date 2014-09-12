@@ -19,11 +19,11 @@ var RoomAction = {
 
 
       // 发消息通知其他玩家加入房间
-      var direct = RoomList.getDirectByUserId(userId);
+      var serverDirect = RoomList.getServerDirectByUserId(userId);
       var joinRoomEvent = {
         cmd:CardUtil.ServerNotify.onJoinRoom,
         data:{
-          direct:direct,//风位
+            serverDirect:serverDirect,//风位
           user: user
         }
       };
@@ -53,11 +53,11 @@ var RoomAction = {
       if(RoomLisst.joinPrivateRoom(user, roomId, password))
       {
         // 发消息通知其他玩家加入房间
-        var direct = RoomList.getDirectByUserId(userId);
+        var serverDirect = RoomList.getServerDirectByUserId(userId);
         var joinRoomEvent = {
           cmd:CardUtil.ServerNotify.onJoinRoom,
           data:{
-            direct:direct,//风位
+              serverDirect:serverDirect,//风位
             user: user
           }
         };

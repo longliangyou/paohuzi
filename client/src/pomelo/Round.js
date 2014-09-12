@@ -2,7 +2,7 @@ var Round = {
   // players: [
   //   {
   //     num: Number, // 玩家编号
-  //     uid: String, // 用户 ID
+  //     userId: String, // 用户 ID
   //     onTable: [[Number]...], // 玩家桌上的牌
   //     onHand: [Number...],    // 玩家手里的牌
   //     onTrash: [Number...],   // 玩家打出的牌
@@ -25,8 +25,8 @@ var Round = {
     var cards = cardRange.concat(cardRange).concat(cardRange).concat(cardRange);
     var onTable = _.shuffle(cards);
 
-    var currentPlayer = function(uid){
-      return _.find(players, function(player){return player.uid == uid;});
+    var currentPlayer = function(userId){
+      return _.find(players, function(player){return player.userId == userId;});
     };
 
 
@@ -35,7 +35,7 @@ var Round = {
     // }
 
     _.each (players, function(player, index){//遍历每个玩家都初始化牌
-      player.uid = userIds[index];
+      player.userId = userIds[index];
       player.onHand = _.sortBy(_.first(onTable, 20), function(c){return c;});
       player.onTable = {shunzi: [], thricePeng: [], thriceWei: [], fourfoldTi: [], fourfoldPao: []};
       player.onTrash = [];
@@ -50,13 +50,12 @@ var Round = {
       onTable = _.rest(onTable, 20);
     });
 
-    cc.log("这里有时会取不到：",bankerNumer);
     players[bankerNumer].onHand.push(onTable.pop());//庄家在给多一张牌
 
     var getOtherPlayerCards = function(player){
       var otherPlayer = {
         num: player.num,
-        uid: player.uid,
+          userId: player.userId,
         onHand:player.onHand,
         onHandLength: player.onHand.length,
         onTable: player.onTable,
@@ -73,12 +72,12 @@ var Round = {
           return true;
         }
       });
-      return player.uid;
+      return player.userId;
     };
 
 
-    round.getCardsByUserId = function(uid) {
-      var player = currentPlayer(uid);
+    round.getCardsByUserId = function(userId) {
+      var player = currentPlayer(userId);
 
       nextPlayer = getOtherPlayerCards(players[(player.num+1)%3]);
       previousPlayer = getOtherPlayerCards(players[(player.num + 2)%3]);
@@ -90,8 +89,8 @@ var Round = {
     };
 
     // 碰牌
-    round.peng = function(uid, card){
-      var player = currentPlayer(uid);
+    round.peng = function(userId, card){
+      var player = currentPlayer(userId);
       if (CardUtil.canPeng(player.onHand, card.currentCard)){
         player.onHand = _.reject(player.onHand, function(card){ return card.currentCard == card;});
         player.onTable.thricePeng.push(card.currentCard);
@@ -101,8 +100,8 @@ var Round = {
     };
 
     // 偎牌
-    round.wei = function(uid, card){
-      var player = currentPlayer(uid);
+    round.wei = function(userId, card){
+      var player = currentPlayer(userId);
       if (CardUtil.canPeng(player.onHand, card.currentCard)){
         player.onHand = _.reject(player.onHand, function(card){ return card.currentCard == card;});
         player.onTable.thriceWei.push(card.currentCard);
@@ -113,14 +112,14 @@ var Round = {
     };
 
     // 提牌或者跑牌
-    round.gang = function(uid, card){
+    round.gang = function(userId, card){
       var action = CardUtil.Actions.Idle;
-      var player = currentPlayer(uid);
+      var player = currentPlayer(userId);
       if (CardUtil.canGang(player.onHand, player.onTable, card.currentCard)){
         var isOnHand = _.find(player.onHand, card.currentCard);
         if (isOnHand){
           player.onHand = _.reject(player.onHand, function(card){ return card.currentCard == card;});
-          if(card.uid === uid){
+          if(card.userId === userId){
             player.onTable.fourfoldTi.push(currentCard);
             action = CardUtil.Actions.Ti;
           } else {
@@ -133,7 +132,7 @@ var Round = {
           action = CardUtil.Actions.Pao;
         } else if (!!(isOnWei = _.find(player.onTable.thriceWei, card.currentCard))){
           player.onTable.thriceWei = _.reject(player.onTable.thriceWei, function(card){ return card.currentCard == card;});
-          if(card.uid === uid){
+          if(card.userId === userId){
             player.onTable.fourfoldTi.push(currentCard);
             action = CardUtil.Actions.Ti;
           } else {

@@ -12,8 +12,26 @@ var FightAIAction = {
      * @param 
      */
     onDisCardAction: function(round, userId){
+        var npcHandle = function(){
+            var roomId = RoomList.getRoomIdByUserId(userId)
+            RoomList.clearTimeout(roomId);
 
+            CardAction.card(userId,cardId, callback)
+        }
 
+        if (UserAction.isNpc(banker)){
+            npcHandle();
+        } else {
+            // 开局发牌
+            var onDiscardEvent = {
+                cmd:CardUtil.ServerNotify.onDisCard,
+                data:{
+                    userId: userId
+                }
+            };
+            ServerNotifyManager.sendCmdResponse(onDiscardEvent);
+            setTimeOut(npcHandle,CardUtil.cardInterval)
+        }
     },
 
     onCardAction: function(round, userId, cardId){

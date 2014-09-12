@@ -25,6 +25,7 @@ GameApp.run =function(){
     //通过调用enterScene 方法进入场景
 
 //    this.enterScene("FightScene")
+    FightConstants.init();
     this.enterScene("HallScene")
 }
 

@@ -89,6 +89,8 @@
 
 
 var FightVo = {
+    onHandleCardSpriteArr_:null,
+    cards:null
 //    deskType : 0, //0表示单机 1表示私人场  2表示三人网络场
 //    bankerUser :null,//庄家的用户
 //    isSendCard : false,//这个主要是为了客户端发牌使用

@@ -33,8 +33,16 @@ var FightModel = BaseModel.extend({
         case CardUtil.ServerNotify.onJoinRoom:
           break;
         case CardUtil.ServerNotify.onNewRound://开局
-              break;
-        case CardUtil.ServerNotify.onDiscard: // 等待玩家出牌 data:{userId:,interval:};
+            var userId = data.userId;
+            var loginModel = Singleton.getInstance("LoginModel");
+            var me = loginModel.user;
+            if(me.userId == userId){//存储自己的风味
+                var cards = data.cards;
+                FightVo.cards = cards;
+                me.cards = cards;//这里是严格按照 上一家  我家  下一家的排序
+            }
+            break;
+        case CardUtil.ServerNotify.onDisCard: // 等待玩家出牌 data:{userId:,interval:};
             break;
         case CardUtil.ServerNotify.onCard:    // 玩家出牌 data:{userId: userId,cardId: cardId}
           break;

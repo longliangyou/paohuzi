@@ -25,24 +25,26 @@ var FightHandle = BaseHandle.extend({
         cc.log("接受到命令：",cmd);
         switch (cmd){
             case CardUtil.ServerNotify.onJoinRoom:
-                var direct = data.direct;
+                var serverDirect = data.serverDirect;
                 var user = data.user;
                 if(me.userId == user.userId){//存储自己的风味
-                    me.direct = direct;
+                    me.serverDirect = serverDirect;
                 }
-                var key = this.getSureDirectByServerDirect(direct);
-                this.sceneLayer_.joinRoom(key,user);
+                var clientDirect = this.getClientDirectByServerDirect(serverDirect);
+                this.sceneLayer_.joinRoom(clientDirect,user);
                 break;
             case CardUtil.ServerNotify.onNewRound://开局
-                var onHand = data.onHand;
-                var userId = data.userId;
-                if(me.userId == userId){//存储自己的风味
-                    me.onHand = onHand;
-                }
                 this.onNewRoundNum_ = checkint(this.onNewRoundNum_) + 1;
                 if(this.onNewRoundNum_ == 3 ){
-                    this.sceneLayer_.onNewRound(me.onHand);
+                    this.sceneLayer_.onNewRound(FightVo.cards);
                 }
+                break;
+            case CardUtil.ServerNotify.onDisCard: // 等待玩家出牌 data:{userId:,interval:};
+                var userId = data.userId;
+                var clientDirect = this.getClientDirectByUserId(userId);
+                var position = FightConstants.CountDownTimer_Position[clientDirect];
+                this.sceneLayer_.setVisibleWithFingerTips(true,position);
+                this.sceneLayer_.setVisibleWithCountDownTimerTips(true,position,null);
                 break;
             default :
                 break;
@@ -51,20 +53,20 @@ var FightHandle = BaseHandle.extend({
 
 
 
-    //回调
-    //发牌回调
-    card_callBack:function(userId,cardSprite){
-        var startPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_START_POS)
-        var middlePos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_MIDDLE_POS)
-        //var endPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_END_POS)
-        CardAnimation.sendOutCardByUser(cardSprite,startPos,middlePos)
-        this.setVisibleByCountDownTimerSprite();//隐藏tips
-
-        if(userId == FightVo.myUser.userId) {
-            CardTool.deleteOrgionByCardSprite(cardSprite);
-            CardTool.sort();
-        }
-    },
+//    //回调
+//    //发牌回调
+//    card_callBack:function(userId,cardSprite){
+//        var startPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_START_POS)
+//        var middlePos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_MIDDLE_POS)
+//        //var endPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_END_POS)
+//        CardAnimation.sendOutCardByUser(cardSprite,startPos,middlePos)
+//        this.setVisibleByCountDownTimerSprite();//隐藏tips
+//
+//        if(userId == FightVo.myUser.userId) {
+//            CardTool.deleteOrgionByCardSprite(cardSprite);
+//            CardTool.sort();
+//        }
+//    },
 
 
 
@@ -83,116 +85,84 @@ var FightHandle = BaseHandle.extend({
         var fightModel = Singleton.getInstance("FightModel");
         var info = fightModel.joinRoom(UserVo.userId,null);
     },
-    //用户出牌
-    card: function(userId,cardSprite){
-        var fightModel = Singleton.getInstance("FightModel");
-        var info = fightModel.card(userId,cardSprite.cardId_);
-        this.card_callBack(userId,cardSprite);
-//        var startPos = cardSprite.getPosition();//this.getPositionByUserId(userId,FightConstants.SEND_CARD_START_POS)
-//        var middlePos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_MIDDLE_POS)
-//        var endPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_END_POS)
-//        CardAnimation.sendOutCardByUser(cardSprite,startPos,middlePos,endPos,null)
-//        if(userId == FightVo.myUser.userId) {
-//            CardTool.deleteOrgionByCardSprite(cardSprite);
-//            CardTool.sort();
+//    //用户出牌
+//    card: function(userId,cardSprite){
+//        var fightModel = Singleton.getInstance("FightModel");
+//        var info = fightModel.card(userId,cardSprite.cardId_);
+//        this.card_callBack(userId,cardSprite);
+////        var startPos = cardSprite.getPosition();//this.getPositionByUserId(userId,FightConstants.SEND_CARD_START_POS)
+////        var middlePos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_MIDDLE_POS)
+////        var endPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_END_POS)
+////        CardAnimation.sendOutCardByUser(cardSprite,startPos,middlePos,endPos,null)
+////        if(userId == FightVo.myUser.userId) {
+////            CardTool.deleteOrgionByCardSprite(cardSprite);
+////            CardTool.sort();
+////        }
+////        this.setVisibleByCountDownTimerSprite();//隐藏tips
+//    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    /** 隐藏倒计时 **/
+//    setVisibleByCountDownTimerSprite:function(){
+//        if(this.sceneLayer_.countDownTimerSprite_){
+//            this.sceneLayer_.countDownTimerSprite_.setVisible(false);
+//            this.sceneLayer_.fingerTips_.setVisible(false);
 //        }
-//        this.setVisibleByCountDownTimerSprite();//隐藏tips
-    },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //一些handle的工具
-    /**
-     * 根据用户userid获取相应对应的坐标
-     * @param userId
-     */
-    getPositionByUserId: function (userId,mark) {
-        var fightModel = Singleton.getInstance("FightModel");
-        var previousUser =  FightVo.previousUser;
-        var nextUser =  FightVo.nextUser;
-        var myUser =  FightVo.myUser;
-
-        var position = {x: display.cx, y: display.cy};
-        if(mark == FightConstants.SEND_CARD_START_POS ) {
-
-            if (previousUser.userId == userId) {
-                position = {x: display.left - 50, y: display.top - 100}
-            } else if (myUser.userId == userId) {
-                position = {x: 0, y: 0};
-            } else if (nextUser.userId == userId) {
-                position = {x: display.right + 50, y: display.top - 100}
-            }
-        }else  if(mark == FightConstants.SEND_CARD_END_POS ) {
-
-            if (previousUser.userId == userId) {
-                position = {x : display.left,y:display.top - 200 };
-            } else if (myUser.userId == userId) {
-                position = {x : display.right,y:display.bottom + 10 };
-            } else if (nextUser.userId == userId) {
-                position = {x : display.right,y:display.top - 200 };
-            }
-        }else {  //FightConstants.SEND_CARD_MIDDLE_POS
-            if (previousUser.userId == userId) {
-                position = {x: display.left + 200, y: display.top - 200}
-            } else if (myUser.userId == userId) {
-                position = {x: display.cx, y: display.cy};
-            } else if (nextUser.userId == userId) {
-                position = {x: display.right - 200, y: display.top - 200}
+//    },
+    /**通过userId 获取用户的上家下家**/
+    getClientDirectByUserId:function(userId){
+        var cards = FightVo.cards;
+        for(var i =0;i<3;i++){
+            if(userId == cards[i].userId){
+                return i;
             }
         }
-
-        return position
     },
-    /** 隐藏倒计时 **/
-    setVisibleByCountDownTimerSprite:function(){
-        if(this.sceneLayer_.countDownTimerSprite_){
-            this.sceneLayer_.countDownTimerSprite_.setVisible(false);
-            this.sceneLayer_.fingerTips_.setVisible(false);
-        }
-    },
-    /**通过后台的index获取用户相对自己的风味**/
-    getSureDirectByServerDirect:function(serverDirect){
+    /**加入房间时，因为服务器还没分配上家，我，下家 通过后台的index获取用户相对自己的风味**/
+    getClientDirectByServerDirect:function(serverDirect){
         var loginModel = Singleton.getInstance("LoginModel");
         var me = loginModel.user;
         var key = serverDirect;
-        if(me.direct == 0){//我是上位时
+        if(me.serverDirect == 0){//我是上位时
             key = key + 1;
             if(key>2)
                 key = 0;
-        }else if(me.direct == 2){
+        }else if(me.serverDirect == 2){
             key = key - 1;
             if(key<0)
                 key = 2;

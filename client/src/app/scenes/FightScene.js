@@ -23,17 +23,17 @@ var FightLayer =  BaseScene.extend({
 
         //加载三个头像显示
         var flysLayer = this.flysLayer_
-        var avatarSprite1 = new AvatarSprite();
-        avatarSprite1.setPosition(display.cx,display.bottom + 40);
-        flysLayer.addChild(avatarSprite1);
-        this.avatarSprite1_ = avatarSprite1
-
-        var avatarSprite0 = new AvatarSprite();
+        var avatarSprite0 = new AvatarSprite(); //上家
         avatarSprite0.setPosition(display.left + 120,display.top - 40);
         flysLayer.addChild(avatarSprite0);
         this.avatarSprite0_ = avatarSprite0
 
-        var avatarSprite2 = new AvatarSprite(1);
+        var avatarSprite1 = new AvatarSprite(); //我
+        avatarSprite1.setPosition(display.cx,display.bottom + 40);
+        flysLayer.addChild(avatarSprite1);
+        this.avatarSprite1_ = avatarSprite1
+
+        var avatarSprite2 = new AvatarSprite(); //下家
         avatarSprite2.setPosition(display.right - 120,display.top - 40);
         flysLayer.addChild(avatarSprite2);
         this.avatarSprite2_ = avatarSprite2
@@ -44,82 +44,15 @@ var FightLayer =  BaseScene.extend({
         return true;
     },
     //有人加入桌子 ，初始化该人的信息
-    joinRoom:function(direct,user){
-        var keySptName = "avatarSprite" + direct+ "_";
+    joinRoom:function(clientDirect,user){
+        var keySptName = "avatarSprite" + clientDirect+ "_";
         this[keySptName].initViw(user);
-    },
-    //开始出牌倒计时
-    onDiscard:function(position,interval,onComplete){
-        if(this.fingerTips_ == null){
-            //提示出牌的tips
-            var tipLayer = this.tipLayer_;
-            var fingerTips = display.newNode();
-            var fight_finger_tips = display.newSprite("#fight_finger_tips.png");
-            TransitionEffect.backAndForth(fight_finger_tips);
-            fingerTips.addChild(fight_finger_tips);
-            fingerTips.addChild(display.newSprite("#fight_txt_finger_tips.png"));
-            tipLayer.addChild(fingerTips);
-            fingerTips.setPosition(display.cx,display.cy);
-            this.fingerTips_ = fingerTips;//提示出牌的动画
-
-
-            //数字倒计时的tips
-            var countDownTimerSprite = new CountDownTimerSprite();
-            countDownTimerSprite.setPosition(display.cx,display.cy);
-            tipLayer.addChild(countDownTimerSprite);
-            this.countDownTimerSprite_ = countDownTimerSprite;
-        }
-
-
-        this.countDownTimerSprite_.setVisible(true);
-        this.fingerTips_.setVisible(true);
-        this.fingerTips_.setPosition(position.x,position.y);
-        this.countDownTimerSprite_.setPosition(position.x,position.y);
-        this.countDownTimerSprite_.start(15,onComplete)
-    },
-    //提示用户 吃、碰、胡等
-    cardOprateTipsShow:function(enableSpriteArray){
-        if(!this.cardOprateTipsSprite_){
-            var cardOprateTipsSprite = new CardOprateTipsSprite();
-            cardOprateTipsSprite.setPosition(display.cx,display.cy);
-            this.tipLayer_.addChild(cardOprateTipsSprite);
-            this.cardOprateTipsSprite_ = cardOprateTipsSprite;
-        }
-        this.cardOprateTipsSprite_.initView(enableSpriteArray);
-    },
-
-
-
-
-
-    /**
-     * 生成80张牌  洗牌 动画
-     */
-    shuffleCard:function(){
-        var batch = this.batch_
-        this.allCardSpt_ = [];
-
-        var fight_card_storage= display.newSprite("#fight_card_storage.png",display.cx,display.top-140)
-        fight_card_storage.align(display.BOTTOM_CENTER);
-        batch.addChild(fight_card_storage);
-        fight_card_storage.setVisible(false);
-        this.fight_card_storage_ = fight_card_storage;
-
-        //生成牌
-        for(var i=0;i<80;i++) {
-            var cardSprite = new CardSprite();
-            cardSprite.initData({cardId:i});
-            cardSprite.initView(false,"fight_wash_card.png");
-            batch.addChild(cardSprite);
-            cardSprite.setPosition(display.cx, display.top + 40);
-            this.allCardSpt_.push(cardSprite)
-            transition.moveTo(cardSprite,{delay:i*0.01,time:0.1,y:display.cy + i*0.5})
-        }
     },
     /**
      * 发牌
      */
-    onNewRound:function(onHand){
+    onNewRound:function(cards){
+        var onHand = cards[1].onHand;
         //庄家 以及 玩家分配过来并初始化
         //纯牌的夹子安排
         this.fight_card_storage_.setVisible(true);//存牌的夹子
@@ -157,14 +90,14 @@ var FightLayer =  BaseScene.extend({
             transition.moveTo(cardSprite2,{delay:delay,time:0.2,x:display.left - 100})
         }
 
-        var cardSprite1 = this.allCardSpt_[60];
-        cardSprite1.initView(false,"fight_big_card.png");
+        var cardSprite3 = this.allCardSpt_[60];
+        cardSprite3.initView(false,"fight_big_card.png");
         if(onHand.length > 20){
-            transition.moveTo(cardSprite1,{delay:delay,time:0.2,y:display.bottom - 115});
-            onHandleCardSpriteArr.push(cardSprite1);
+            transition.moveTo(cardSprite3,{time:0.2,y:display.bottom - 115});
+            onHandleCardSpriteArr.push(cardSprite3);
         }else{
-            cardSprite2.setRotation(90);
-            transition.moveTo(cardSprite2,{delay:delay,time:0.2,x:display.left - 100})
+            cardSprite3.setRotation(90);
+            transition.moveTo(cardSprite3,{delay:delay,time:0.2,x:display.left - 100})
         }
 
 
@@ -173,19 +106,106 @@ var FightLayer =  BaseScene.extend({
         var onComplete = function() {
             self.orderMyCard(onHandleCardSpriteArr,onHand);
         }
-        this.backgroundLayer_.performWithDelay(onComplete,1);
+        this.backgroundLayer_.performWithDelay(onComplete,1.5);
 
+    },
+    //倒计时提示
+    setVisibleWithCountDownTimerTips:function(visible,position,onComplete){
+        if(this.countDownTimerSprite_ == null){
+            var tipLayer = this.tipLayer_;
+            var countDownTimerSprite = new CountDownTimerSprite();
+            tipLayer.addChild(countDownTimerSprite);
+            this.countDownTimerSprite_ = countDownTimerSprite;
+        }
+        cc.log(visible,position,"xxxxxxxxxxxxxxxxx");
+        if(visible) {
+            this.countDownTimerSprite_.setVisible(true);
+            this.countDownTimerSprite_.setPosition(position.x, position.y);
+            this.countDownTimerSprite_.start(15, onComplete)
+        }else{
+            this.countDownTimerSprite_.stop();
+            this.countDownTimerSprite_.setVisible(false);
+        }
+    },
+    //滑动出牌提示
+    setVisibleWithFingerTips:function(visible,position){
+        if(this.fingerTips_ == null) {
+            var tipLayer = this.tipLayer_;
+            var fingerTips = display.newNode();
+            var fight_finger_tips = display.newSprite("#fight_finger_tips.png");
+            TransitionEffect.backAndForth(fight_finger_tips);
+            fingerTips.addChild(fight_finger_tips);
+            fingerTips.addChild(display.newSprite("#fight_txt_finger_tips.png"));
+            tipLayer.addChild(fingerTips);
+            this.fingerTips_ = fingerTips;
+        }
+
+        if(visible) {
+            this.fingerTips_.setVisible(true);
+            this.fingerTips_.setPosition(position.x, position.y);
+        }else{
+            this.fingerTips_.setVisible(false);
+        }
+    },
+//    //提示用户 吃、碰、胡等
+//    cardOprateTipsShow:function(enableSpriteArray){
+//        if(!this.cardOprateTipsSprite_){
+//            var cardOprateTipsSprite = new CardOprateTipsSprite();
+//            cardOprateTipsSprite.setPosition(display.cx,display.cy);
+//            this.tipLayer_.addChild(cardOprateTipsSprite);
+//            this.cardOprateTipsSprite_ = cardOprateTipsSprite;
+//        }
+//        this.cardOprateTipsSprite_.initView(enableSpriteArray);
+//    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //////////////////////////////////////////////////////////////////////// private /////////////////////////////////////////
+
+
+    /**
+     * 生成80张牌  洗牌 动画
+     */
+    shuffleCard:function(){
+        var batch = this.batch_
+        this.allCardSpt_ = [];
+
+        var fight_card_storage= display.newSprite("#fight_card_storage.png",display.cx,display.top-140)
+        fight_card_storage.align(display.BOTTOM_CENTER);
+        batch.addChild(fight_card_storage);
+        fight_card_storage.setVisible(false);
+        this.fight_card_storage_ = fight_card_storage;
+
+        //生成牌
+        for(var i=0;i<80;i++) {
+            var cardSprite = new CardSprite();
+            cardSprite.initData({cardId:i});
+            cardSprite.initView(false,"fight_wash_card.png");
+            batch.addChild(cardSprite);
+            cardSprite.setPosition(display.cx, display.top + 40);
+            this.allCardSpt_.push(cardSprite)
+            transition.moveTo(cardSprite,{delay:i*0.01,time:0.1,y:display.cy + i*0.5})
+        }
     },
     /**
      * 第一次排列牌
      */
     orderMyCard:function(onHandleCardSprite,onHand){
         //排列我的牌
-        var loginModel = Singleton.getInstance("LoginModel");
-        var me = loginModel.user;
+//        var loginModel = Singleton.getInstance("LoginModel");
+//        var me = loginModel.user;
         var outputCard = CardUtil.riffle(onHand);
         var behaveNum = checkint(outputCard.length/2)
-
 
         var onHandleCardSpriteArr = [];
         var index = 0;
@@ -216,7 +236,7 @@ var FightLayer =  BaseScene.extend({
             onHandleCardSpriteArr.push(oneonHandleCardSpriteArr)
         }
         //存储起来
-        me.onHandleCardSpriteArr_ = onHandleCardSpriteArr;
+        FightVo.onHandleCardSpriteArr_ = onHandleCardSpriteArr;
     },
 
 
