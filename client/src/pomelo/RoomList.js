@@ -239,5 +239,6 @@ RoomList.setTimeout = function(roomId, timerId){
 
 
 RoomList.clearTimeout = function(roomId, timerId){
-  clearTimeout(this.rooms[roomId].timerId);
+  destroyTimeout(this.rooms[roomId].timerId);
+  this.rooms[roomId].timerId = null;
 };

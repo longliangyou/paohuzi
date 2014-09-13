@@ -38,7 +38,7 @@ var RoundAction = {
       var banker = RoomList.getUserByUserId(bankId);
       //启动ai
       FightAIAction.onDisCardAction(round,banker.userId)
-    }
+    },
 
 
     // 判断是否能自动杠，自动偎，自动跑

@@ -153,15 +153,23 @@ stringFormat =function(pattern, index){
 
 
 /**
- * 客户端伪造一个定时器
- * @param callback
- * @param inval
- */
+* 客户端伪造一个定时器
+* @param callback
+* @param inval
+*/
+var timeHandleArr = {};
 setTimeOut = function(callback, inval){
+    var complete = function(){
+        var callback = timeHandleArr.timeId ;
+        if ( _.isFunction(callback)) {
+            callback();
+        }
+    }
     var scene = display.getRunningScene();
-    var timeId = scene.performWithDelay(callback,inval/1000);
+    var timeId = scene.performWithDelay(complete,inval/1000);
+    timeHandleArr.timeId = callback;
     return timeId;
 }
-clearTimeout = function(timeId){
-    timeId.stop();
+destroyTimeout = function(timeId){
+    timeHandleArr.timeId = null;
 }

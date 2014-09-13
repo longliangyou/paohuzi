@@ -117,7 +117,6 @@ var FightLayer =  BaseScene.extend({
             tipLayer.addChild(countDownTimerSprite);
             this.countDownTimerSprite_ = countDownTimerSprite;
         }
-        cc.log(visible,position,"xxxxxxxxxxxxxxxxx");
         if(visible) {
             this.countDownTimerSprite_.setVisible(true);
             this.countDownTimerSprite_.setPosition(position.x, position.y);

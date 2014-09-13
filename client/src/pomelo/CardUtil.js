@@ -21,7 +21,7 @@ CardUtil.Actions = {
 };
 
 // 用户出牌倒计时，单位为秒，默认值为 15 秒
-CardUtil.cardInterval = 15;
+CardUtil.cardInterval = 15*1000;
 
 
 // CMD
@@ -29,9 +29,9 @@ CardUtil.ServerNotify = {
   onJoinRoom: 1,    // 新玩家加入通知
   onNewRound: 2,    // 开局通知
   onDisCard:3,    //等待玩家出牌
-  onCard:     11,    // 玩家出的牌
-  onEat:      4,    // 玩家吃牌
-  onPeng:     5,    // 玩家碰牌
+  onCard:     4,    // 玩家出的牌
+  onEat:      5,    // 玩家吃牌
+  onPeng:     11,    // 玩家碰牌
   onWei:      6,    // 玩家偎牌
   onWin:      7,    // 玩家胡牌
   onTi:       8,    // 玩家提牌

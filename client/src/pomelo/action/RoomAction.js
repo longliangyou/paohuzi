@@ -37,8 +37,9 @@ var RoomAction = {
 
 
       if (RoomList.isFull(roomId)){
-        RoundAction.newRound(roomId);
         RoomList.clearTimeout(roomId);
+        RoundAction.newRound(roomId);
+
       } else {
         RoomList.setTimeout(roomId, setTimeOut(function(){
           var userId = UserAction.createNpcUser().userId;

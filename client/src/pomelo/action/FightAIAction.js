@@ -13,9 +13,6 @@ var FightAIAction = {
      */
     onDisCardAction: function(round, userId){
         var npcHandle = function(){
-            var roomId = RoomList.getRoomIdByUserId(userId)
-            RoomList.clearTimeout(roomId);
-
             CardAction.card(userId,null)
         }
 
@@ -31,7 +28,8 @@ var FightAIAction = {
                 }
             };
             ServerNotifyManager.sendCmdResponse(onDiscardEvent);
-            setTimeOut(npcHandle,CardUtil.cardInterval)
+            var roomId = RoomList.getRoomIdByUserId(userId)
+            RoomList.setTimeout(roomId,setTimeOut(npcHandle,CardUtil.cardInterval))
         }
     },
 

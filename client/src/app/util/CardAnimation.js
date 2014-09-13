@@ -43,14 +43,14 @@ CardAnimation.sendOutCardByUser = function(cardSprite,startPos,middlePos,onCompl
 
 
 
-CardAnimation.loseSendOutCardByUser = function(cardSprite,endPos){
-    var onComplete = function(){
-        cardSprite.initView(true,FightConstants.small_card);
-        cardSprite.setScale(1);
-    }
-    transition.scaleTo(cardSprite, {scale : 0.5, time : 0.5});
-    transition.moveTo(cardSprite, {x : endPos.x, y:endPos.y, time : 0.5,onComplete:onComplete})
-}
+//CardAnimation.loseSendOutCardByUser = function(cardSprite,endPos){
+//    var onComplete = function(){
+//        cardSprite.initView(true,FightConstants.small_card);
+//        cardSprite.setScale(1);
+//    }
+//    transition.scaleTo(cardSprite, {scale : 0.5, time : 0.5});
+//    transition.moveTo(cardSprite, {x : endPos.x, y:endPos.y, time : 0.5,onComplete:onComplete})
+//}
 
 
 

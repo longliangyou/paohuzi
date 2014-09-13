@@ -91,7 +91,30 @@
 var FightVo = {
     onHandleCardSpriteArr_:null,
     isSendCard:false,
-    cards:null
+    cards:null,
+    //根据cardid 获取一个 cardsprite 的视图，这个主要客户端使用，如果当前玩家是自己的话，为直接从 this.onHandleCardSpriteArr_ 寻找，否则会新实例化一个出来
+    getCardSpriteByCardId:function(uerId,cardId){
+        var loginModel = Singleton.getInstance("LoginModel");
+        var me = loginModel.user;
+        if(me.userId == uerId ){
+            for(var i =0;i<this.onHandleCardSpriteArr_.length;i++){
+                var array = this.onHandleCardSpriteArr_[i];
+                for(var j =0;j< array.length;j++){
+                    var one = array[j];
+                    if(one.cardId_ == cardId){
+                        return one;
+                    }
+                }
+            }
+        }else{
+            var cardSprite = new CardSprite();
+            cardSprite.initData({cardId:cardId});
+            cardSprite.initView(true,FightConstants.full_card);
+            this.sceneLayer_.batch_.addChild(cardSprite);
+            return cardSprite;
+        }
+    }
+
 //    deskType : 0, //0表示单机 1表示私人场  2表示三人网络场
 //    bankerUser :null,//庄家的用户
 //    isSendCard : false,//这个主要是为了客户端发牌使用

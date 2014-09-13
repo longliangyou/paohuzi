@@ -22,7 +22,7 @@ var FightHandle = BaseHandle.extend({
         var loginModel = Singleton.getInstance("LoginModel");
         var me = loginModel.user;
 
-        cc.log("接受到命令：",cmd);
+        cc.log("接受到命令：",cmd,data.cardId);
         switch (cmd){
             case CardUtil.ServerNotify.onJoinRoom:
                 var serverDirect = data.serverDirect;
@@ -47,7 +47,14 @@ var FightHandle = BaseHandle.extend({
                 this.sceneLayer_.setVisibleWithCountDownTimerTips(true,position,null);
                 break;
             case CardUtil.ServerNotify.onCard:    // 玩家出牌
-                
+                var userId = data.userId;
+                var isDiscardByClient = data.isDiscardByClient;
+                var cardId = data.cardId;
+                if(userId == me.userId && isDiscardByClient) {
+                }else{
+                    var cardSprite = FightVo.getCardSpriteByCardId(userId,cardId)
+                    this.card_callBack(userId,cardSprite);
+                }
             default :
                 break;
         }
@@ -58,16 +65,19 @@ var FightHandle = BaseHandle.extend({
     //回调
     //发牌回调
     card_callBack:function(userId,cardSprite){
-        var startPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_START_POS)
-        var middlePos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_MIDDLE_POS)
-        //var endPos = this.getPositionByUserId(userId,FightConstants.SEND_CARD_END_POS)
-        CardAnimation.sendOutCardByUser(cardSprite,startPos,middlePos)
-        this.setVisibleByCountDownTimerSprite();//隐藏tips
-
-        if(userId == FightVo.myUser.userId) {
+        var loginModel = Singleton.getInstance("LoginModel");
+        var me = loginModel.user;
+        var clientDirect = this.getClientDirectByUserId(userId);
+        var startPos = FightConstants.Start_Position[clientDirect];
+        if(userId == me.userId) {
+            startPos = cardSprite.getPosition();
             CardTool.deleteOrgionByCardSprite(cardSprite);
             CardTool.sort();
         }
+        var middlePos =  FightConstants.Middle_Position[clientDirect];
+        CardAnimation.sendOutCardByUser(cardSprite,startPos,middlePos)
+        this.sceneLayer_.setVisibleWithCountDownTimerTips(false);
+        this.sceneLayer_.setVisibleWithFingerTips(false)
     },
 
 
@@ -93,9 +103,10 @@ var FightHandle = BaseHandle.extend({
         var fightModel = Singleton.getInstance("FightModel");
         var loginModel = Singleton.getInstance("LoginModel");
         var userId = loginModel.user.userId;
+        var self = this;
         var complete = function(result){
             if(result.rect == STATUS_SUCCESS){
-
+                self.card_callBack(userId,cardSprite);
             }else{
 
             }

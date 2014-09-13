@@ -16,6 +16,19 @@ FightConstants.init = function() {
         {x: display.cx - 200, y: display.cy },
         {x: display.right - 100, y: display.top - 100 }
     ];
+
+    //牌的初始位置
+    FightConstants.Start_Position = [
+        {x: display.left, y: display.top - 150 },
+        {x: display.cx , y: display.cy },
+        {x: display.right, y: display.top - 150 }
+    ];
+    //出了牌后放各自中间的牌
+    FightConstants.Middle_Position = [
+        {x: display.cx - 100, y: display.top - 150 },
+        {x: display.cx , y: display.cy },
+        {x: display.cx + 100, y: display.top - 150 }
+    ];
 }
 
 
