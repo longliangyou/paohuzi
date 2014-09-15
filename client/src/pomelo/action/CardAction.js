@@ -40,7 +40,7 @@ var CardAction = {
             }
         };
         ServerNotifyManager.sendCmdResponse(onDiscardEvent);
-        FightAIAction.onCardAction(round, userId, cardId)
+        FightAIAction.onCardAction(roomId,round, userId, cardId)
 
     }
 };

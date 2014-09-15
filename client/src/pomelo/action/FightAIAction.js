@@ -39,7 +39,7 @@ var FightAIAction = {
      * @param userId
      * @param cardId
      */
-    onCardAction: function(round, userId, cardId){
+    onCardAction: function(roomId,round, userId, cardId){
         var handResule = RoundAction.newDisardByMyHand(roomId, userId, cardId);
         if(handResule.length>0){
             /**
