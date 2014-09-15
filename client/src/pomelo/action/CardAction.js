@@ -40,7 +40,7 @@ var CardAction = {
             }
         };
         ServerNotifyManager.sendCmdResponse(onDiscardEvent);
-        RoundAction.newDisard(roomId, userId, cardId);
+        RoundAction.newDisardByMyHand(roomId, userId, cardId);
 
 
     }
