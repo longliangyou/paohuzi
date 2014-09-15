@@ -43,7 +43,7 @@ var RoundAction = {
 
 
     /**
-     * 当我从手中出了一张牌后 ，看我的操作
+     * 当我从手中出了一张牌后 ，看另外两家的操作
      * 判断是否能自动杠，自动偎，自动跑
      * 跑胡子规则 ： http://www.80166.com/help/phz.shtml
      * @param roomId
@@ -54,35 +54,44 @@ var RoundAction = {
         /**
          * todo-long
          * 1:获取出上家  下家 （这里可以在round中抽取出两个方法，通过一个userId分别获取上家下家）
-         * 2：判断下家是否可以自动跑，碰，吃，无操作
-         * 3：判断下下家，即上家是否可以跑，碰，吃，无操作
-         * 4：如果任何一家有跑的操作，直接 ServerNotifyManager-》CardUtil.ServerNotify.onPao （跑有三种情况，一种是我手上三张牌跑，一种是我桌面畏的牌跑，一种是桌面碰的牌跑）
-         *    并返回true标示符
-         * 5：否则返回false标示符
+         * 2：判断下家是否可以自动跑，碰，吃，无操作,存储push进handResule
+         * 3：判断下下家，即上家是否可以跑，碰，吃，无操作，存储push进handResule
+         *  （跑有三种情况，一种是我手上三张牌跑，一种是我桌面畏的牌跑，一种是桌面碰的牌跑）
+         *
+         * 5：返回 handResule 操作
          */
+         var handResule = [];
+
         var round = RoomList.getRound(roomId);
         var previousPlayer;
         var nextPlayer;
         if(nextPlayer){
-
-        }
-
-
-        //结果
-        var canPao = false;
-        if(canPao){
-            var newRoundEvent = {
-                cmd:CardUtil.ServerNotify.onPao,
-                data:{
-                    cardId: cardId,
-                    paoType:0,//跑的类型
-                    userId: nextPlayer.userId
+            var nextHand = [
+                {
+                    type: CardUtil.ServerNotify.onPao,
+                    mark:1 //（跑有三种情况，一种是我手上三张牌跑，一种是我桌面畏的牌跑，一种是桌面碰的牌跑）
+                },
+                {
+                    type: CardUtil.ServerNotify.onEat
                 }
-            };
-            ServerNotifyManager.sendCmdResponse(newRoundEvent);
-            return
+            ]
+            handResule.push(nextHand)
         }
 
-        return false
+
+        if(previousPlayer){
+            var nextHand = [
+                {
+                    type: CardUtil.ServerNotify.onPao,
+                    mark:1 //（跑有三种情况，一种是我手上三张牌跑，一种是我桌面畏的牌跑，一种是桌面碰的牌跑）
+                },
+                {
+                    type: CardUtil.ServerNotify.onEat
+                }
+            ]
+            handResule.push(nextHand)
+        }
+
+        return handResule
     }
 };
