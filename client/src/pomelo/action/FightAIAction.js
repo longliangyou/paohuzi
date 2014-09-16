@@ -41,16 +41,12 @@ var FightAIAction = {
      */
     onCardAction: function(roomId,round, userId, cardId){
         var handResule = RoundAction.newDisardByMyHand(roomId, userId, cardId);
-        if(handResule.length>0){
-            /**
-            1：handResule 判断是否有跑，有跑直接发送 ServerNotifyManager
-            2:没有的话，判断是否是npc，如果是npc直接从 handResule 取一个操作 ServerNotifyManager 发送即可
-                                         如果不是npc，启动倒计时，直接从 handResule 取一个操作 ServerNotifyManager 发送即可
-             */
+        /**
+        1：handResule 判断是否有跑，有跑直接发送 ServerNotifyManager
+        2:没有的话，判断是否是npc，如果是npc直接从 handResule 取一个操作 ServerNotifyManager 发送即可
+                                     如果不是npc，启动倒计时，直接从 handResule 取一个操作 ServerNotifyManager 发送即可
+         */
 
-        }else{//臭牌
-
-        }
     },
 
 

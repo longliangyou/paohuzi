@@ -58,7 +58,7 @@ var RoundAction = {
          * 3：判断下下家，即上家是否可以跑，碰，吃，无操作，存储push进handResule
          *  （跑有三种情况，一种是我手上三张牌跑，一种是我桌面畏的牌跑，一种是桌面碰的牌跑）
          *
-         * 5：返回 handResule 操作
+         * 4：返回 handResule 操作
          */
 //         var handResule = [];
 //
