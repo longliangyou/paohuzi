@@ -60,38 +60,38 @@ var RoundAction = {
          *
          * 5：返回 handResule 操作
          */
-         var handResule = [];
-
-        var round = RoomList.getRound(roomId);
-        var previousPlayer;
-        var nextPlayer;
-        if(nextPlayer){
-            var nextHand = [
-                {
-                    type: CardUtil.ServerNotify.onPao,
-                    mark:1 //（跑有三种情况，一种是我手上三张牌跑，一种是我桌面畏的牌跑，一种是桌面碰的牌跑）
-                },
-                {
-                    type: CardUtil.ServerNotify.onEat
-                }
-            ]
-            handResule.push(nextHand)
-        }
-
-
-        if(previousPlayer){
-            var nextHand = [
-                {
-                    type: CardUtil.ServerNotify.onPao,
-                    mark:1 //（跑有三种情况，一种是我手上三张牌跑，一种是我桌面畏的牌跑，一种是桌面碰的牌跑）
-                },
-                {
-                    type: CardUtil.ServerNotify.onEat
-                }
-            ]
-            handResule.push(nextHand)
-        }
-
-        return handResule
+//         var handResule = [];
+//
+//        var round = RoomList.getRound(roomId);
+//        var previousPlayer;
+//        var nextPlayer;
+//        if(nextPlayer){
+//            var nextHand = [
+//                {
+//                    type: CardUtil.ServerNotify.onPao,
+//                    mark:1 //（跑有三种情况，一种是我手上三张牌跑，一种是我桌面畏的牌跑，一种是桌面碰的牌跑）
+//                },
+//                {
+//                    type: CardUtil.ServerNotify.onEat
+//                }
+//            ]
+//            handResule.push(nextHand)
+//        }
+//
+//
+//        if(previousPlayer){
+//            var nextHand = [
+//                {
+//                    type: CardUtil.ServerNotify.onPao,
+//                    mark:1 //（跑有三种情况，一种是我手上三张牌跑，一种是我桌面畏的牌跑，一种是桌面碰的牌跑）
+//                },
+//                {
+//                    type: CardUtil.ServerNotify.onEat
+//                }
+//            ]
+//            handResule.push(nextHand)
+//        }
+//
+//        return handResule
     }
 };
