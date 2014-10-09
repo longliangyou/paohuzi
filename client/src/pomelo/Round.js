@@ -180,13 +180,14 @@ var Round = {
     };
 
 
+    //从该userId的用户中 随机抽取出一张牌
     round.discardForNpc = function(userId){
       var player = currentPlayer(userId);
       cardId = _.sample(player.onHand);
       return cardId;
     };
 
-
+    //从用户userId中 打出一张牌 打出的牌会放到onTrash 中
     round.discard = function(userId, cardId){
       var player = currentPlayer(userId);
       var index = player.onHand.indexOf(cardId);
