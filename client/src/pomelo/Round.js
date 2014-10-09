@@ -89,6 +89,39 @@ var Round = {
       return [previousPlayer, player, nextPlayer];
     };
 
+
+    // 获取上一家的userId
+    round.getPreviousUserId = function(userId) {
+      var player = currentPlayer(userId);
+      var previousPlayer = getOtherPlayerCards(players[(player.num + 2)%3]);
+      return previousPlayer.userId;
+    };
+
+
+    // 获取下一家的userId
+    round.getNextUserId = function(userId){
+      var player = currentPlayer(userId);
+      var nextPlayer = getOtherPlayerCards(players[(player.num+1)%3]);
+      return nextPlayer.userId;
+    };
+
+
+    // 获取用户所可能的 actions
+    round.getActions = function(userId, cardId){
+      var player = currentPlayer(userId);
+      var canHu = CardUtil.canHu(player.onHand, player.onTable, cardId);
+      var canPeng = CardUtil.canPeng(player.onHand, cardId);
+      var canGang = CardUtil.canGang(player.onHand, player.onTable, cardId);
+      var canChi = CardUtil.canChi(player.onHand, cardId);
+      return {
+        canHu: canHu,
+        canPeng: canPeng,
+        canGang: canGang,
+        canChi: canChi
+      };
+    };
+
+
     // 碰牌
     round.peng = function(userId, card){
       var player = currentPlayer(userId);
@@ -100,6 +133,7 @@ var Round = {
       return CardUtil.Actions.Idle;
     };
 
+
     // 偎牌
     round.wei = function(userId, card){
       var player = currentPlayer(userId);
@@ -109,8 +143,8 @@ var Round = {
         return CardUtil.Actions.Wei;
       }
       return CardUtil.Actions.Idle;
-
     };
+
 
     // 提牌或者跑牌
     round.gang = function(userId, card){
@@ -145,11 +179,13 @@ var Round = {
       return action;
     };
 
+
     round.discardForNpc = function(userId){
       var player = currentPlayer(userId);
       cardId = _.sample(player.onHand);
       return cardId;
     };
+
 
     round.discard = function(userId, cardId){
       var player = currentPlayer(userId);
