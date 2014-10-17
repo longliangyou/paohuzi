@@ -89,9 +89,17 @@
 
 
 var FightVo = {
-    onHandleCardSpriteArr_:null,
-    isSendCard:false,
-    cards:null,
+//    onTable: [[Number]...], // 玩家桌上的牌
+    //     onHand: [Number...],    // 玩家手里的牌
+    //     onTrash: [Number...],   // 玩家打出的牌
+    //     unFollow: [Number],     // 玩家没有吃的牌
+    //     unTouch: [Number],      // 玩家没有碰的牌
+    otherSendCardSprite:null,//其他玩家当前桌面打出的牌
+    onTrashCardSpriteArr_:null,//玩家打出的牌 丢弃的牌
+    onTableCardSpriteArr_:null,//玩家桌上的牌
+    onHandleCardSpriteArr_:null,//当前我手上牌
+    isSendCard:false,//是否可以出牌
+    cards:null,//所有玩家的牌 ，这个数据没啥用
     //根据cardid 获取一个 cardsprite 的视图，这个主要客户端使用，如果当前玩家是自己的话，为直接从 this.onHandleCardSpriteArr_ 寻找，否则会新实例化一个出来
     getCardSpriteByCardId:function(uerId,cardId){
         var loginModel = Singleton.getInstance("LoginModel");

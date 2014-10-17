@@ -53,8 +53,14 @@ var FightHandle = BaseHandle.extend({
                 if(userId == me.userId && isDiscardByClient) {
                 }else{
                     var cardSprite = FightVo.getCardSpriteByCardId(userId,cardId)
+                    FightVo.otherSendCardSprite = cardSprite;//存储起来 用户打出的牌
                     this.card_callBack(userId,cardSprite);
                 }
+            case CardUtil.ServerNotify.onPeng:    // 玩家碰牌
+                var userId = data.userId;
+                var cardId = data.cardId;
+                this.peng_callBack(userId,cardId);
+
             default :
                 break;
         }
@@ -79,7 +85,40 @@ var FightHandle = BaseHandle.extend({
         this.sceneLayer_.setVisibleWithCountDownTimerTips(false);
         this.sceneLayer_.setVisibleWithFingerTips(false)
     },
+    //碰牌回调
+    peng_callBack:function(userId,cardId){
+        var loginModel = Singleton.getInstance("LoginModel");
+        var me = loginModel.user;
+        var clientDirect = this.getClientDirectByUserId(userId);
+        var endPosition = FightConstants.Peng_Position[clientDirect];
+        var middlePos = FightConstants.Middle_Position[clientDirect];
 
+
+        var cardSprite1 = null;
+        var cardSprite2 = null;
+        var pengCardSprite = FightVo.otherSendCardSprite;
+        CardAnimation.chiCardByUser(pengCardSprite,middlePos,endPosition)
+        if(userId == me.userId) {
+            cardSprite1 = FightVo.getCardSpriteByCardId(userId,cardId)
+            CardTool.deleteOrgionByCardSprite(cardSprite1);
+            CardAnimation.chiCardByUser(cardSprite1,middlePos,endPosition)
+
+            cardSprite2 = FightVo.getCardSpriteByCardId(userId,cardId)
+            CardTool.deleteOrgionByCardSprite(cardSprite2);
+            CardAnimation.chiCardByUser(cardSprite2,middlePos,endPosition)
+
+            CardTool.sort();
+        }else{
+
+        }
+
+
+
+//        var middlePos =  FightConstants.Middle_Position[clientDirect];
+//        CardAnimation.sendOutCardByUser(cardSprite,startPos,middlePos)
+//        this.sceneLayer_.setVisibleWithCountDownTimerTips(false);
+//        this.sceneLayer_.setVisibleWithFingerTips(false)
+    },
 
 
 

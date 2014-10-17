@@ -54,13 +54,13 @@ var FightModel = BaseModel.extend({
             break;
         case CardUtil.ServerNotify.onCard:    // 玩家出牌
           break;
-
-          case CardUtil.ServerNotify.onEat:     // 玩家吃牌
-          break;
-
         case CardUtil.ServerNotify.onPeng:    // 玩家碰牌
-            //{   cardId:牌的数字,user:谁出的，分别有三种情况(previousUser/myUser/nextUser) }
+              //{   cardId:牌的数字,user:谁出的，分别有三种情况(previousUser/myUser/nextUser) }
+              break;
+        case CardUtil.ServerNotify.onEat:     // 玩家吃牌
           break;
+
+
 
         case CardUtil.ServerNotify.onWei:     // 玩家偎牌
             //{   cardId:牌的数字,user:谁出的，分别有三种情况(previousUser/myUser/nextUser) }

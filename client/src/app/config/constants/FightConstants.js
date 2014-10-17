@@ -17,17 +17,24 @@ FightConstants.init = function() {
         {x: display.right - 100, y: display.top - 100 }
     ];
 
-    //牌的初始位置
+    //牌的初始位置 出牌的起始位置
     FightConstants.Start_Position = [
         {x: display.left, y: display.top - 150 },
         {x: display.cx , y: display.cy },
         {x: display.right, y: display.top - 150 }
     ];
-    //出了牌后放各自中间的牌
+    //出了牌后放各自中间的牌 出的牌在中间暂时
     FightConstants.Middle_Position = [
         {x: display.cx - 100, y: display.top - 150 },
         {x: display.cx , y: display.cy },
         {x: display.cx + 100, y: display.top - 150 }
+    ];
+
+    //碰的牌的位置
+    FightConstants.Peng_Position = [
+        {x: display.left -100, y: display.top - 150 -100 },
+        {x: display.cx-100 , y: display.cy -100 },
+        {x: display.right - 100, y: display.top - 150 -100 }
     ];
 }
 

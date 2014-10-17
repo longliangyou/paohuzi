@@ -40,7 +40,28 @@ var FightAIAction = {
      * @param cardId
      */
     onCardAction: function(roomId,round, userId, cardId){
-        var handResule = RoundAction.newDisardByMyHand(roomId, userId, cardId);
+        var nextUserId = round.getNextUserId(userId);
+        var previousUserId = round.getPreviousUserId(userId);
+
+        //先判断下一家的操作
+        var actions = round.getActions(nextUserId, cardId);
+        cc.log("FightAIAction 当前拥有的操作:",actions.canHu,actions.canPeng);
+//        if(actions.canHu){
+//            HuAction.hu(nextUserId, cardId, null);
+//            return;
+//        }else
+        if(actions.canPeng){
+            PengAction.peng(nextUserId, cardId, null)
+            return;
+        }else if(actions.canGang){
+            GangAction.gang(nextUserId, cardId, null)
+            return;
+        }else if(actions.canChi){
+
+        }
+
+
+        //var handResule = RoundAction.newDisardByMyHand(roomId, userId, cardId);
         /**
         1：handResule 判断是否有跑，有跑直接发送 ServerNotifyManager
         2:没有的话，判断是否是npc，如果是npc直接从 handResule 取一个操作 ServerNotifyManager 发送即可

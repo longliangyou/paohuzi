@@ -10,7 +10,13 @@ var HuAction = {
      * 
      */
     hu: function(userId, cardId, callback){
-
-
+        var newRoundEvent = {
+            cmd:CardUtil.ServerNotify.onWin,
+            data:{
+                cardId: cardId,
+                userId: userId
+            }
+        };
+        ServerNotifyManager.sendCmdResponse(newRoundEvent);
     }
 };

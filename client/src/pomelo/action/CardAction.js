@@ -22,7 +22,7 @@ var CardAction = {
         var isDiscardByClient = true;//当前uerId这个客户端这张牌是否已经出了，、 或者没出，服务端主要随机获取一张的
         if(cardId == null){ //随机给其出一张牌
             isDiscardByClient = false;
-            cardId = round.discardForNpc(userId);
+            cardId = round.getRangeCardIdByUserId(userId);
         }
 
         round.discard(userId, cardId);

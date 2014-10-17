@@ -37,6 +37,22 @@ CardAnimation.sendOutCardByUser = function(cardSprite,startPos,middlePos,onCompl
 }
 
 
+/**
+ * 某个用户碰牌  畏牌  杠牌
+ * @param cardSprite
+ * @param startPos
+ * @param middlePos
+ * @param endPos
+ */
+CardAnimation.chiCardByUser = function(cardSprite,middlePos,endPos,onComplete){
+    //cardSprite.setPosition(startPos.x,startPos.y);
+    cardSprite.setLocalZOrder(MapConstants.MAX_OBJECT_ZORDER);
+
+    var callBack = function(){
+        transition.moveTo(cardSprite, {x : endPos.x, y:endPos.y, time : 0.5,onComplete: onComplete})
+    }
+    transition.moveTo(cardSprite, {x : middlePos.x, y:middlePos.y, time : 0.5,onComplete: callBack})
+}
 
 
 

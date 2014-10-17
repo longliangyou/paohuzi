@@ -456,7 +456,8 @@ CardUtil.canPeng = function(cardsOnHand, currentCard){
 
 CardUtil.canGang = function(cardsOnHand, cardsOnTable, currentCard){
   var canGang = false;
-  var countedCards = _.countBy(cards, function(c){return c;});
+  //var countedCards = _.countBy(cards, function(c){return c;});
+  var countedCards = _.countBy(cardsOnHand, function(c){return c;});
   if(countedCards[currentCard] === 3){
     canGang = true;
   }
