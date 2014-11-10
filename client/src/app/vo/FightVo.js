@@ -100,6 +100,7 @@ var FightVo = {
     onHandleCardSpriteArr_:null,//当前我手上牌
     isSendCard:false,//是否可以出牌
     cards:null,//所有玩家的牌 ，这个数据没啥用
+    sceneLayer_:null,//场景
     //根据cardid 获取一个 cardsprite 的视图，这个主要客户端使用，如果当前玩家是自己的话，为直接从 this.onHandleCardSpriteArr_ 寻找，否则会新实例化一个出来
     getCardSpriteByCardId:function(uerId,cardId){
         var loginModel = Singleton.getInstance("LoginModel");

@@ -29,11 +29,18 @@ var PengAction = {
                 }
             };
             ServerNotifyManager.sendCmdResponse(newRoundEvent);
+
+
+
         }
 
 
         if (_.isFunction(callback)) {
             callback({rect: rect, data: null});
         }
+
+
+
+        FightAIAction.onPengAction(roomId,round, userId, cardId)
     }
 };

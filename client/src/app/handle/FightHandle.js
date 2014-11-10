@@ -7,6 +7,7 @@ var FightHandle = BaseHandle.extend({
     init:function(){
         //监听model的相关cmd事件
         var fightModel = Singleton.getInstance("FightModel");
+        FightVo.sceneLayer_ = this.sceneLayer_
 
         var callBack = Util.proxy(this.onMessageHandle,this)
         fightModel.addEventListener("CMD",callBack)
@@ -53,14 +54,15 @@ var FightHandle = BaseHandle.extend({
                 if(userId == me.userId && isDiscardByClient) {
                 }else{
                     var cardSprite = FightVo.getCardSpriteByCardId(userId,cardId)
-                    FightVo.otherSendCardSprite = cardSprite;//存储起来 用户打出的牌
+
                     this.card_callBack(userId,cardSprite);
                 }
+                break
             case CardUtil.ServerNotify.onPeng:    // 玩家碰牌
                 var userId = data.userId;
                 var cardId = data.cardId;
                 this.peng_callBack(userId,cardId);
-
+                break;
             default :
                 break;
         }
@@ -71,6 +73,8 @@ var FightHandle = BaseHandle.extend({
     //回调
     //发牌回调
     card_callBack:function(userId,cardSprite){
+        FightVo.otherSendCardSprite = cardSprite;//存储起来 用户打出的牌
+
         var loginModel = Singleton.getInstance("LoginModel");
         var me = loginModel.user;
         var clientDirect = this.getClientDirectByUserId(userId);
@@ -97,7 +101,7 @@ var FightHandle = BaseHandle.extend({
         var cardSprite1 = null;
         var cardSprite2 = null;
         var pengCardSprite = FightVo.otherSendCardSprite;
-        CardAnimation.chiCardByUser(pengCardSprite,middlePos,endPosition)
+        CardAnimation.chiCardByUser(pengCardSprite,middlePos,endPosition,null,0,30)
         if(userId == me.userId) {
             cardSprite1 = FightVo.getCardSpriteByCardId(userId,cardId)
             CardTool.deleteOrgionByCardSprite(cardSprite1);
@@ -109,7 +113,11 @@ var FightHandle = BaseHandle.extend({
 
             CardTool.sort();
         }else{
+            cardSprite1 = FightVo.getCardSpriteByCardId(userId,cardId)
+            CardAnimation.chiCardByUser(cardSprite1,middlePos,endPosition,null,0,10)
 
+            cardSprite2 = FightVo.getCardSpriteByCardId(userId,cardId)
+            CardAnimation.chiCardByUser(cardSprite2,middlePos,endPosition,null,0,-10)
         }
 
 

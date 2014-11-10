@@ -615,7 +615,7 @@
                 <key>sourceSize</key>
                 <string>{60,178}</string>
             </dict>
-            <key>fight_small_card _d1.png</key>
+            <key>fight_small_card.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{820,1215},{32,39}}</string>
@@ -628,7 +628,7 @@
                 <key>sourceSize</key>
                 <string>{32,39}</string>
             </dict>
-            <key>fight_small_card _d10.png</key>
+            <key>fight_small_card_d1.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{900,1182},{32,39}}</string>
@@ -641,7 +641,7 @@
                 <key>sourceSize</key>
                 <string>{32,39}</string>
             </dict>
-            <key>fight_small_card _d2.png</key>
+            <key>fight_small_card_d10.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{860,1182},{32,39}}</string>
@@ -654,7 +654,7 @@
                 <key>sourceSize</key>
                 <string>{32,39}</string>
             </dict>
-            <key>fight_small_card _d3.png</key>
+            <key>fight_small_card_d2.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{820,1182},{32,39}}</string>
@@ -667,7 +667,7 @@
                 <key>sourceSize</key>
                 <string>{32,39}</string>
             </dict>
-            <key>fight_small_card _d4.png</key>
+            <key>fight_small_card_d3.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{747,1203},{32,39}}</string>
@@ -680,7 +680,7 @@
                 <key>sourceSize</key>
                 <string>{32,39}</string>
             </dict>
-            <key>fight_small_card _d5.png</key>
+            <key>fight_small_card_d4.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{707,1203},{32,39}}</string>
@@ -693,7 +693,7 @@
                 <key>sourceSize</key>
                 <string>{32,39}</string>
             </dict>
-            <key>fight_small_card _d6.png</key>
+            <key>fight_small_card_d5.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{787,1177},{32,39}}</string>
@@ -706,7 +706,7 @@
                 <key>sourceSize</key>
                 <string>{32,39}</string>
             </dict>
-            <key>fight_small_card _d7.png</key>
+            <key>fight_small_card_d6.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{747,1170},{32,39}}</string>
@@ -719,7 +719,7 @@
                 <key>sourceSize</key>
                 <string>{32,39}</string>
             </dict>
-            <key>fight_small_card _d8.png</key>
+            <key>fight_small_card_d7.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{707,1170},{32,39}}</string>
@@ -732,7 +732,7 @@
                 <key>sourceSize</key>
                 <string>{32,39}</string>
             </dict>
-            <key>fight_small_card _d9.png</key>
+            <key>fight_small_card_d8.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{787,1137},{32,39}}</string>
@@ -745,7 +745,7 @@
                 <key>sourceSize</key>
                 <string>{32,39}</string>
             </dict>
-            <key>fight_small_card.png</key>
+            <key>fight_small_card_d9.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{747,1137},{32,39}}</string>
@@ -1067,7 +1067,7 @@
             <key>size</key>
             <string>{1024,2048}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:cb46e004c2c5649639d4827df1a13c4d:c076dd394a7fb8f4dea77431f48f888f:476fcd4873c1984eefe6c7e206ec713e$</string>
+            <string>$TexturePacker:SmartUpdate:c9f19c0b1c661bc59116389dc5f4d1c0:1e68e1c6e3bf5b4e879b67346d364522:476fcd4873c1984eefe6c7e206ec713e$</string>
             <key>textureFileName</key>
             <string>Sheet_Fight.png</string>
         </dict>

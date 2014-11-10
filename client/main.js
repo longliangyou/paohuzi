@@ -1,30 +1,1 @@
-
-
-//这里交给 GameApp　处理
-cc.game.onStart = function(){
-//    cc.view.adjustViewPort(true);
-//    cc.view.setDesignResolutionSize(960,640,cc.ResolutionPolicy.SHOW_ALL);
-//    cc.view.resizeWithBrowserSize(true);
-
-    EnginInit.init();//引擎初始化
-    GameApp.run();
-    //PomeloApi.init('123456', function(){}); // TODO
-};
-cc.game.run();
-
-
-
-///**
-// * 老的启动游戏
-// */
-//cc.game.onStart = function(){
-//    cc.view.setDesignResolutionSize(800, 450, cc.ResolutionPolicy.SHOW_ALL);
-//    cc.view.resizeWithBrowserSize(true);
-//
-//
-//    //load resources
-//    cc.LoaderScene.preload(g_resources, function () {
-//        cc.director.runScene(new HelloWorldScene());
-//    }, this);
-//};
-//cc.game.run();
+//端口  63342//http://localhost:63342/paohuzi/client/index.html//这里交给 GameApp　处理cc.game.onStart = function(){//    cc.view.adjustViewPort(true);//    cc.view.setDesignResolutionSize(960,640,cc.ResolutionPolicy.SHOW_ALL);//    cc.view.resizeWithBrowserSize(true);    EnginInit.init();//引擎初始化    GameApp.run();    //PomeloApi.init('123456', function(){}); // TODO};cc.game.run();///**// * 老的启动游戏// *///cc.game.onStart = function(){//    cc.view.setDesignResolutionSize(800, 450, cc.ResolutionPolicy.SHOW_ALL);//    cc.view.resizeWithBrowserSize(true);//////    //load resources//    cc.LoaderScene.preload(g_resources, function () {//        cc.director.runScene(new HelloWorldScene());//    }, this);//};//cc.game.run();

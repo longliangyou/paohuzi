@@ -45,7 +45,7 @@ var FightAIAction = {
 
         //先判断下一家的操作
         var actions = round.getActions(nextUserId, cardId);
-        cc.log("FightAIAction 当前拥有的操作:",actions.canHu,actions.canPeng);
+        cc.log("FightAIAction 当前拥有的操作:",actions.canHu,actions.canPeng,actions.canGang,actions.canChi);
 //        if(actions.canHu){
 //            HuAction.hu(nextUserId, cardId, null);
 //            return;
@@ -58,6 +58,7 @@ var FightAIAction = {
             return;
         }else if(actions.canChi){
 
+
         }
 
 
@@ -69,6 +70,21 @@ var FightAIAction = {
          */
 
     },
+
+    /**
+     * 用户碰以后的操作
+      * @param roomId
+     * @param round
+     * @param userId
+     * @param cardId
+     */
+    onPengAction:function(roomId,round, userId, cardId){
+        if (UserAction.isNpcByUserId(userId)){
+            //碰了后  随便出一张牌
+            CardAction.card(userId,null,null)
+        }
+    },
+
 
 
     onEatAction: function(round, userId, cardId){

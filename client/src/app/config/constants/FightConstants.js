@@ -34,7 +34,7 @@ FightConstants.init = function() {
     FightConstants.Peng_Position = [
         {x: display.left -100, y: display.top - 150 -100 },
         {x: display.cx-100 , y: display.cy -100 },
-        {x: display.right - 100, y: display.top - 150 -100 }
+        {x: display.right - 16, y: display.top - 150 -100 }
     ];
 }
 
