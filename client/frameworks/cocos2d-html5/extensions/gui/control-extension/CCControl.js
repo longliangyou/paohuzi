@@ -1,6 +1,7 @@
 /**
- *
- * Copyright (c) 2010-2012 cocos2d-x.org
+ * Copyright (c) 2008-2010 Ricardo Quesada
+ * Copyright (c) 2011-2012 cocos2d-x.org
+ * Copyright (c) 2013-2014 Chukong Technologies Inc.
  * Copyright 2011 Yannick Loriot.
  * http://yannickloriot.com
  *
@@ -22,8 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- *
- * converted to Javascript / cocos2d-x by Angus C
  */
 
 /** Number of kinds of control event. */
@@ -56,14 +55,14 @@ cc.CONTROL_STATE_INITIAL = 1 << 3;
  * certain events occur.
  * To use the CCControl you have to subclass it.
  * @class
- * @extends cc.LayerRGBA
+ * @extends cc.Layer
  *
  * @property {Number}   state       - <@readonly> The current control state: cc.CONTROL_STATE_NORMAL | cc.CONTROL_STATE_HIGHLIGHTED | cc.CONTROL_STATE_DISABLED | cc.CONTROL_STATE_SELECTED | cc.CONTROL_STATE_INITIAL
  * @property {Boolean}  enabled     - Indicate whether the control node is enbaled
  * @property {Boolean}  selected    - Indicate whether the control node is selected
  * @property {Boolean}  highlighted - Indicate whether the control node is highlighted
  */
-cc.Control = cc.LayerRGBA.extend(/** @lends cc.Control# */{
+cc.Control = cc.Layer.extend(/** @lends cc.Control# */{
     _isOpacityModifyRGB: false,
     _hasVisibleParents: false,
     _touchListener: null,
@@ -78,7 +77,7 @@ cc.Control = cc.LayerRGBA.extend(/** @lends cc.Control# */{
         var children = this.getChildren();
         for (var i = 0, len = children.length; i < len; i++) {
             var selNode = children[i];
-            if (selNode && selNode.RGBAProtocol)
+            if (selNode)
                 selNode.setOpacityModifyRGB(opacityModifyRGB);
         }
     },
@@ -143,13 +142,13 @@ cc.Control = cc.LayerRGBA.extend(/** @lends cc.Control# */{
     },
 
     ctor: function () {
-        cc.LayerRGBA.prototype.ctor.call(this);
+        cc.Layer.prototype.ctor.call(this);
         this._dispatchTable = {};
         this._color = cc.color.WHITE;
     },
 
     init: function () {
-        if (cc.LayerRGBA.prototype.init.call(this)) {
+        if (cc.Layer.prototype.init.call(this)) {
             // Initialise instance variables
             this._state = cc.CONTROL_STATE_NORMAL;
             this._enabled = true;
@@ -157,7 +156,8 @@ cc.Control = cc.LayerRGBA.extend(/** @lends cc.Control# */{
             this._highlighted = false;
 
             var listener = cc.EventListener.create({
-                event: cc.EventListener.TOUCH_ONE_BY_ONE
+                event: cc.EventListener.TOUCH_ONE_BY_ONE,
+                swallowTouches: true
             });
             if (this.onTouchBegan)
                 listener.onTouchBegan = this.onTouchBegan.bind(this);
@@ -335,9 +335,9 @@ cc.Control = cc.LayerRGBA.extend(/** @lends cc.Control# */{
                 var invocation = eventInvocationList[i];
                 var shouldBeRemoved = true;
                 if (target)
-                    shouldBeRemoved = (target == invocation.getTarget());
+                    shouldBeRemoved = (target === invocation.getTarget());
                 if (action)
-                    shouldBeRemoved = (shouldBeRemoved && (action == invocation.getAction()));
+                    shouldBeRemoved = (shouldBeRemoved && (action === invocation.getAction()));
                 // Remove the corresponding invocation object
                 if (shouldBeRemoved)
                     cc.arrayRemoveObject(eventInvocationList, invocation);

@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -25,14 +25,15 @@
  ****************************************************************************/
 
 /**
- * @namespace
  * <p>
- *     Singleton that manages the Animations.<br/>
+ *     cc.animationCache is a singleton object that manages the Animations.<br/>
  *     It saves in a cache the animations. You should use this class if you want to save your animations in a cache.<br/>
  * <br/>
  * example<br/>
  * cc.animationCache.addAnimation(animation,"animation1");<br/>
  * </p>
+ * @class
+ * @name cc.animationCache
  */
 cc.animationCache = /** @lends cc.animationCache# */{
 	_animations: {},
@@ -47,8 +48,8 @@ cc.animationCache = /** @lends cc.animationCache# */{
     },
 
     /**
-     *  Deletes a cc.Animation from the cache.
-     * @param  {String} name
+     * Deletes a cc.Animation from the cache.
+     * @param {String} name
      */
     removeAnimation:function (name) {
         if (!name) {
@@ -74,14 +75,6 @@ cc.animationCache = /** @lends cc.animationCache# */{
         return null;
     },
 
-    /**
-     * <p>
-     *     Adds an animation from an NSDictionary<br/>
-     *     Make sure that the frames were previously loaded in the cc.SpriteFrameCache.
-     * </p>
-     * @param {object} dictionary
-     * @param {String} plist
-     */
     _addAnimationsWithDictionary:function (dictionary,plist) {
         var animations = dictionary["animations"];
         if (!animations) {
@@ -116,7 +109,7 @@ cc.animationCache = /** @lends cc.animationCache# */{
 
     /**
      * <p>
-     *    Adds an animation from a plist file.<br/>
+     *    Adds an animations from a plist file.<br/>
      *    Make sure that the frames were previously loaded in the cc.SpriteFrameCache.
      * </p>
      * @param {String} plist
@@ -163,10 +156,10 @@ cc.animationCache = /** @lends cc.animationCache# */{
             if (frames.length === 0) {
                 cc.log(cc._LogInfos.animationCache__parseVersion1_3, key);
                 continue;
-            } else if (frames.length != frameNames.length) {
+            } else if (frames.length !== frameNames.length) {
                 cc.log(cc._LogInfos.animationCache__parseVersion1_4, key);
             }
-            animation = cc.Animation.create(frames, delay, 1);
+            animation = new cc.Animation(frames, delay, 1);
             cc.animationCache.addAnimation(animation, key);
         }
     },

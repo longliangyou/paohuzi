@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -25,7 +25,9 @@
  ****************************************************************************/
 
 /**
- * @namespace Singleton object that stores manages GL shaders
+ * cc.shaderCache is a singleton object that stores manages GL shaders
+ * @class
+ * @name cc.shaderCache
  */
 cc.shaderCache = /** @lends cc.shaderCache# */{
 
@@ -271,7 +273,10 @@ cc.shaderCache = /** @lends cc.shaderCache# */{
         this._loadDefaultShader(program, this.TYPE_POSITION_UCOLOR);
     },
 
-    /** returns a GL program for a given key */
+    /**
+     * returns a GL program for a given key
+     * @param {String} key
+     */
     programForKey: function (key) {
         return this._programs[key];
     },
@@ -279,13 +284,17 @@ cc.shaderCache = /** @lends cc.shaderCache# */{
     /**
      * returns a GL program for a shader name
      * @param {String} shaderName
-     * @return cc.GLProgram
+     * @return {cc.GLProgram}
      */
     getProgram: function (shaderName) {
         return this._programs[shaderName];
     },
 
-    /** adds a CCGLProgram to the cache for a given name */
+    /**
+     * adds a CCGLProgram to the cache for a given name
+     * @param {cc.GLProgram} program
+     * @param {String} key
+     */
     addProgram: function (program, key) {
         this._programs[key] = program;
     }

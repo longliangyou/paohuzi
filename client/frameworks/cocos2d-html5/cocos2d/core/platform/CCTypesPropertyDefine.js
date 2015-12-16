@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-_tmp.PrototypeColor = function () {
+cc._tmp.PrototypeColor = function () {
     var _p = cc.color;
     /**
      * White color (255, 255, 255, 255)
@@ -134,6 +134,32 @@ _tmp.PrototypeColor = function () {
     /** @expose */
     _p.GRAY;
     cc.defineGetterSetter(_p, "GRAY", _p._getGray);
+
+    cc.BlendFunc._disable = function(){
+        return new cc.BlendFunc(cc.ONE, cc.ZERO);
+    };
+    cc.BlendFunc._alphaPremultiplied = function(){
+        return new cc.BlendFunc(cc.ONE, cc.ONE_MINUS_SRC_ALPHA);
+    };
+    cc.BlendFunc._alphaNonPremultiplied = function(){
+        return new cc.BlendFunc(cc.SRC_ALPHA, cc.ONE_MINUS_SRC_ALPHA);
+    };
+    cc.BlendFunc._additive = function(){
+        return new cc.BlendFunc(cc.SRC_ALPHA, cc.ONE);
+    };
+
+    /** @expose */
+    cc.BlendFunc.DISABLE;
+    cc.defineGetterSetter(cc.BlendFunc, "DISABLE", cc.BlendFunc._disable);
+    /** @expose */
+    cc.BlendFunc.ALPHA_PREMULTIPLIED;
+    cc.defineGetterSetter(cc.BlendFunc, "ALPHA_PREMULTIPLIED", cc.BlendFunc._alphaPremultiplied);
+    /** @expose */
+    cc.BlendFunc.ALPHA_NON_PREMULTIPLIED;
+    cc.defineGetterSetter(cc.BlendFunc, "ALPHA_NON_PREMULTIPLIED", cc.BlendFunc._alphaNonPremultiplied);
+    /** @expose */
+    cc.BlendFunc.ADDITIVE;
+    cc.defineGetterSetter(cc.BlendFunc, "ADDITIVE", cc.BlendFunc._additive);
 };
 
 

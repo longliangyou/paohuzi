@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -42,10 +42,8 @@
  *                                                                                                                                     <br/>
  *     - It is recommended to use it ONLY if you are going to create 3D effects. For 2D effecs, use the action CCFollow or position/scale/rotate. *
  * </p>
- * @class
- * @extends cc.Class
  */
-cc.Camera = cc.Class.extend(/** @lends cc.Action# */{
+cc.Camera = cc.Class.extend({
     _eyeX:null,
     _eyeY:null,
     _eyeZ:null,
@@ -58,11 +56,13 @@ cc.Camera = cc.Class.extend(/** @lends cc.Action# */{
     _upY:null,
     _upZ:null,
 
-    _dirty:null,
+    _dirty:false,
     _lookupMatrix:null,
-
+    /**
+     * constructor of cc.Camera
+     */
     ctor:function () {
-        this._lookupMatrix = new cc.kmMat4();
+        this._lookupMatrix = new cc.math.Matrix4();
         this.restore();
     },
 
@@ -103,7 +103,7 @@ cc.Camera = cc.Class.extend(/** @lends cc.Action# */{
         this._upY = 1.0;
         this._upZ = 0.0;
 
-        cc.kmMat4Identity( this._lookupMatrix );
+        this._lookupMatrix.identity();
 
         this._dirty = false;
     },
@@ -113,17 +113,24 @@ cc.Camera = cc.Class.extend(/** @lends cc.Action# */{
      */
     locate:function () {
         if (this._dirty) {
-            var eye = new cc.kmVec3(), center = new cc.kmVec3(), up = new cc.kmVec3();
-
-            cc.kmVec3Fill( eye, this._eyeX, this._eyeY , this._eyeZ );
-            cc.kmVec3Fill( center, this._centerX, this._centerY, this._centerZ);
-
-            cc.kmVec3Fill( up, this._upX, this._upY, this._upZ);
-            cc.kmMat4LookAt( this._lookupMatrix, eye, center, up);
-
+            var eye = new cc.math.Vec3(this._eyeX, this._eyeY , this._eyeZ),
+                center = new cc.math.Vec3(this._centerX, this._centerY, this._centerZ),
+                up = new cc.math.Vec3(this._upX, this._upY, this._upZ);
+            this._lookupMatrix.lookAt(eye, center, up);
             this._dirty = false;
         }
         cc.kmGLMultMatrix( this._lookupMatrix);
+    },
+
+    _locateForRenderer: function(matrix){
+        if (this._dirty) {
+            var eye = new cc.math.Vec3(this._eyeX, this._eyeY , this._eyeZ),
+                center = new cc.math.Vec3(this._centerX, this._centerY, this._centerZ),
+                up = new cc.math.Vec3(this._upX, this._upY, this._upZ);
+            this._lookupMatrix.lookAt(eye, center, up);
+            this._dirty = false;
+        }
+        matrix.multiply(this._lookupMatrix);
     },
 
     /**
@@ -131,7 +138,7 @@ cc.Camera = cc.Class.extend(/** @lends cc.Action# */{
      * @param {Number} eyeX
      * @param {Number} eyeY
      * @param {Number} eyeZ
-     * @deprecated This function will be deprecated sooner or later.
+     * @deprecated This function will be deprecated sooner or later please use setEye instead.
      */
     setEyeXYZ:function (eyeX, eyeY, eyeZ) {
         this.setEye(eyeX,eyeY,eyeZ);
@@ -156,7 +163,7 @@ cc.Camera = cc.Class.extend(/** @lends cc.Action# */{
      * @param {Number} centerX
      * @param {Number} centerY
      * @param {Number} centerZ
-     * @deprecated  This function will be deprecated sooner or later.
+     * @deprecated  This function will be deprecated sooner or later please use setCenter instead.
      */
     setCenterXYZ:function (centerX, centerY, centerZ) {
         this.setCenter(centerX,centerY,centerZ);
@@ -207,7 +214,7 @@ cc.Camera = cc.Class.extend(/** @lends cc.Action# */{
      * @param {Number} eyeY
      * @param {Number} eyeZ
      * @return {Object}
-     * @deprecated This function will be deprecated sooner or later.
+     * @deprecated This function will be deprecated sooner or later, please use getEye instead.
      */
     getEyeXYZ:function (eyeX, eyeY, eyeZ) {
         return {x:this._eyeX , y:this._eyeY , z: this._eyeZ };
@@ -227,7 +234,7 @@ cc.Camera = cc.Class.extend(/** @lends cc.Action# */{
      * @param {Number} centerY
      * @param {Number} centerZ
      * @return {Object}
-     * @deprecated This function will be deprecated sooner or later.
+     * @deprecated This function will be deprecated sooner or later,please use getCenter instead.
      */
     getCenterXYZ:function (centerX, centerY, centerZ) {
         return {x:this._centerX ,y:this._centerY ,z:this._centerZ };
@@ -247,7 +254,7 @@ cc.Camera = cc.Class.extend(/** @lends cc.Action# */{
      * @param {Number} upY
      * @param {Number} upZ
      * @return {Object}
-     * @deprecated This function will be deprecated sooner or later.
+     * @deprecated This function will be deprecated sooner or later,please use getUp instead.
      */
     getUpXYZ:function (upX, upY, upZ) {
         return {x:this._upX,y:this._upY,z:this._upZ};

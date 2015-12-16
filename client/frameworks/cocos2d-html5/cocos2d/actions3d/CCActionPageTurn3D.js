@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -36,6 +36,18 @@
  * @extends cc.Grid3DAction
  */
 cc.PageTurn3D = cc.Grid3DAction.extend(/** @lends cc.PageTurn3D# */{
+    getGrid: function(){
+        var result = new cc.Grid3D(this._gridSize, undefined, undefined, this._gridNodeTarget.getGridRect());
+        result.setNeedDepthTestForBlit(true);
+        return result;
+    },
+
+    clone: function(){
+       var ret = new cc.PageTurn3D();
+        ret.initWithDuration(this._duration, this._gridSize);
+        return ret;
+    },
+
     /**
      * Update each tick                                         <br/>
      * Time is the percentage of the way through the duration
@@ -45,8 +57,9 @@ cc.PageTurn3D = cc.Grid3DAction.extend(/** @lends cc.PageTurn3D# */{
         var deltaAy = (tt * tt * 500);
         var ay = -100 - deltaAy;
 
-        var deltaTheta = -Math.PI / 2 * Math.sqrt(time);
-        var theta = /*0.01f */ +Math.PI / 2 + deltaTheta;
+        var deltaTheta = Math.sqrt(time);
+        var theta = deltaTheta>0.5?Math.PI/2 *deltaTheta : Math.PI/2*(1-deltaTheta);
+        var rotateByYAxis = (2-time)*Math.PI;
 
         var sinTheta = Math.sin(theta);
         var cosTheta = Math.cos(theta);
@@ -58,8 +71,9 @@ cc.PageTurn3D = cc.Grid3DAction.extend(/** @lends cc.PageTurn3D# */{
                 locVer.x = i;
                 locVer.y = j;
                 // Get original vertex
-                var p = this.originalVertex(locVer);
+                var p = this.getOriginalVertex(locVer);
 
+                p.x -= this.getGridRect().x;
                 var R = Math.sqrt((p.x * p.x) + ((p.y - ay) * (p.y - ay)));
                 var r = R * sinTheta;
                 var alpha = Math.asin(p.x / R);
@@ -77,14 +91,17 @@ cc.PageTurn3D = cc.Grid3DAction.extend(/** @lends cc.PageTurn3D# */{
 
                 // We scale z here to avoid the animation being
                 // too much bigger than the screen due to perspectve transform
-                p.z = (r * ( 1 - cosBeta ) * cosTheta) / 7;// "100" didn't work for
-
+                p.z = (r * ( 1 - cosBeta ) * cosTheta);// "100" didn't work for
+                p.x = p.z * Math.sin(rotateByYAxis) + p.x * Math.cos(rotateByYAxis);
+                p.z = p.z * Math.cos(rotateByYAxis) - p.x * Math.cos(rotateByYAxis);
+                p.z/= 7;
                 //	Stop z coord from dropping beneath underlying page in a transition
                 // issue #751
                 if (p.z < 0.5)
                     p.z = 0.5;
 
                 // Set new coords
+                p.x+= this.getGridRect().x;
                 this.setVertex(locVer, p);
             }
         }
@@ -93,10 +110,21 @@ cc.PageTurn3D = cc.Grid3DAction.extend(/** @lends cc.PageTurn3D# */{
 
 /**
  * create PageTurn3D action
+ * @function
  * @param {Number} duration
  * @param {cc.Size} gridSize
  * @return {cc.PageTurn3D}
  */
-cc.PageTurn3D.create = function (duration, gridSize) {
+cc.pageTurn3D = function (duration, gridSize) {
     return new cc.PageTurn3D(duration, gridSize);
 };
+/**
+ * Please use cc.pageTurn3D instead
+ * create PageTurn3D action
+ * @param {Number} duration
+ * @param {cc.Size} gridSize
+ * @return {cc.PageTurn3D}
+ * @static
+ * @deprecated since v3.0 please use cc.pageTurn3D instead.
+ */
+cc.PageTurn3D.create = cc.pageTurn3D;

@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2014 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -26,7 +26,8 @@
 
 /**
  * <p>NodeGrid class is a class serves as a decorator of cc.Node,<br/>
- * Grid node can run grid actions over all its children</p>
+ * Grid node can run grid actions over all its children   (WebGL only)
+ * </p>
  * @type {Class}
  *
  * @property {cc.GridBase}  grid    - Grid object that is used when applying effects
@@ -35,55 +36,50 @@
 cc.NodeGrid = cc.Node.extend({
     grid: null,
     _target: null,
+    _gridRect:null,
 
+    ctor: function (rect) {
+        cc.Node.prototype.ctor.call(this);
+        if(rect === undefined) rect = cc.rect();
+        this._gridRect = rect;
+    },
+    /**
+     * Gets the grid object.
+     * @returns {cc.GridBase}
+     */
     getGrid: function () {
         return this.grid;
     },
 
+    /**
+     * Set the grid object.
+     * @param {cc.GridBase} grid
+     */
     setGrid: function (grid) {
         this.grid = grid;
     },
 
+    /**
+     * @brief Set the effect grid rect.
+     * @param {cc.rect} rect.
+     */
+    setGridRect: function (rect) {
+        this._gridRect = rect;
+    },
+    /**
+     * @brief Get the effect grid rect.
+     * @return {cc.rect} rect.
+    */
+    getGridRect: function () {
+        return this._gridRect;
+    },
+
+    /**
+     * Set the target
+     * @param {cc.Node} target
+     */
     setTarget: function (target) {
-        //var self = this;
-        //self._target && self.removeChild(self._target);
         this._target = target;
-        //self.addChild(self._target);
-    },
-
-    addChild: function (child, zOrder, tag) {
-        cc.Node.prototype.addChild.call(this, child, zOrder, tag);
-
-        if (child && !this._target)
-            this._target = child;
-    },
-
-    visit: function () {
-        var self = this;
-        // quick return if not visible
-        if (!self._visible)
-            return;
-
-        var isWebGL = cc._renderType == cc._RENDER_TYPE_WEBGL;
-        var locGrid = self.grid;
-        if (isWebGL && locGrid && locGrid._active)
-            locGrid.beforeDraw();
-
-        self.transform();
-
-        var locChildren = this._children;
-        if (locChildren && locChildren.length > 0) {
-            var childLen = locChildren.length;
-            this.sortAllChildren();
-            // draw children
-            for (i = 0; i < childLen; i++) {
-                var child = locChildren[i];
-                child && child.visit();
-            }
-        }
-
-        if (isWebGL && locGrid && locGrid._active)
-            locGrid.afterDraw(self._target);
     },
 
     _transformForWebGL: function () {
@@ -91,8 +87,7 @@ cc.NodeGrid = cc.Node.extend({
         var t4x4 = this._transform4x4, topMat4 = cc.current_stack.top;
 
         // Convert 3x3 into 4x4 matrix
-        //cc.CGAffineToGL(this.nodeToParentTransform(), this._transform4x4.mat);
-        var trans = this.nodeToParentTransform();
+        var trans = this.getNodeToParentTransform();
         var t4x4Mat = t4x4.mat;
         t4x4Mat[0] = trans.a;
         t4x4Mat[4] = trans.c;
@@ -106,12 +101,13 @@ cc.NodeGrid = cc.Node.extend({
         t4x4Mat[14] = this._vertexZ;
 
         //optimize performance for Javascript
-        cc.kmMat4Multiply(topMat4, topMat4, t4x4); // = cc.kmGLMultMatrix(this._transform4x4);
+        topMat4.multiply(t4x4) ; // = cc.kmGLMultMatrix(this._transform4x4);
 
         // XXX: Expensive calls. Camera should be integrated into the cached affine matrix
-        if (this._camera != null && !(this.grid && this.grid.isActive())) {
-            var apx = this._anchorPointInPoints.x, apy = this._anchorPointInPoints.y;
-            var translate = (apx !== 0.0 || apy !== 0.0);
+        if (this._camera !== null && !(this.grid && this.grid.isActive())) {
+            var app = this._renderCmd._anchorPointInPoints,
+                apx = app.x, apy = app.y,
+                translate = (apx !== 0.0 || apy !== 0.0);
             if (translate) {
                 if(!cc.SPRITEBATCHNODE_RENDER_SUBPIXEL) {
                     apx = 0 | apx;
@@ -124,14 +120,17 @@ cc.NodeGrid = cc.Node.extend({
                 this._camera.locate();
             }
         }
+    },
+
+    _createRenderCmd: function(){
+        if (cc._renderType === cc.game.RENDER_TYPE_WEBGL)
+            return new cc.NodeGrid.WebGLRenderCmd(this);
+        else
+            return new cc.Node.CanvasRenderCmd(this);            // cc.NodeGrid doesn't support Canvas mode.
     }
 });
 
 var _p = cc.NodeGrid.prototype;
-if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
-    _p.transform = _p._transformForWebGL;
-    //The parent class method directly from canvas model
-}
 // Extended property
 /** @expose */
 _p.grid;
@@ -141,9 +140,10 @@ cc.defineGetterSetter(_p, "target", null, _p.setTarget);
 
 
 /**
- * Creates a NodeGrid
+ * Creates a NodeGrid. <br />
  * Implementation cc.NodeGrid
- * @return {cc.NodeGrid|null}
+ * @deprecated since v3.0 please new cc.NodeGrid instead.
+ * @return {cc.NodeGrid}
  */
 cc.NodeGrid.create = function () {
     return new cc.NodeGrid();

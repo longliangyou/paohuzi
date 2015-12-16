@@ -1,5 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2008-2010 Ricardo Quesada
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -52,7 +54,7 @@ cc.Invocation = cc.Class.extend(/** @lends cc.Invocation# */{
 
     invoke:function(sender){
         if (this._target && this._action) {
-            if (typeof(this._action) == "string") {
+            if (cc.isString(this._action)) {
                 this._target[this._action](sender, this._controlEvent);
             } else{
                 this._action.call(this._target, sender, this._controlEvent);

@@ -1,5 +1,7 @@
 /****************************************************************************
- Copyright (c) 2012 cocos2d-x.org
+ Copyright (c) 2008-2010 Ricardo Quesada
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
  Copyright (c) 2010 Sangwoo Im
 
  http://www.cocos2d-x.org
@@ -41,7 +43,7 @@ cc.TABLEVIEW_FILL_BOTTOMUP = 1;
  * Abstract class for SWTableView cell node
  * @class
  * @abstract
- * @extend cc.Node
+ * @extends cc.Node
  *
  * @property {Number}   objectId    - The index used internally by SWTableView and its subclasses
  */
@@ -176,7 +178,7 @@ cc.TableViewDataSource = cc.Class.extend(/** @lends cc.TableViewDataSource# */{
  * this is a very basic, minimal implementation to bring UITableView-like component into cocos2d world.
  *
  * @class
- * @extend cc.ScrollView
+ * @extends cc.ScrollView
  *
  * @property {cc.TableViewDataSource}   dataSource          - The data source of the table view
  * @property {cc.TableViewDelegate}     delegate            - The event delegate of the table view
@@ -193,10 +195,21 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
     _cellsPositions:null,                       //vector with all cell positions
     _touchedCell:null,
 
-    ctor:function () {
+    /**
+     * The
+     * @param dataSource
+     * @param size
+     * @param container
+     */
+    ctor:function (dataSource, size, container) {
         cc.ScrollView.prototype.ctor.call(this);
         this._oldDirection = cc.SCROLLVIEW_DIRECTION_NONE;
         this._cellsPositions = [];
+
+        this.initWithViewSize(size, container);
+        this.setDataSource(dataSource);
+        this._updateCellPositions();
+        this._updateContentSize();
     },
 
     __indexFromOffset:function (offset) {
@@ -241,7 +254,7 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
             locOffset.y = this.getContainer().getContentSize().height - locOffset.y;
 
         var index = this.__indexFromOffset(locOffset);
-        if (index != -1) {
+        if (index !== -1) {
             index = Math.max(0, index);
             if (index > maxIdx)
                 index = cc.INVALID_INDEX;
@@ -315,8 +328,8 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
 
         this.setContentSize(size);
 
-        if (this._oldDirection != this._direction) {
-            if (this._direction == cc.SCROLLVIEW_DIRECTION_HORIZONTAL) {
+        if (this._oldDirection !== this._direction) {
+            if (this._direction === cc.SCROLLVIEW_DIRECTION_HORIZONTAL) {
                 this.setContentOffset(cc.p(0, 0));
             } else {
                 this.setContentOffset(cc.p(0, this.minContainerOffset().y));
@@ -334,7 +347,7 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
         cc.arrayRemoveObject(this._indices, cell.getIdx());
 
         cell.reset();
-        if (cell.getParent() == this.getContainer()) {
+        if (cell.getParent() === this.getContainer()) {
             this.getContainer().removeChild(cell, true);
         }
     },
@@ -346,12 +359,12 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
     },
 
     _addCellIfNecessary:function (cell) {
-        if (cell.getParent() != this.getContainer()) {
+        if (cell.getParent() !== this.getContainer()) {
             this.getContainer().addChild(cell);
         }
         this._cellsUsed.insertSortedObject(cell);
         var locIndices = this._indices, addIdx = cell.getIdx();
-        if(locIndices.indexOf(addIdx) == -1){
+        if(locIndices.indexOf(addIdx) === -1){
             locIndices.push(addIdx);
             //sort
             locIndices.sort(function(a,b){return a-b;});
@@ -383,7 +396,7 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
      * determines how cell is ordered and filled in the view.
      */
     setVerticalFillOrder:function (fillOrder) {
-        if (this._vOrdering != fillOrder) {
+        if (this._vOrdering !== fillOrder) {
             this._vOrdering = fillOrder;
             if (this._cellsUsed.count() > 0) {
                 this.reloadData();
@@ -415,7 +428,7 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
      * @param idx index to find a cell
      */
     updateCellAtIndex:function (idx) {
-        if (idx == cc.INVALID_INDEX || idx > this._dataSource.numberOfCellsInTableView(this) - 1)
+        if (idx === cc.INVALID_INDEX || idx > this._dataSource.numberOfCellsInTableView(this) - 1)
             return;
 
         var cell = this.cellAtIndex(idx);
@@ -433,7 +446,7 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
      * @param idx location to insert
      */
     insertCellAtIndex:function (idx) {
-        if (idx == cc.INVALID_INDEX || idx > this._dataSource.numberOfCellsInTableView(this) - 1)
+        if (idx === cc.INVALID_INDEX || idx > this._dataSource.numberOfCellsInTableView(this) - 1)
             return;
 
         var newIdx, locCellsUsed = this._cellsUsed;
@@ -461,7 +474,7 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
      * @param idx index to find a cell
      */
     removeCellAtIndex:function (idx) {
-        if (idx == cc.INVALID_INDEX || idx > this._dataSource.numberOfCellsInTableView(this) - 1)
+        if (idx === cc.INVALID_INDEX || idx > this._dataSource.numberOfCellsInTableView(this) - 1)
             return;
 
         var cell = this.cellAtIndex(idx);
@@ -496,7 +509,7 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
 
             locCellsFreed.addObject(cell);
             cell.reset();
-            if (cell.getParent() == locContainer)
+            if (cell.getParent() === locContainer)
                 locContainer.removeChild(cell, true);
         }
 
@@ -532,7 +545,7 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
      */
     cellAtIndex:function (idx) {
         var i = this._indices.indexOf(idx);
-        if (i == -1)
+        if (i === -1)
             return null;
         return this._cellsUsed.objectWithObjectID(idx);
     },
@@ -543,7 +556,7 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
         if (0 === countOfItems)
             return;
 
-        if (this._tableViewDelegate != null && this._tableViewDelegate.scrollViewDidScroll)
+        if (this._tableViewDelegate !== null && this._tableViewDelegate.scrollViewDidScroll)
             this._tableViewDelegate.scrollViewDidScroll(this);
 
         var  idx = 0, locViewSize = this._viewSize, locContainer = this.getContainer();
@@ -598,7 +611,7 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
 
         var locIndices = this._indices;
         for (var i = startIdx; i <= endIdx; i++) {
-            if (locIndices.indexOf(i) != -1)
+            if (locIndices.indexOf(i) !== -1)
                 continue;
             this.updateCellAtIndex(i);
         }
@@ -618,7 +631,7 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
             bb.x = tmpOrigin.x;
             bb.y = tmpOrigin.y;
             var locTableViewDelegate = this._tableViewDelegate;
-            if (cc.rectContainsPoint(bb, touch.getLocation()) && locTableViewDelegate != null){
+            if (cc.rectContainsPoint(bb, touch.getLocation()) && locTableViewDelegate !== null){
                 if(locTableViewDelegate.tableCellUnhighlight)
                     locTableViewDelegate.tableCellUnhighlight(this, this._touchedCell);
                 if(locTableViewDelegate.tableCellTouched)
@@ -630,8 +643,10 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
     },
 
     onTouchBegan:function(touch, event){
-        if (!this.isVisible())
-            return false;
+        for (var c = this; c != null; c = c.parent) {
+            if (!c.isVisible())
+                return false;
+        }
 
         var touchResult = cc.ScrollView.prototype.onTouchBegan.call(this, touch, event);
 
@@ -646,10 +661,10 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
             else
                 this._touchedCell  = this.cellAtIndex(index);
 
-            if (this._touchedCell && this._tableViewDelegate != null && this._tableViewDelegate.tableCellHighlight)
+            if (this._touchedCell && this._tableViewDelegate !== null && this._tableViewDelegate.tableCellHighlight)
                 this._tableViewDelegate.tableCellHighlight(this, this._touchedCell);
         } else if(this._touchedCell) {
-            if(this._tableViewDelegate != null && this._tableViewDelegate.tableCellUnhighlight)
+            if(this._tableViewDelegate !== null && this._tableViewDelegate.tableCellUnhighlight)
                 this._tableViewDelegate.tableCellUnhighlight(this, this._touchedCell);
             this._touchedCell = null;
         }
@@ -661,7 +676,7 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
         cc.ScrollView.prototype.onTouchMoved.call(this, touch, event);
 
         if (this._touchedCell && this.isTouchMoved()) {
-            if(this._tableViewDelegate != null && this._tableViewDelegate.tableCellUnhighlight)
+            if(this._tableViewDelegate !== null && this._tableViewDelegate.tableCellUnhighlight)
                 this._tableViewDelegate.tableCellUnhighlight(this, this._touchedCell);
             this._touchedCell = null;
         }
@@ -671,7 +686,7 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
         cc.ScrollView.prototype.onTouchCancelled.call(this, touch, event);
 
         if (this._touchedCell) {
-            if(this._tableViewDelegate != null && this._tableViewDelegate.tableCellUnhighlight)
+            if(this._tableViewDelegate !== null && this._tableViewDelegate.tableCellUnhighlight)
                 this._tableViewDelegate.tableCellUnhighlight(this, this._touchedCell);
             this._touchedCell = null;
         }
@@ -694,17 +709,12 @@ _p = null;
 
 /**
  * An initialized table view object
- *
+ * @deprecated
  * @param {cc.TableViewDataSource} dataSource data source;
  * @param {cc.Size} size view size
  * @param {cc.Node} [container] parent object for cells
  * @return {cc.TableView} table view
  */
 cc.TableView.create = function (dataSource, size, container) {
-    var table = new cc.TableView();
-    table.initWithViewSize(size, container);
-    table.setDataSource(dataSource);
-    table._updateCellPositions();
-    table._updateContentSize();
-    return table;
+    return new cc.TableView(dataSource, size, container);
 };

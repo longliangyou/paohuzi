@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -159,7 +159,7 @@ cc.BuilderReader = cc.Class.extend({
         this._currentBit = -1;
         this._currentByte = -1;
 
-        if (arguments.length != 0) {
+        if (arguments.length !== 0) {
             if (ccNodeLoaderLibrary instanceof cc.BuilderReader) {
                 var ccbReader = ccNodeLoaderLibrary;
 
@@ -222,7 +222,7 @@ cc.BuilderReader = cc.Class.extend({
         if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
             req.setRequestHeader("Accept-Charset", "x-user-defined");
             req.send(null);
-            if (req.status != 200) {
+            if (req.status !== 200) {
                 cc.log(errInfo);
                 return null;
             }
@@ -236,7 +236,7 @@ cc.BuilderReader = cc.Class.extend({
             if (req.overrideMimeType)
                 req.overrideMimeType('text\/plain; charset=x-user-defined');
             req.send(null);
-            if (req.status != 200) {
+            if (req.status !== 200) {
                 cc.log(errInfo);
                 return null;
             }
@@ -280,7 +280,7 @@ cc.BuilderReader = cc.Class.extend({
 
         var nodeGraph = this.readFileWithCleanUp(true);
 
-        if (nodeGraph && locAnimationManager.getAutoPlaySequenceId() != -1) {
+        if (nodeGraph && locAnimationManager.getAutoPlaySequenceId() !== -1) {
             //auto play animations
             locAnimationManager.runAnimations(locAnimationManager.getAutoPlaySequenceId(), 0);
         }
@@ -305,7 +305,7 @@ cc.BuilderReader = cc.Class.extend({
 
     createSceneWithNodeGraphFromFile:function (ccbFileName, owner, parentSize, animationManager) {
         var node = this.readNodeGraphFromFile(ccbFileName, owner, parentSize, animationManager);
-        var scene = cc.Scene.create();
+        var scene = new cc.Scene();
         scene.addChild(node);
         return scene;
     },
@@ -376,7 +376,7 @@ cc.BuilderReader = cc.Class.extend({
     },
 
     readBool:function () {
-        return (0 != this.readByte());
+        return (0 !== this.readByte());
     },
 
     readFloat:function () {
@@ -428,7 +428,7 @@ cc.BuilderReader = cc.Class.extend({
 
         this._currentByte += size;
 
-        return exponent == (bias << 1) + 1 ? significand ? NaN : signal ? -Infinity : +Infinity
+        return exponent === (bias << 1) + 1 ? significand ? NaN : signal ? -Infinity : +Infinity
             : (1 + signal * -2) * (exponent || significand ? !exponent ? Math.pow(2, -bias + 1) * significand
             : Math.pow(2, exponent - bias) * (1 + significand) : 0);
     },
@@ -458,7 +458,7 @@ cc.BuilderReader = cc.Class.extend({
     },
 
     _shl:function (a, b) {
-        for (++b; --b; a = ((a %= 0x7fffffff + 1) & 0x40000000) == 0x40000000 ? a * 2 : (a - 0x40000000) * 2 + 0x7fffffff + 1);
+        for (++b; --b; a = ((a %= 0x7fffffff + 1) & 0x40000000) === 0x40000000 ? a * 2 : (a - 0x40000000) * 2 + 0x7fffffff + 1);
         return a;
     },
 
@@ -669,34 +669,34 @@ cc.BuilderReader = cc.Class.extend({
         keyframe.setEasingType(easingType);
         keyframe.setEasingOpt(easingOpt);
 
-        if (type == CCB_PROPTYPE_CHECK) {
+        if (type === CCB_PROPTYPE_CHECK) {
             value = this.readBool();
-        } else if (type == CCB_PROPTYPE_BYTE) {
+        } else if (type === CCB_PROPTYPE_BYTE) {
             value = this.readByte();
-        } else if (type == CCB_PROPTYPE_COLOR3) {
+        } else if (type === CCB_PROPTYPE_COLOR3) {
             var c = cc.color(this.readByte(), this.readByte(), this.readByte());
             value = cc.Color3BWapper.create(c);
-        } else if (type == CCB_PROPTYPE_FLOATXY) {
+        } else if (type === CCB_PROPTYPE_FLOATXY) {
             value = [this.readFloat(), this.readFloat()];
-        } else if (type == CCB_PROPTYPE_DEGREES) {
+        } else if (type === CCB_PROPTYPE_DEGREES) {
             value = this.readFloat();
-        } else if (type == CCB_PROPTYPE_SCALELOCK || type == CCB_PROPTYPE_POSITION || type == CCB_PROPTYPE_FLOATXY) {
+        } else if (type === CCB_PROPTYPE_SCALELOCK || type === CCB_PROPTYPE_POSITION || type === CCB_PROPTYPE_FLOATXY) {
             value = [this.readFloat(), this.readFloat()];
-        } else if (type == CCB_PROPTYPE_SPRITEFRAME) {
+        } else if (type === CCB_PROPTYPE_SPRITEFRAME) {
             var spriteSheet = this.readCachedString();
             var spriteFile = this.readCachedString();
 
-            if (spriteSheet == "") {
+            if (spriteSheet === "") {
                 spriteFile = this._ccbRootPath + spriteFile;
                 var texture = cc.textureCache.addImage(spriteFile);
                 var locContentSize = texture.getContentSize();
                 var bounds = cc.rect(0, 0, locContentSize.width, locContentSize.height);
-                value = cc.SpriteFrame.create(texture, bounds);
+                value = new cc.SpriteFrame(texture, bounds);
             } else {
                 spriteSheet = this._ccbRootPath + spriteSheet;
                 var frameCache = cc.spriteFrameCache;
                 // Load the sprite sheet only if it is not loaded
-                if (this._loadedSpriteSheets.indexOf(spriteSheet) == -1) {
+                if (this._loadedSpriteSheets.indexOf(spriteSheet) === -1) {
                     frameCache.addSpriteFrames(spriteSheet);
                     this._loadedSpriteSheets.push(spriteSheet);
                 }
@@ -709,21 +709,20 @@ cc.BuilderReader = cc.Class.extend({
 
     _readHeader:function () {
         /* If no bytes loaded, don't crash about it. */
-        if (this._data == null) {
+        if (!this._data)
             return false;
-        }
 
         /* Read magic bytes */
         var magicBytes = this._readStringFromBytes(this._currentByte, 4, true);
         this._currentByte += 4;
 
-        if (magicBytes != 'ccbi') {
+        if (magicBytes !== 'ccbi') {
             return false;
         }
 
         /* Read version. */
         var version = this.readInt(false);
-        if (version != CCB_VERSION) {
+        if (version !== CCB_VERSION) {
             cc.log("WARNING! Incompatible ccbi file version (file: " + version + " reader: " + CCB_VERSION + ")");
             return false;
         }
@@ -783,7 +782,7 @@ cc.BuilderReader = cc.Class.extend({
 
         var memberVarAssignmentType = this.readInt(false);
         var memberVarAssignmentName;
-        if (memberVarAssignmentType != CCB_TARGETTYPE_NONE) {
+        if (memberVarAssignmentType !== CCB_TARGETTYPE_NONE) {
             memberVarAssignmentName = this.readCachedString();
         }
 
@@ -799,7 +798,7 @@ cc.BuilderReader = cc.Class.extend({
         if (!locActionManager.getRootNode())
             locActionManager.setRootNode(node);
 
-        if (locJsControlled && node == locActionManager.getRootNode()) {
+        if (locJsControlled && node === locActionManager.getRootNode()) {
             locActionManager.setDocumentControllerName(jsControlledName);
         }
 
@@ -855,7 +854,7 @@ cc.BuilderReader = cc.Class.extend({
             node = embeddedNode;
         }
         var target = null, locMemberAssigner = null;
-        if (memberVarAssignmentType != CCB_TARGETTYPE_NONE) {
+        if (memberVarAssignmentType !== CCB_TARGETTYPE_NONE) {
             if (!locJsControlled) {
                 if (memberVarAssignmentType === CCB_TARGETTYPE_DOCUMENTROOT) {
                     target = locActionManager.getRootNode();
@@ -863,19 +862,19 @@ cc.BuilderReader = cc.Class.extend({
                     target = this._owner;
                 }
 
-                if (target != null) {
+                if (!target) {
                     var assigned = false;
 
-                    if (target != null && (target.onAssignCCBMemberVariable)) {
+                    if (target.onAssignCCBMemberVariable)
                         assigned = target.onAssignCCBMemberVariable(target, memberVarAssignmentName, node);
-                    }
+
                     locMemberAssigner = this._ccbMemberVariableAssigner;
                     if (!assigned && locMemberAssigner != null && locMemberAssigner.onAssignCCBMemberVariable) {
                         locMemberAssigner.onAssignCCBMemberVariable(target, memberVarAssignmentName, node);
                     }
                 }
             } else {
-                if (memberVarAssignmentType == CCB_TARGETTYPE_DOCUMENTROOT) {
+                if (memberVarAssignmentType === CCB_TARGETTYPE_DOCUMENTROOT) {
                     locActionManager.addDocumentOutletName(memberVarAssignmentName);
                     locActionManager.addDocumentOutletNode(node);
                 } else {
@@ -928,15 +927,15 @@ cc.BuilderReader = cc.Class.extend({
     },
 
     _getBit:function () {
-        var bit = (this._data[this._currentByte] & (1 << this._currentBit)) != 0;
-
+        var bit = (this._data[this._currentByte] & (1 << this._currentBit)) !== 0;
         this._currentBit++;
 
         if (this._currentBit >= 8) {
             this._currentBit = 0;
             this._currentByte++;
+            if(this._currentByte > this._data.length)
+                throw new Error("out of the data bound");
         }
-
         return bit;
     },
 
@@ -965,7 +964,7 @@ cc.BuilderReader.loadAsScene = function (ccbFilePath, owner, parentSize, ccbRoot
 
     var getNode = cc.BuilderReader.load(ccbFilePath, owner, parentSize, ccbRootPath);
 
-    var scene = cc.Scene.create();
+    var scene = new cc.Scene();
     scene.addChild(getNode);
     return scene;
 };
@@ -978,7 +977,7 @@ cc.BuilderReader.load = function (ccbFilePath, owner, parentSize, ccbRootPath) {
     ccbRootPath = ccbRootPath || cc.BuilderReader.getResourcePath();
     var reader = new cc.BuilderReader(cc.NodeLoaderLibrary.newDefaultCCNodeLoaderLibrary());
     reader.setCCBRootPath(ccbRootPath);
-    if((ccbFilePath.length < 5)||(ccbFilePath.toLowerCase().lastIndexOf(".ccbi") != ccbFilePath.length - 5))
+    if((ccbFilePath.length < 5)||(ccbFilePath.toLowerCase().lastIndexOf(".ccbi") !== ccbFilePath.length - 5))
         ccbFilePath = ccbFilePath + ".ccbi";
 
     var node = reader.readNodeGraphFromFile(ccbFilePath, owner, parentSize);
@@ -1029,7 +1028,7 @@ cc.BuilderReader.load = function (ccbFilePath, owner, parentSize, ccbRootPath) {
 
         // Create a controller
         var controllerClass = controllerClassCache[controllerName];
-        if(!controllerClass) throw "Can not find controller : " + controllerName;
+        if(!controllerClass) throw new Error("Can not find controller : " + controllerName);
         var controller = new controllerClass();
         controller.controllerName = controllerName;
 
@@ -1060,7 +1059,7 @@ cc.BuilderReader.load = function (ccbFilePath, owner, parentSize, ccbRootPath) {
             controller[outletName] = outletNode;
         }
 
-        if (controller.onDidLoadFromCCB && typeof(controller.onDidLoadFromCCB) == "function")
+        if (controller.onDidLoadFromCCB && cc.isFunction(controller.onDidLoadFromCCB))
             controller.onDidLoadFromCCB();
 
         // Setup timeline callbacks
@@ -1071,12 +1070,15 @@ cc.BuilderReader.load = function (ccbFilePath, owner, parentSize, ccbRootPath) {
             var kfCallbackName = callbackSplit[1];
 
             if (callbackType == 1){ // Document callback
-                animationManager.setCallFunc(cc.CallFunc.create(controller[kfCallbackName], controller), keyframeCallbacks[j]);
+                animationManager.setCallFunc(cc.callFunc(controller[kfCallbackName], controller), keyframeCallbacks[j]);
             } else if (callbackType == 2 && owner) {// Owner callback
-                animationManager.setCallFunc(cc.CallFunc.create(owner[kfCallbackName], owner), keyframeCallbacks[j]);
+                animationManager.setCallFunc(cc.callFunc(owner[kfCallbackName], owner), keyframeCallbacks[j]);
             }
         }
     }
+
+    //auto play animations
+    animationManager.runAnimations(animationManager.getAutoPlaySequenceId(), 0);
 
     return node;
 };
@@ -1092,7 +1094,7 @@ cc.BuilderReader.getResourcePath = function () {
 
 cc.BuilderReader.lastPathComponent = function (pathStr) {
     var slashPos = pathStr.lastIndexOf("/");
-    if (slashPos != -1) {
+    if (slashPos !== -1) {
         return pathStr.substring(slashPos + 1, pathStr.length - slashPos);
     }
     return pathStr;
@@ -1100,7 +1102,7 @@ cc.BuilderReader.lastPathComponent = function (pathStr) {
 
 cc.BuilderReader.deletePathExtension = function (pathStr) {
     var dotPos = pathStr.lastIndexOf(".");
-    if (dotPos != -1) {
+    if (dotPos !== -1) {
         return pathStr.substring(0, dotPos);
     }
     return pathStr;
@@ -1112,7 +1114,7 @@ cc.BuilderReader.toLowerCase = function (sourceStr) {
 
 cc.BuilderReader.endsWith = function (sourceStr, ending) {
     if (sourceStr.length >= ending.length)
-        return (sourceStr.lastIndexOf(ending) == 0);
+        return (sourceStr.lastIndexOf(ending) === 0);
     else
         return false;
 };

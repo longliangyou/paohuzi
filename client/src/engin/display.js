@@ -82,7 +82,25 @@ display.init = function(){
             cc.log("display - invalid CONFIG_SCREEN_AUTOSCALE \"%s\"", CONFIG_SCREEN_AUTOSCALE)
         }
 
-//        glview.setDesignResolutionSize(CONFIG_SCREEN_WIDTH, CONFIG_SCREEN_HEIGHT, cc.ResolutionPolicy.NO_BORDER)
+
+        if(!cc.sys.isNative && document.getElementById("cocosLoading")) //If referenced loading.js, please remove it
+            document.body.removeChild(document.getElementById("cocosLoading"));
+
+        // Pass true to enable retina display, on Android disabled by default to improve performance
+        cc.view.enableRetina(cc.sys.os === cc.sys.OS_IOS ? true : false);
+        // Adjust viewport meta
+        cc.view.adjustViewPort(true);
+
+        // glview.setDesignResolutionSize(960, 640, cc.ResolutionPolicy.SHOW_ALL);
+       //glview.setDesignResolutionSize(CONFIG_SCREEN_WIDTH, CONFIG_SCREEN_HEIGHT, cc.ResolutionPolicy.NO_BORDER);//quick中适配方案
+
+
+        //浏览器窗口变化后的监听
+        cc.view.resizeWithBrowserSize(true);
+        cc.view.setResizeCallback(function() {
+            // 做任何你所需要的游戏内容层面的适配操作
+            // 比如说，你可以针对用户的移动设备方向来决定所要应用的适配模式
+        });
     }
 
 

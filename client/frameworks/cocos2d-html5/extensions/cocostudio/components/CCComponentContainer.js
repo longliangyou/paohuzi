@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2013 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -23,7 +24,7 @@
  ****************************************************************************/
 
 /**
- * The container of cc.Component
+ * The component container for Cocostudio, it has some components.
  * @class
  * @extends cc.Class
  */
@@ -31,21 +32,38 @@ cc.ComponentContainer = cc.Class.extend(/** @lends cc.ComponentContainer# */{
     _components:null,
     _owner:null,
 
+    /**
+     * Construction of cc.ComponentContainer
+     * @param node
+     */
     ctor:function(node){
         this._components = null;
         this._owner = node;
     },
 
+    /**
+     * Gets component by name.
+     * @param name
+     * @returns {*}
+     */
     getComponent:function(name){
         if(!name)
-            throw "cc.ComponentContainer.getComponent(): name should be non-null";
+            throw new Error("cc.ComponentContainer.getComponent(): name should be non-null");
         name = name.trim();
+        if(!this._components){
+            this._components = {};
+        }
         return this._components[name];
     },
 
+    /**
+     * Adds a component to container
+     * @param {cc.Component} component
+     * @returns {boolean}
+     */
     add:function(component){
         if(!component)
-             throw "cc.ComponentContainer.add(): component should be non-null";
+             throw new Error("cc.ComponentContainer.add(): component should be non-null");
         if(component.getOwner()){
             cc.log("cc.ComponentContainer.add(): Component already added. It can't be added again");
             return false;
@@ -67,25 +85,25 @@ cc.ComponentContainer = cc.Class.extend(/** @lends cc.ComponentContainer# */{
     },
 
     /**
-     *
-     * @param {String|cc.Component} name
+     * Removes component from container by name or component object.
+     * @param {String|cc.Component} name component name or component object.
      * @returns {boolean}
      */
     remove:function(name){
         if(!name)
-            throw "cc.ComponentContainer.remove(): name should be non-null";
+            throw new Error("cc.ComponentContainer.remove(): name should be non-null");
         if(!this._components)
             return false;
-        if(name instanceof cc.Component){
+        if(name instanceof cc.Component)
             return this._removeByComponent(name);
-        }else{
+        else {
             name = name.trim();
             return this._removeByComponent(this._components[name]);
         }
     },
 
     _removeByComponent:function(component){
-        if(component)
+        if(!component)
             return false;
         component.onExit();
         component.setOwner(null);
@@ -93,10 +111,12 @@ cc.ComponentContainer = cc.Class.extend(/** @lends cc.ComponentContainer# */{
         return true;
     },
 
+    /**
+     * Removes all components of container.
+     */
     removeAll:function(){
         if(!this._components)
             return;
-
         var locComponents = this._components;
         for(var selKey in locComponents){
             var selComponent = locComponents[selKey];
@@ -112,24 +132,27 @@ cc.ComponentContainer = cc.Class.extend(/** @lends cc.ComponentContainer# */{
         this._components = {};
     },
 
+    /**
+     * Visit callback by director. it calls every frame.
+     * @param {Number} delta
+     */
     visit:function(delta){
         if(!this._components)
             return;
 
         var locComponents = this._components;
-        for(var selKey in locComponents){
+        for(var selKey in locComponents)
              locComponents[selKey].update(delta);
-        }
     },
 
-    isEmpty:function(){
-         if(!this._components)
+    /**
+     * Returns the container whether is empty.
+     * @returns {boolean}
+     */
+    isEmpty: function () {
+        if (!this._components)
             return true;
-
-        for(var selkey in this._components){
-            return false;
-        }
-        return true;
+        return this._components.length === 0;
     }
 });
 

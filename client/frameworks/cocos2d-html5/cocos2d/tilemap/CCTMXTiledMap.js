@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -97,6 +97,9 @@ cc.TMX_ORIENTATION_ISO = 2;
  * object.getProperty(name_of_the_property);</p>
  * @class
  * @extends cc.Node
+ * @param {String} tmxFile tmxFile fileName or content string
+ * @param {String} resourcePath   If tmxFile is a file name ,it is not required.If tmxFile is content string ,it is must required.
+
  *
  * @property {Array}    properties      - Properties from the map. They can be added using tilemap editors
  * @property {Number}   mapOrientation  - Map orientation
@@ -105,8 +108,20 @@ cc.TMX_ORIENTATION_ISO = 2;
  * @property {Number}   mapHeight       - Height of the map
  * @property {Number}   tileWidth       - Width of a tile
  * @property {Number}   tileHeight      - Height of a tile
+ *
+ * @example
+ * //example
+ * 1.
+ * //create a TMXTiledMap with file name
+ * var tmxTiledMap = new cc.TMXTiledMap("res/orthogonal-test1.tmx");
+ * 2.
+ * //create a TMXTiledMap with content string and resource path
+ * var resources = "res/TileMaps";
+ * var filePath = "res/TileMaps/orthogonal-test1.tmx";
+ * var xmlStr = cc.loader.getRes(filePath);
+ * var tmxTiledMap = new cc.TMXTiledMap(xmlStr, resources);
  */
-cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
+cc.TMXTiledMap = cc.Node.extend(/** @lends cc.TMXTiledMap# */{
 	properties: null,
 	mapOrientation: null,
 	objectGroups: null,
@@ -119,22 +134,10 @@ cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
     _className: "TMXTiledMap",
 
     /**
-     * Creates a TMX Tiled Map with a TMX file  or content string.
-     * Implementation cc.TMXTiledMap
-     * @constructor
+     * Creates a TMX Tiled Map with a TMX file  or content string. <br/>
+     * Constructor of cc.TMXTiledMap
      * @param {String} tmxFile tmxFile fileName or content string
      * @param {String} resourcePath   If tmxFile is a file name ,it is not required.If tmxFile is content string ,it is must required.
-     * @example
-     * //example
-     * 1.
-     * //create a TMXTiledMap with file name
-     * var tmxTiledMap = new cc.TMXTiledMap("res/orthogonal-test1.tmx");
-     * 2.
-     * //create a TMXTiledMap with content string and resource path
-     * var resources = "res/TileMaps";
-     * var filePath = "res/TileMaps/orthogonal-test1.tmx";
-     * var xmlStr = cc.loader.getRes(filePath);
-     * var tmxTiledMap = new cc.TMXTiledMap(xmlStr, resources);
      */
     ctor:function(tmxFile,resourcePath){
         cc.Node.prototype.ctor.call(this);
@@ -149,6 +152,7 @@ cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
     },
 
     /**
+     * Gets the map size.
      * @return {cc.Size}
      */
     getMapSize:function () {
@@ -156,6 +160,7 @@ cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
     },
 
     /**
+     * Set the map size.
      * @param {cc.Size} Var
      */
     setMapSize:function (Var) {
@@ -177,6 +182,7 @@ cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
 	},
 
     /**
+     * Gets the tile size.
      * @return {cc.Size}
      */
     getTileSize:function () {
@@ -184,6 +190,7 @@ cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
     },
 
     /**
+     * Set the tile size
      * @param {cc.Size} Var
      */
     setTileSize:function (Var) {
@@ -213,6 +220,7 @@ cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
     },
 
     /**
+     * map orientation
      * @param {Number} Var
      */
     setMapOrientation:function (Var) {
@@ -228,6 +236,7 @@ cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
     },
 
     /**
+     * object groups
      * @param {Array} Var
      */
     setObjectGroups:function (Var) {
@@ -235,7 +244,7 @@ cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
     },
 
     /**
-     * properties
+     * Gets the properties
      * @return {object}
      */
     getProperties:function () {
@@ -243,6 +252,7 @@ cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
     },
 
     /**
+     * Set the properties
      * @param {object} Var
      */
     setProperties:function (Var) {
@@ -250,19 +260,20 @@ cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
     },
 
     /**
+     * Initializes the instance of cc.TMXTiledMap with tmxFile
      * @param {String} tmxFile
-     * @return {Boolean}
+     * @return {Boolean} Whether the initialization was successful.
      * @example
      * //example
      * var map = new cc.TMXTiledMap()
      * map.initWithTMXFile("hello.tmx");
      */
     initWithTMXFile:function (tmxFile) {
-        if(!tmxFile || tmxFile.length == 0)
-            throw "cc.TMXTiledMap.initWithTMXFile(): tmxFile should be non-null or non-empty string.";
+        if(!tmxFile || tmxFile.length === 0)
+            throw new Error("cc.TMXTiledMap.initWithTMXFile(): tmxFile should be non-null or non-empty string.");
 	    this.width = 0;
 	    this.height = 0;
-        var mapInfo = cc.TMXMapInfo.create(tmxFile);
+        var mapInfo = new cc.TMXMapInfo(tmxFile);
         if (!mapInfo)
             return false;
 
@@ -273,11 +284,17 @@ cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
         return true;
     },
 
+    /**
+     * Initializes the instance of cc.TMXTiledMap with tmxString
+     * @param {String} tmxString
+     * @param {String} resourcePath
+     * @return {Boolean} Whether the initialization was successful.
+     */
     initWithXML:function(tmxString, resourcePath){
         this.width = 0;
 	    this.height = 0;
 
-        var mapInfo = cc.TMXMapInfo.create(tmxString, resourcePath);
+        var mapInfo = new cc.TMXMapInfo(tmxString, resourcePath);
         var locTilesets = mapInfo.getTilesets();
         if(!locTilesets || locTilesets.length === 0)
             cc.log("cc.TMXTiledMap.initWithXML(): Map not found. Please check the filename.");
@@ -311,6 +328,10 @@ cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
         }
     },
 
+    /**
+     * Return All layers array.
+     * @returns {Array}
+     */
     allLayers: function () {
         var retArr = [], locChildren = this._children;
         for(var i = 0, len = locChildren.length;i< len;i++){
@@ -328,11 +349,11 @@ cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
      */
     getLayer:function (layerName) {
         if(!layerName || layerName.length === 0)
-            throw "cc.TMXTiledMap.getLayer(): layerName should be non-null or non-empty string.";
+            throw new Error("cc.TMXTiledMap.getLayer(): layerName should be non-null or non-empty string.");
         var locChildren = this._children;
         for (var i = 0; i < locChildren.length; i++) {
             var layer = locChildren[i];
-            if (layer && layer.layerName == layerName)
+            if (layer && layer.layerName === layerName)
                 return layer;
         }
         // layer not found
@@ -346,11 +367,11 @@ cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
      */
     getObjectGroup:function (groupName) {
         if(!groupName || groupName.length === 0)
-            throw "cc.TMXTiledMap.getObjectGroup(): groupName should be non-null or non-empty string.";
+            throw new Error("cc.TMXTiledMap.getObjectGroup(): groupName should be non-null or non-empty string.");
         if (this.objectGroups) {
             for (var i = 0; i < this.objectGroups.length; i++) {
                 var objectGroup = this.objectGroups[i];
-                if (objectGroup && objectGroup.groupName == groupName) {
+                if (objectGroup && objectGroup.groupName === groupName) {
                     return objectGroup;
                 }
             }
@@ -372,14 +393,25 @@ cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
      * Return properties dictionary for tile GID
      * @param {Number} GID
      * @return {object}
+     * @deprecated
      */
     propertiesForGID:function (GID) {
+        cc.log("propertiesForGID is deprecated. Please use getPropertiesForGID instead.");
+        return this.getPropertiesForGID[GID];
+    },
+
+    /**
+     * Return properties dictionary for tile GID
+     * @param {Number} GID
+     * @return {object}
+     */
+    getPropertiesForGID: function(GID) {
         return this._tileProperties[GID];
     },
 
     _parseLayer:function (layerInfo, mapInfo) {
         var tileset = this._tilesetForLayer(layerInfo, mapInfo);
-        var layer = cc.TMXLayer.create(tileset, layerInfo, mapInfo);
+        var layer = new cc.TMXLayer(tileset, layerInfo, mapInfo);
         // tell the layerinfo to release the ownership of the tiles map.
         layerInfo.ownTiles = false;
         layer.setupTiles();
@@ -397,7 +429,7 @@ cc.TMXTiledMap = cc.NodeRGBA.extend(/** @lends cc.TMXTiledMap# */{
                         for (var x = 0; x < size.width; x++) {
                             var pos = x + size.width * y;
                             var gid = layerInfo._tiles[pos];
-                            if (gid != 0) {
+                            if (gid !== 0) {
                                 // Optimization: quick return
                                 // if the layer is invalid (more than 1 tileset per layer) an cc.assert will be thrown later
                                 if (((gid & cc.TMX_TILE_FLIPPED_MASK)>>>0) >= tileset.firstGid) {
@@ -437,20 +469,10 @@ cc.defineGetterSetter(_p, "tileHeight", _p._getTileHeight, _p._setTileHeight);
 /**
  * Creates a TMX Tiled Map with a TMX file  or content string.
  * Implementation cc.TMXTiledMap
+ * @deprecated since v3.0 please use new cc.TMXTiledMap(tmxFile,resourcePath) instead.
  * @param {String} tmxFile tmxFile fileName or content string
  * @param {String} resourcePath   If tmxFile is a file name ,it is not required.If tmxFile is content string ,it is must required.
  * @return {cc.TMXTiledMap|undefined}
- * @example
- * //example
- * 1.
- * //create a TMXTiledMap with file name
- * var tmxTiledMap = cc.TMXTiledMap.create("res/orthogonal-test1.tmx");
- * 2.
- * //create a TMXTiledMap with content string and resource path
- * var resources = "res/TileMaps";
- * var filePath = "res/TileMaps/orthogonal-test1.tmx";
- * var xmlStr = cc.loader.getRes(filePath);
- * var tmxTiledMap = cc.TMXTiledMap.create(xmlStr, resources);
  */
 cc.TMXTiledMap.create = function (tmxFile,resourcePath) {
     return new cc.TMXTiledMap(tmxFile,resourcePath);

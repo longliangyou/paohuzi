@@ -1,6 +1,8 @@
 /**
  *
- * Copyright (c) 2010-2012 cocos2d-x.org
+ * Copyright (c) 2008-2010 Ricardo Quesada
+ * Copyright (c) 2011-2012 cocos2d-x.org
+ * Copyright (c) 2013-2014 Chukong Technologies Inc.
  *
  * Copyright 2011 Yannick Loriot. All rights reserved.
  * http://yannickloriot.com
@@ -58,6 +60,22 @@ cc.ControlSlider = cc.Control.extend(/** @lends cc.ControlSlider# */{
     _progressSprite:null,
     _backgroundSprite:null,
     _className:"ControlSlider",
+
+    ctor:function (bgFile, progressFile, thumbFile) {
+        cc.Control.prototype.ctor.call(this);
+        if (thumbFile != undefined) {
+            // Prepare background for slider
+            var bgSprite = new cc.Sprite(bgFile);
+
+            // Prepare progress for slider
+            var progressSprite = new cc.Sprite(progressFile);
+
+            // Prepare thumb (menuItem) for slider
+            var thumbSprite = new cc.Sprite(thumbFile);
+
+            this.initWithSprites(bgSprite, progressSprite, thumbSprite);
+        }
+    },
 
     getValue:function () {
         return this._value;
@@ -191,7 +209,7 @@ cc.ControlSlider = cc.Control.extend(/** @lends cc.ControlSlider# */{
 
     sliderBegan:function (location) {
         this.setSelected(true);
-        this.getThumbSprite().setColor(cc.color.GRAY);
+        this._thumbSprite.setColor(cc.color.GRAY);
         this.setValue(this.valueForLocation(location));
     },
     sliderMoved:function (location) {
@@ -240,6 +258,7 @@ cc.ControlSlider = cc.Control.extend(/** @lends cc.ControlSlider# */{
         var textureRect = this._progressSprite.getTextureRect();
         textureRect = cc.rect(textureRect.x, textureRect.y, this._thumbSprite.getPositionX(), textureRect.height);
         this._progressSprite.setTextureRect(textureRect, this._progressSprite.isTextureRectRotated());
+        this._thumbSprite._renderCmd.transform(this._renderCmd);
     },
     /** Returns the value for the given location. */
     valueForLocation:function (location) {
@@ -281,23 +300,9 @@ _p = null;
 /**
  * Creates a slider with a given background sprite and a progress bar and a
  * thumb item.
- *
- * @see initWithBackgroundSprite:progressSprite:thumbMenuItem:
+ * @deprecated
+ * @see cc.ControlSlider
  */
 cc.ControlSlider.create = function (bgFile, progressFile, thumbFile) {
-    if (typeof(bgFile) == "string") {
-        // Prepare background for slider
-        bgFile = cc.Sprite.create(bgFile);
-
-        // Prepare progress for slider
-        progressFile = cc.Sprite.create(progressFile);
-
-        // Prepare thumb (menuItem) for slider
-        thumbFile = cc.Sprite.create(thumbFile);
-    }
-
-    var pRet = new cc.ControlSlider();
-    pRet.initWithSprites(bgFile, progressFile, thumbFile);
-    return pRet;
-
+    return new cc.ControlSlider(bgFile, progressFile, thumbFile);
 };

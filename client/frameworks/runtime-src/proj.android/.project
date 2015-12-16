@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>client</name>
+	<name>paohuzi</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -42,24 +42,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>Classes</name>
+			<name>jsjavabridge</name>
 			<type>2</type>
-			<locationURI>COCOS2DX/projects/client/Classes</locationURI>
-		</link>
-		<link>
-			<name>cocos2dx</name>
-			<type>2</type>
-			<locationURI>COCOS2DX/cocos2dx</locationURI>
-		</link>
-		<link>
-			<name>extensions</name>
-			<type>2</type>
-			<locationURI>COCOS2DX/extensions</locationURI>
-		</link>
-		<link>
-			<name>scripting</name>
-			<type>2</type>
-			<locationURI>COCOS2DX/scripting</locationURI>
+			<location>PARENT-2-PROJECT_LOC/cocos2d-x/cocos/platform/android/java/src</location>
 		</link>
 	</linkedResources>
 </projectDescription>

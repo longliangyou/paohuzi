@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -47,6 +47,12 @@ cc.FLT_MAX = parseFloat('3.402823466e+38F');
  * @constant
  * @type Number
  */
+cc.FLT_MIN = parseFloat("1.175494351e-38F");
+
+/**
+ * @constant
+ * @type Number
+ */
 cc.RAD = cc.PI / 180;
 
 /**
@@ -68,14 +74,14 @@ cc.UINT_MAX = 0xffffffff;
  *  modified from c++ macro, you need to pass in the x and y variables names in string, <br/>
  *  and then a reference to the whole object as third variable
  * </p>
- * @param x
- * @param y
- * @param ref
+ * @param {String} x
+ * @param {String} y
+ * @param {Object} ref
  * @function
- * @deprecated
+ * @deprecated since v3.0
  */
 cc.swap = function (x, y, ref) {
-    if ((typeof ref) == 'object' && (typeof ref.x) != 'undefined' && (typeof ref.y) != 'undefined') {
+    if (cc.isObject(ref) && !cc.isUndefined(ref.x) && !cc.isUndefined(ref.y)) {
         var tmp = ref[x];
         ref[x] = ref[y];
         ref[y] = tmp;
@@ -140,7 +146,17 @@ cc.degreesToRadians = function (angle) {
  * @return {Number}
  * @function
  */
+cc.radiansToDegrees = function (angle) {
+    return angle * cc.DEG;
+};
+/**
+ * converts radians to degrees
+ * @param {Number} angle
+ * @return {Number}
+ * @function
+ */
 cc.radiansToDegress = function (angle) {
+    cc.log(cc._LogInfos.radiansToDegress);
     return angle * cc.DEG;
 };
 
@@ -149,20 +165,6 @@ cc.radiansToDegress = function (angle) {
  * @type Number
  */
 cc.REPEAT_FOREVER = Number.MAX_VALUE - 1;
-
-/**
- * default gl blend src function. Compatible with premultiplied alpha images.
- * @constant
- * @type Number
- */
-cc.BLEND_SRC = cc.OPTIMIZE_BLEND_FUNC_FOR_PREMULTIPLIED_ALPHA ? 1 : 0x0302;
-
-/**
- * default gl blend dst function. Compatible with premultiplied alpha images.
- * @constant
- * @type Number
- */
-cc.BLEND_DST = 0x0303;
 
 /**
  * Helpful macro that setups the GL server state, the correct GL program and sets the Model View Projection matrix
@@ -239,6 +241,7 @@ cc.FLT_EPSILON = 0.0000001192092896;
  *     On Mac it returns 1;<br/>
  *     On iPhone it returns 2 if RetinaDisplay is On. Otherwise it returns 1
  * </p>
+ * @return {Number}
  * @function
  */
 cc.contentScaleFactor = cc.IS_RETINA_DISPLAY_SUPPORTED ? function () {
@@ -260,7 +263,8 @@ cc.pointPointsToPixels = function (points) {
 
 /**
  * Converts a Point in pixels to points
- * @param {Point} pixels
+ * @param {cc.Rect} pixels
+ * @return {cc.Point}
  * @function
  */
 cc.pointPixelsToPoints = function (pixels) {
@@ -305,6 +309,7 @@ cc._sizePixelsToPointsOut = function (sizeInPixels, outSize) {
 /**
  * Converts a rect in pixels to points
  * @param {cc.Rect} pixel
+ * @return {cc.Rect}
  * @function
  */
 cc.rectPixelsToPoints = cc.IS_RETINA_DISPLAY_SUPPORTED ? function (pixel) {
@@ -318,6 +323,7 @@ cc.rectPixelsToPoints = cc.IS_RETINA_DISPLAY_SUPPORTED ? function (pixel) {
 /**
  * Converts a rect in points to pixels
  * @param {cc.Rect} point
+ * @return {cc.Rect}
  * @function
  */
 cc.rectPointsToPixels = cc.IS_RETINA_DISPLAY_SUPPORTED ? function (point) {
@@ -328,6 +334,7 @@ cc.rectPointsToPixels = cc.IS_RETINA_DISPLAY_SUPPORTED ? function (point) {
     return p;
 };
 
+//some gl constant variable
 /**
  * @constant
  * @type Number
@@ -406,11 +413,64 @@ cc.ONE_MINUS_CONSTANT_ALPHA	= 0x8004;
  */
 cc.ONE_MINUS_CONSTANT_COLOR	= 0x8002;
 
+/**
+ * the constant variable equals gl.LINEAR for texture
+ * @constant
+ * @type Number
+ */
+cc.LINEAR	= 0x2601;
+
+/**
+ * the constant variable equals gl.REPEAT for texture
+ * @constant
+ * @type Number
+ */
+cc.REPEAT	= 0x2901;
+
+/**
+ * the constant variable equals gl.CLAMP_TO_EDGE for texture
+ * @constant
+ * @type Number
+ */
+cc.CLAMP_TO_EDGE	= 0x812f;
+
+/**
+ * the constant variable equals gl.MIRRORED_REPEAT for texture
+ * @constant
+ * @type Number
+ */
+cc.MIRRORED_REPEAT   = 0x8370;
+
+/**
+ * default gl blend src function. Compatible with premultiplied alpha images.
+ * @constant
+ * @name cc.BLEND_SRC
+ * @type Number
+ */
+cc.BLEND_SRC = cc.SRC_ALPHA;
+cc.game.addEventListener(cc.game.EVENT_RENDERER_INITED, function () {
+    if (cc._renderType === cc.game.RENDER_TYPE_WEBGL
+         && cc.OPTIMIZE_BLEND_FUNC_FOR_PREMULTIPLIED_ALPHA) {
+        cc.BLEND_SRC = cc.ONE;
+    }
+});
+
+/**
+ * default gl blend dst function. Compatible with premultiplied alpha images.
+ * @constant
+ * @type Number
+ */
+cc.BLEND_DST = 0x0303;
+
+/**
+ * Check webgl error.Error will be shown in console if exists.
+ * @function
+ */
 cc.checkGLErrorDebug = function () {
-    if (cc.renderMode == cc._RENDER_TYPE_WEBGL) {
+    if (cc.renderMode === cc.game.RENDER_TYPE_WEBGL) {
         var _error = cc._renderContext.getError();
         if (_error) {
-            cc.log(CC._localZOrder.checkGLErrorDebug, _error);
+            cc.log(cc._LogInfos.checkGLErrorDebug, _error);
         }
     }
 };
@@ -701,3 +761,77 @@ cc.SELECTED_TAG = 8802;
  * @type Number
  */
 cc.DISABLE_TAG = 8803;
+
+
+// Array utils
+
+/**
+ * Verify Array's Type
+ * @param {Array} arr
+ * @param {function} type
+ * @return {Boolean}
+ * @function
+ */
+cc.arrayVerifyType = function (arr, type) {
+    if (arr && arr.length > 0) {
+        for (var i = 0; i < arr.length; i++) {
+            if (!(arr[i] instanceof  type)) {
+                cc.log("element type is wrong!");
+                return false;
+            }
+        }
+    }
+    return true;
+};
+
+/**
+ * Searches for the first occurance of object and removes it. If object is not found the function has no effect.
+ * @function
+ * @param {Array} arr Source Array
+ * @param {*} delObj  remove object
+ */
+cc.arrayRemoveObject = function (arr, delObj) {
+    for (var i = 0, l = arr.length; i < l; i++) {
+        if (arr[i] === delObj) {
+            arr.splice(i, 1);
+            break;
+        }
+    }
+};
+
+/**
+ * Removes from arr all values in minusArr. For each Value in minusArr, the first matching instance in arr will be removed.
+ * @function
+ * @param {Array} arr Source Array
+ * @param {Array} minusArr minus Array
+ */
+cc.arrayRemoveArray = function (arr, minusArr) {
+    for (var i = 0, l = minusArr.length; i < l; i++) {
+        cc.arrayRemoveObject(arr, minusArr[i]);
+    }
+};
+
+/**
+ * Inserts some objects at index
+ * @function
+ * @param {Array} arr
+ * @param {Array} addObjs
+ * @param {Number} index
+ * @return {Array}
+ */
+cc.arrayAppendObjectsToIndex = function(arr, addObjs,index){
+    arr.splice.apply(arr, [index, 0].concat(addObjs));
+    return arr;
+};
+
+/**
+ * Copy an array's item to a new array (its performance is better than Array.slice)
+ * @param {Array} arr
+ * @return {Array}
+ */
+cc.copyArray = function(arr){
+    var i, len = arr.length, arr_clone = new Array(len);
+    for (i = 0; i < len; i += 1)
+        arr_clone[i] = arr[i];
+    return arr_clone;
+};

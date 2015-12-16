@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2013 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -22,19 +23,27 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+/**
+ * Sends event by trigger manager.
+ * @function
+ * @param {Number} event
+ */
 ccs.sendEvent = function (event) {
     var triggerObjArr = ccs.triggerManager.get(event);
-    if (triggerObjArr == null) {
+    if (triggerObjArr == null)
         return;
-    }
     for (var i = 0; i < triggerObjArr.length; i++) {
         var triObj = triggerObjArr[i];
-        if (triObj != null && triObj.detect()) {
+        if (triObj != null && triObj.detect())
             triObj.done();
-        }
     }
 };
 
+/**
+ * Registers a trigger class to objectFactory type map.
+ * @param {String} className
+ * @param {function} func
+ */
 ccs.registerTriggerClass = function (className, func) {
     new ccs.TInfo(className, func);
 };

@@ -1,6 +1,8 @@
 /**
  *
- * Copyright (c) 2010-2012 cocos2d-x.org
+ * Copyright (c) 2008-2010 Ricardo Quesada
+ * Copyright (c) 2011-2012 cocos2d-x.org
+ * Copyright (c) 2013-2014 Chukong Technologies Inc.
  *
  * Copyright 2011 Yannick Loriot. All rights reserved.
  * http://yannickloriot.com
@@ -27,7 +29,7 @@
 /**
  * CCControlSwitch: Switch control ui component
  * @class
- * @extend cc.Control
+ * @extends cc.Control
  */
 cc.ControlSwitch = cc.Control.extend(/** @lends cc.ControlSwitch# */{
     /** Sprite which represents the view. */
@@ -38,20 +40,22 @@ cc.ControlSwitch = cc.Control.extend(/** @lends cc.ControlSwitch# */{
     /** A Boolean value that determines the off/on state of the switch. */
     _on:false,
     _className:"ControlSwitch",
-    ctor:function () {
+    ctor:function (maskSprite, onSprite, offSprite, thumbSprite, onLabel, offLabel) {
         cc.Control.prototype.ctor.call(this);
+
+        offLabel && this.initWithMaskSprite(maskSprite, onSprite, offSprite, thumbSprite, onLabel, offLabel);
     },
 
     /** Creates a switch with a mask sprite, on/off sprites for on/off states, a thumb sprite and an on/off labels. */
     initWithMaskSprite:function (maskSprite, onSprite, offSprite, thumbSprite, onLabel, offLabel) {
         if(!maskSprite)
-            throw "cc.ControlSwitch.initWithMaskSprite(): maskSprite should be non-null.";
+            throw new Error("cc.ControlSwitch.initWithMaskSprite(): maskSprite should be non-null.");
         if(!onSprite)
-            throw "cc.ControlSwitch.initWithMaskSprite(): onSprite should be non-null.";
+            throw new Error("cc.ControlSwitch.initWithMaskSprite(): onSprite should be non-null.");
         if(!offSprite)
-            throw "cc.ControlSwitch.initWithMaskSprite(): offSprite should be non-null.";
+            throw new Error("cc.ControlSwitch.initWithMaskSprite(): offSprite should be non-null.");
         if(!thumbSprite)
-            throw "cc.ControlSwitch.initWithMaskSprite(): thumbSprite should be non-null.";
+            throw new Error("cc.ControlSwitch.initWithMaskSprite(): thumbSprite should be non-null.");
         if (this.init()) {
             this._on = true;
 
@@ -73,7 +77,7 @@ cc.ControlSwitch = cc.Control.extend(/** @lends cc.ControlSwitch# */{
         this._on = isOn;
         var xPosition = (this._on) ? this._switchSprite.getOnPosition() : this._switchSprite.getOffPosition();
         if(animated){
-            this._switchSprite.runAction(cc.ActionTween.create(0.2, "sliderXPosition", this._switchSprite.getSliderXPosition(),xPosition));
+            this._switchSprite.runAction(new cc.ActionTween(0.2, "sliderXPosition", this._switchSprite.getSliderXPosition(),xPosition));
         }else{
             this._switchSprite.setSliderXPosition(xPosition);
         }
@@ -152,19 +156,17 @@ cc.ControlSwitch = cc.Control.extend(/** @lends cc.ControlSwitch# */{
     }
 });
 
-/** Creates a switch with a mask sprite, on/off sprites for on/off states and a thumb sprite. */
+/** Creates a switch with a mask sprite, on/off sprites for on/off states and a thumb sprite.
+ *  @deprecated
+ */
 cc.ControlSwitch.create = function (maskSprite, onSprite, offSprite, thumbSprite, onLabel, offLabel) {
-    var pRet = new cc.ControlSwitch();
-    if (pRet && pRet.initWithMaskSprite(maskSprite, onSprite, offSprite, thumbSprite, onLabel, offLabel)) {
-        return pRet;
-    }
-    return null;
+    return new cc.ControlSwitch(maskSprite, onSprite, offSprite, thumbSprite, onLabel, offLabel);
 };
 
 /**
  * ControlSwitchSprite: Sprite switch control ui component
  * @class
- * @extend cc.Sprite
+ * @extends cc.Sprite
  *
  * @property {Number}           sliderX         - Slider's x position
  * @property {cc.Point}         onPos           - The position of slider when switch is on
@@ -213,7 +215,8 @@ cc.ControlSwitchSprite = cc.Sprite.extend({
     },
 
     initWithMaskSprite:function (maskSprite, onSprite, offSprite, thumbSprite, onLabel, offLabel) {
-        if (cc.Sprite.prototype.initWithTexture.call(this, maskSprite.getTexture())) {
+        if (cc.Sprite.prototype.init.call(this)) {
+            this.setSpriteFrame(maskSprite.displayFrame());
             // Sets the default values
             this._onPosition = 0;
             this._offPosition = -onSprite.getContentSize().width + thumbSprite.getContentSize().width / 2;
@@ -231,13 +234,16 @@ cc.ControlSwitchSprite = cc.Sprite.extend({
             this._stencil.setPosition(0, 0);
 
             // Init clipper for mask
-            this._clipper = cc.ClippingNode.create();
+            this._clipper = new cc.ClippingNode();
             this._clipper.setAnchorPoint(0.5, 0.5);
             this._clipper.setPosition(maskSize.width / 2, maskSize.height / 2);
             this._clipper.setStencil(this._stencil);
-            this._backRT = cc.RenderTexture.create(maskSize.width, maskSize.height);
-            this._clipper.addChild(this._backRT.getSprite());
             this.addChild(this._clipper);
+
+            this._clipper.addChild(onSprite);
+            this._clipper.addChild(offSprite);
+            this._clipper.addChild(onLabel);
+            this._clipper.addChild(offLabel);
 
             this.addChild(this._thumbSprite);
 
@@ -248,35 +254,32 @@ cc.ControlSwitchSprite = cc.Sprite.extend({
     },
 
     needsLayout:function () {
-        this._onSprite.setPosition(this._onSprite.getContentSize().width / 2 + this._sliderXPosition,
-            this._onSprite.getContentSize().height / 2);
-        this._offSprite.setPosition(this._onSprite.getContentSize().width + this._offSprite.getContentSize().width / 2 + this._sliderXPosition,
-            this._offSprite.getContentSize().height / 2);
+        var maskSize = this._maskSize;
+        this._onSprite.setPosition(
+            this._onSprite.getContentSize().width / 2 + this._sliderXPosition - maskSize.width / 2,
+            this._onSprite.getContentSize().height / 2 - maskSize.height / 2
+        );
+        this._offSprite.setPosition(
+            this._onSprite.getContentSize().width + this._offSprite.getContentSize().width / 2 + this._sliderXPosition - maskSize.width / 2,
+            this._offSprite.getContentSize().height / 2 - maskSize.height / 2
+        );
 
         if (this._onLabel) {
-            this._onLabel.setPosition(this._onSprite.getPositionX() - this._thumbSprite.getContentSize().width / 6,
-                this._onSprite.getContentSize().height / 2);
+            this._onLabel.setPosition(
+                this._onSprite.getPositionX() - this._thumbSprite.getContentSize().width / 6,
+                this._onSprite.getContentSize().height / 2 - maskSize.height / 2
+            );
         }
         if (this._offLabel) {
-            this._offLabel.setPosition(this._offSprite.getPositionX() + this._thumbSprite.getContentSize().width / 6,
-                this._offSprite.getContentSize().height / 2);
+            this._offLabel.setPosition(
+                this._offSprite.getPositionX() + this._thumbSprite.getContentSize().width / 6,
+                this._offSprite.getContentSize().height / 2 - maskSize.height / 2
+            );
         }
-        this._thumbSprite.setPosition(this._onSprite.getContentSize().width + this._sliderXPosition,
-            this._maskSize.height / 2);
-
-        this._backRT.begin();
-
-        this._onSprite.visit();
-        this._offSprite.visit();
-
-        if (this._onLabel)
-            this._onLabel.visit();
-        if (this._offLabel)
-            this._offLabel.visit();
-
-        this._backRT.end();
-
-        //this.setFlippedY(true);
+        this._thumbSprite.setPosition(
+            this._onSprite.getContentSize().width + this._sliderXPosition,
+            this._maskSize.height / 2
+        );
     },
 
     setSliderXPosition:function (sliderXPosition) {
@@ -305,8 +308,8 @@ cc.ControlSwitchSprite = cc.Sprite.extend({
     },
 
     updateTweenAction:function (value, key) {
-        cc.log("key = " + key + ", value = " + value);
-        this.setSliderXPosition(value);
+        if (key === "sliderXPosition")
+            this.setSliderXPosition(value);
     },
 
     setOnPosition:function (onPosition) {

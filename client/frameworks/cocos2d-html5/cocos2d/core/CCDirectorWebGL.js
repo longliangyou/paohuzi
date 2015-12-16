@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -24,8 +24,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
+cc.game.addEventListener(cc.game.EVENT_RENDERER_INITED, function () {
 
+    // Do nothing under other render mode
+    if (cc._renderType !== cc.game.RENDER_TYPE_WEBGL) {
+        return;
+    }
 
     /**
      * OpenGL projection protocol
@@ -36,11 +40,28 @@ if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
         /**
          * Called by CCDirector when the projection is updated, and "custom" projection is used
          */
-        updateProjection:function () {
+        updateProjection: function () {
         }
     });
 
     var _p = cc.Director.prototype;
+
+    var recursiveChild = function(node){
+        if(node && node._renderCmd){
+            node._renderCmd.setDirtyFlag(cc.Node._dirtyFlags.transformDirty);
+            var i, children = node._children;
+            for(i=0; i<children.length; i++){
+                recursiveChild(children[i]);
+            }
+        }
+    };
+
+    cc.eventManager.addCustomListener(cc.Director.EVENT_PROJECTION_CHANGED, function(){
+        var director = cc.director;
+        var stack = cc.director._scenesStack;
+        for(var  i=0; i<stack.length; i++)
+            recursiveChild(stack[i]);
+    });
 
     _p.setProjection = function (projection) {
         var _t = this;
@@ -48,33 +69,41 @@ if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
 
         _t.setViewport();
 
+        var view = _t._openGLView,
+            ox = view._viewPortRect.x / view._scaleX,
+            oy = view._viewPortRect.y / view._scaleY;
+
         switch (projection) {
             case cc.Director.PROJECTION_2D:
                 cc.kmGLMatrixMode(cc.KM_GL_PROJECTION);
                 cc.kmGLLoadIdentity();
-                var orthoMatrix = new cc.kmMat4();
-                cc.kmMat4OrthographicProjection(orthoMatrix, 0, size.width, 0, size.height, -1024, 1024);
+                var orthoMatrix = cc.math.Matrix4.createOrthographicProjection(
+                    -ox,
+                    size.width - ox,
+                    -oy,
+                    size.height - oy,
+                    -1024, 1024);
                 cc.kmGLMultMatrix(orthoMatrix);
                 cc.kmGLMatrixMode(cc.KM_GL_MODELVIEW);
                 cc.kmGLLoadIdentity();
                 break;
             case cc.Director.PROJECTION_3D:
                 var zeye = _t.getZEye();
-                var matrixPerspective = new cc.kmMat4(), matrixLookup = new cc.kmMat4();
+                var matrixPerspective = new cc.math.Matrix4(), matrixLookup = new cc.math.Matrix4();
                 cc.kmGLMatrixMode(cc.KM_GL_PROJECTION);
                 cc.kmGLLoadIdentity();
 
                 // issue #1334
-                cc.kmMat4PerspectiveProjection(matrixPerspective, 60, size.width / size.height, 0.1, zeye * 2);
+                matrixPerspective = cc.math.Matrix4.createPerspectiveProjection(60, size.width / size.height, 0.1, zeye * 2);
 
                 cc.kmGLMultMatrix(matrixPerspective);
 
                 cc.kmGLMatrixMode(cc.KM_GL_MODELVIEW);
                 cc.kmGLLoadIdentity();
-                var eye = cc.kmVec3Fill(null, size.width / 2, size.height / 2, zeye);
-                var center = cc.kmVec3Fill(null, size.width / 2, size.height / 2, 0.0);
-                var up = cc.kmVec3Fill(null, 0.0, 1.0, 0.0);
-                cc.kmMat4LookAt(matrixLookup, eye, center, up);
+                var eye = new cc.math.Vec3(-ox + size.width / 2, -oy + size.height / 2, zeye);
+                var center = new cc.math.Vec3( -ox + size.width / 2, -oy + size.height / 2, 0.0);
+                var up = new cc.math.Vec3( 0.0, 1.0, 0.0);
+                matrixLookup.lookAt(eye, center, up);
                 cc.kmGLMultMatrix(matrixLookup);
                 break;
             case cc.Director.PROJECTION_CUSTOM:
@@ -88,20 +117,15 @@ if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
         _t._projection = projection;
         cc.eventManager.dispatchEvent(_t._eventProjectionChanged);
         cc.setProjectionMatrixDirty();
+        cc.renderer.childrenOrderDirty = true;
     };
 
     _p.setDepthTest = function (on) {
+        cc.renderer.setDepthTest(on);
+    };
 
-        var loc_gl= cc._renderContext;
-        if (on) {
-            loc_gl.clearDepth(1.0);
-            loc_gl.enable(loc_gl.DEPTH_TEST);
-            loc_gl.depthFunc(loc_gl.LEQUAL);
-            //cc._renderContext.hint(cc._renderContext.PERSPECTIVE_CORRECTION_HINT, cc._renderContext.NICEST);
-        } else {
-            loc_gl.disable(loc_gl.DEPTH_TEST);
-        }
-        //cc.checkGLErrorDebug();
+    _p.setClearColor = function (clearColor) {
+        cc.renderer._clearColor = clearColor;
     };
 
     _p.setOpenGLView = function (openGLView) {
@@ -123,8 +147,6 @@ if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
         //if (_t._openGLView != openGLView) {
         // because EAGLView is not kind of CCObject
 
-        _t._createStatsLabel();
-
         //if (_t._openGLView)
         _t.setGLDefaultValues();
 
@@ -133,147 +155,48 @@ if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
          }*/
 
         //}
-        if(cc.eventManager)
+        if (cc.eventManager)
             cc.eventManager.setEnabled(true);
     };
 
-    _p._clear = function() {
+    _p._clear = function () {
         var gl = cc._renderContext;
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     };
 
-    _p._beforeVisitScene = function() {
+    _p._beforeVisitScene = function () {
         cc.kmGLPushMatrix();
     };
 
-    _p._afterVisitScene = function() {
+    _p._afterVisitScene = function () {
         cc.kmGLPopMatrix();
     };
 
-    _p._createStatsLabel = function(){
-        var _t = this;
-        if(!cc.LabelAtlas)
-            return _t._createStatsLabelForCanvas();
-
-        if((cc.Director._fpsImageLoaded == null) || (cc.Director._fpsImageLoaded == false))
-            return;
-
-        var texture = new cc.Texture2D();
-        texture.initWithElement(cc.Director._fpsImage);
-        texture.handleLoadedTexture();
-
-        /*
-         We want to use an image which is stored in the file named ccFPSImage.c
-         for any design resolutions and all resource resolutions.
-
-         To achieve this,
-
-         Firstly, we need to ignore 'contentScaleFactor' in 'CCAtlasNode' and 'CCLabelAtlas'.
-         So I added a new method called 'setIgnoreContentScaleFactor' for 'CCAtlasNode',
-         this is not exposed to game developers, it's only used for displaying FPS now.
-
-         Secondly, the size of this image is 480*320, to display the FPS label with correct size,
-         a factor of design resolution ratio of 480x320 is also needed.
-         */
-        var factor = cc.view.getDesignResolutionSize().height / 320.0;
-        if(factor === 0)
-            factor = _t._winSizeInPoints.height / 320.0;
-
-        var tmpLabel = new cc.LabelAtlas();
-        tmpLabel._setIgnoreContentScaleFactor(true);
-        tmpLabel.initWithString("00.0", texture, 12, 32 , '.');
-        tmpLabel.scale = factor;
-        _t._FPSLabel = tmpLabel;
-
-        tmpLabel = new cc.LabelAtlas();
-        tmpLabel._setIgnoreContentScaleFactor(true);
-        tmpLabel.initWithString("0.000", texture, 12, 32, '.');
-        tmpLabel.scale = factor;
-        _t._SPFLabel = tmpLabel;
-
-        tmpLabel = new cc.LabelAtlas();
-        tmpLabel._setIgnoreContentScaleFactor(true);
-        tmpLabel.initWithString("000", texture, 12, 32, '.');
-        tmpLabel.scale = factor;
-        _t._drawsLabel = tmpLabel;
-
-        var locStatsPosition = cc.DIRECTOR_STATS_POSITION;
-        _t._drawsLabel.setPosition(locStatsPosition.x, 34 * factor + locStatsPosition.y);
-        _t._SPFLabel.setPosition(locStatsPosition.x, 17 * factor + locStatsPosition.y);
-        _t._FPSLabel.setPosition(locStatsPosition);
-    };
-
-    _p._createStatsLabelForCanvas = function(){
-        var _t = this;
-        //The original _createStatsLabelForCanvas method
-        //Because the referenced by a cc.Director.prototype._createStatsLabel
-        var fontSize = 0;
-        if (_t._winSizeInPoints.width > _t._winSizeInPoints.height)
-            fontSize = 0 | (_t._winSizeInPoints.height / 320 * 24);
-        else
-            fontSize = 0 | (_t._winSizeInPoints.width / 320 * 24);
-
-        _t._FPSLabel = cc.LabelTTF.create("000.0", "Arial", fontSize);
-        _t._SPFLabel = cc.LabelTTF.create("0.000", "Arial", fontSize);
-        _t._drawsLabel = cc.LabelTTF.create("0000", "Arial", fontSize);
-
-        var locStatsPosition = cc.DIRECTOR_STATS_POSITION;
-        _t._drawsLabel.setPosition(_t._drawsLabel.width / 2 + locStatsPosition.x, _t._drawsLabel.height * 5 / 2 + locStatsPosition.y);
-        _t._SPFLabel.setPosition(_t._SPFLabel.width / 2 + locStatsPosition.x, _t._SPFLabel.height * 3 / 2 + locStatsPosition.y);
-        _t._FPSLabel.setPosition(_t._FPSLabel.width / 2 + locStatsPosition.x, _t._FPSLabel.height / 2 + locStatsPosition.y);
-    };
-
-
-    /**
-     * <p>
-     *     converts a UIKit coordinate to an OpenGL coordinate<br/>
-     *     Useful to convert (multi) touches coordinates to the current layout (portrait or landscape)
-     * </p>
-     * @param {cc.Point} uiPoint
-     * @return {cc.Point}
-     *
-     * convertToGL move to CCDirectorWebGL
-     */
     _p.convertToGL = function (uiPoint) {
-        var transform = new cc.kmMat4();
+        var transform = new cc.math.Matrix4();
         cc.GLToClipTransform(transform);
 
-        var transformInv = new cc.kmMat4();
-        cc.kmMat4Inverse(transformInv, transform);
+        var transformInv = transform.inverse();
 
         // Calculate z=0 using -> transform*[0, 0, 0, 1]/w
         var zClip = transform.mat[14] / transform.mat[15];
-
         var glSize = this._openGLView.getDesignResolutionSize();
-        var clipCoord = new cc.kmVec3(2.0 * uiPoint.x / glSize.width - 1.0, 1.0 - 2.0 * uiPoint.y / glSize.height, zClip);
-
-        var glCoord = new cc.kmVec3();
-        cc.kmVec3TransformCoord(glCoord, clipCoord, transformInv);
-
+        var glCoord = new cc.math.Vec3(2.0 * uiPoint.x / glSize.width - 1.0, 1.0 - 2.0 * uiPoint.y / glSize.height, zClip);
+        glCoord.transformCoord(transformInv);
         return cc.p(glCoord.x, glCoord.y);
     };
 
-    /**
-     * <p>converts an OpenGL coordinate to a UIKit coordinate<br/>
-     * Useful to convert node points to window points for calls such as glScissor</p>
-     * @param {cc.Point} glPoint
-     * @return {cc.Point}
-     */
     _p.convertToUI = function (glPoint) {
-        var transform = new cc.kmMat4();
+        var transform = new cc.math.Matrix4();
         cc.GLToClipTransform(transform);
 
-        var clipCoord = new cc.kmVec3();
+        var clipCoord = new cc.math.Vec3(glPoint.x, glPoint.y, 0.0);
         // Need to calculate the zero depth from the transform.
-        var glCoord = new cc.kmVec3(glPoint.x, glPoint.y, 0.0);
-        cc.kmVec3TransformCoord(clipCoord, glCoord, transform);
+        clipCoord.transformCoord(transform);
 
         var glSize = this._openGLView.getDesignResolutionSize();
         return cc.p(glSize.width * (clipCoord.x * 0.5 + 0.5), glSize.height * (-clipCoord.y * 0.5 + 0.5));
     };
-
-
-
 
     _p.getVisibleSize = function () {
         //if (this._openGLView) {
@@ -295,36 +218,22 @@ if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
         return (this._winSizeInPoints.height / 1.1566 );
     };
 
-    /**
-     * Sets the glViewport
-     */
-    _p.setViewport = function(){
-        if(this._openGLView) {
+    _p.setViewport = function () {
+        var view = this._openGLView;
+        if (view) {
             var locWinSizeInPoints = this._winSizeInPoints;
-            this._openGLView.setViewPortInPoints(0,0, locWinSizeInPoints.width, locWinSizeInPoints.height);
+            view.setViewPortInPoints(-view._viewPortRect.x/view._scaleX, -view._viewPortRect.y/view._scaleY, locWinSizeInPoints.width, locWinSizeInPoints.height);
         }
     };
 
-    /**
-     *  Get the CCEGLView, where everything is rendered
-     * @return {*}
-     */
     _p.getOpenGLView = function () {
         return this._openGLView;
     };
 
-    /**
-     * Sets an OpenGL projection
-     * @return {Number}
-     */
     _p.getProjection = function () {
         return this._projection;
     };
 
-    /**
-     * enables/disables OpenGL alpha blending
-     * @param {Boolean} on
-     */
     _p.setAlphaBlending = function (on) {
         if (on)
             cc.glBlendFunc(cc.BLEND_SRC, cc.BLEND_DST);
@@ -333,10 +242,6 @@ if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
         //cc.checkGLErrorDebug();
     };
 
-
-    /**
-     * sets the OpenGL default values
-     */
     _p.setGLDefaultValues = function () {
         var _t = this;
         _t.setAlphaBlending(true);
@@ -346,6 +251,6 @@ if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
         _t.setProjection(_t._projection);
 
         // set other opengl default values
-        cc._renderContext.clearColor(0.0, 0.0, 0.0, 1.0);
+        cc._renderContext.clearColor(0.0, 0.0, 0.0, 0.0);
     };
-}
+});

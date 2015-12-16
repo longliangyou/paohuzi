@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -205,7 +205,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
         // Move base values
         var locBaseValues = this._baseValues;
         var baseValue = locBaseValues.objectForKey(fromNode);
-        if(baseValue != null) {
+        if(baseValue !== null) {
             locBaseValues.setObject(baseValue, toNode);
             locBaseValues.removeObjectForKey(fromNode);
         }
@@ -231,7 +231,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
             var timeSinceLastKeyframe = keyframe.getTime() - lastKeyframeTime;
             lastKeyframeTime = keyframe.getTime();
             if(timeSinceLastKeyframe > 0) {
-                actions.push(cc.DelayTime.create(timeSinceLastKeyframe));
+                actions.push(cc.delayTime(timeSinceLastKeyframe));
             }
 
             var keyVal = keyframe.getValue();
@@ -246,23 +246,21 @@ cc.BuilderAnimationManager = cc.Class.extend({
                     actions.push(callback);
             } else {
                 var target;
-                if(selectorTarget == CCB_TARGETTYPE_DOCUMENTROOT)
+                if(selectorTarget === CCB_TARGETTYPE_DOCUMENTROOT)
                     target = this._rootNode;
-                else if (selectorTarget == CCB_TARGETTYPE_OWNER)
+                else if (selectorTarget === CCB_TARGETTYPE_OWNER)
                     target = this._owner;
 
                 if(target != null) {
                     if(selectorName.length > 0) {
                         var selCallFunc = 0;
 
-                        var targetAsCCBSelectorResolver = target;
-
                         if(target.onResolveCCBCCCallFuncSelector != null)
-                            selCallFunc = targetAsCCBSelectorResolver.onResolveCCBCCCallFuncSelector(target, selectorName);
-                        if(selCallFunc == 0)
+                            selCallFunc = target.onResolveCCBCCCallFuncSelector(target, selectorName);
+                        if(selCallFunc === 0)
                             cc.log("Skipping selector '" + selectorName + "' since no CCBSelectorResolver is present.");
                         else
-                            actions.push(cc.CallFunc.create(selCallFunc,target));
+                            actions.push(cc.callFunc(selCallFunc,target));
                     } else {
                         cc.log("Unexpected empty selector.");
                     }
@@ -272,7 +270,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
         if(actions.length < 1)
             return null;
 
-        return cc.Sequence.create(actions);
+        return cc.sequence(actions);
     },
     getActionForSoundChannel:function(channel) {
         var lastKeyframeTime = 0;
@@ -286,7 +284,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
             var timeSinceLastKeyframe = keyframe.getTime() - lastKeyframeTime;
             lastKeyframeTime = keyframe.getTime();
             if(timeSinceLastKeyframe > 0) {
-                actions.push(cc.DelayTime.create(timeSinceLastKeyframe));
+                actions.push(cc.delayTime(timeSinceLastKeyframe));
             }
 
             var keyVal = keyframe.getValue();
@@ -298,7 +296,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
         if(actions.length < 1)
             return null;
 
-        return cc.Sequence.create(actions);
+        return cc.sequence(actions);
     },
 
     runAnimationsForSequenceNamed:function(name){
@@ -311,7 +309,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
 
     runAnimationsForSequenceIdTweenDuration:function(nSeqId, tweenDuration){
         if(nSeqId === -1)
-            throw "cc.BuilderAnimationManager.runAnimationsForSequenceIdTweenDuration(): Sequence id should not be -1";
+            throw new Error("cc.BuilderAnimationManager.runAnimationsForSequenceIdTweenDuration(): Sequence id should not be -1");
         tweenDuration = tweenDuration || 0;
 
         this._rootNode.stopAllActions();
@@ -342,7 +340,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
                 var baseKeys = nodeBaseValues.allKeys();
                 for(j = 0; j < baseKeys.length;j++){
                     var selBaseKey =  baseKeys[j];
-                    if(seqNodePropNames.indexOf(selBaseKey) == -1){
+                    if(seqNodePropNames.indexOf(selBaseKey) === -1){
                         var value = nodeBaseValues.objectForKey(selBaseKey);
                         if(value != null)
                             this._setAnimatedProperty(selBaseKey,node, value, tweenDuration);
@@ -353,8 +351,8 @@ cc.BuilderAnimationManager = cc.Class.extend({
 
         // Make callback at end of sequence
         var seq = this._getSequence(nSeqId);
-        var completeAction = cc.Sequence.create(cc.DelayTime.create(seq.getDuration() + tweenDuration),
-            cc.CallFunc.create(this._sequenceCompleted,this));
+        var completeAction = cc.sequence(cc.delayTime(seq.getDuration() + tweenDuration),
+            cc.callFunc(this._sequenceCompleted,this));
         this._rootNode.runAction(completeAction);
 
         // Playback callbacks and sounds
@@ -381,7 +379,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
     runAnimations:function (name, tweenDuration) {
         tweenDuration = tweenDuration || 0;
         var nSeqId;
-        if(typeof(name) === "string")
+        if(cc.isString(name))
             nSeqId = this._getSequenceId(name);
         else
             nSeqId = name;
@@ -444,19 +442,19 @@ cc.BuilderAnimationManager = cc.Class.extend({
         } else if (propName === "rotationY") {
             return cc.BuilderRotateYTo.create(duration, keyframe1.getValue());
         } else if (propName === "opacity") {
-            return cc.FadeTo.create(duration, keyframe1.getValue());
+            return cc.fadeTo(duration, keyframe1.getValue());
         } else if (propName === "color") {
             var selColor = keyframe1.getValue().getColor();
-            return cc.TintTo.create(duration, selColor.r, selColor.g, selColor.b);
+            return cc.tintTo(duration, selColor.r, selColor.g, selColor.b);
         } else if (propName === "visible") {
             var isVisible = keyframe1.getValue();
             if (isVisible) {
-                return cc.Sequence.create(cc.DelayTime.create(duration), cc.Show.create());
+                return cc.sequence(cc.delayTime(duration), cc.show());
             } else {
-                return cc.Sequence.create(cc.DelayTime.create(duration), cc.Hide.create());
+                return cc.sequence(cc.delayTime(duration), cc.hide());
             }
         } else if (propName === "displayFrame") {
-            return cc.Sequence.create(cc.DelayTime.create(duration), cc.BuilderSetSpriteFrame.create(keyframe1.getValue()));
+            return cc.sequence(cc.delayTime(duration), cc.BuilderSetSpriteFrame.create(keyframe1.getValue()));
         } else if(propName === "position"){
             getArr = this._getBaseValue(node,propName);
             type = getArr[2];
@@ -470,7 +468,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
 
             var absPos = cc._getAbsolutePosition(x,y, type,containerSize,propName);
 
-            return cc.MoveTo.create(duration,absPos);
+            return cc.moveTo(duration,absPos);
         } else if( propName === "scale"){
             getArr = this._getBaseValue(node,propName);
             type = getArr[2];
@@ -487,13 +485,13 @@ cc.BuilderAnimationManager = cc.Class.extend({
                 y *= resolutionScale;
             }
 
-            return cc.ScaleTo.create(duration,x,y);
+            return cc.scaleTo(duration,x,y);
         } else if( propName === "skew") {
             //get relative position
             getValueArr = keyframe1.getValue();
             x = getValueArr[0];
             y = getValueArr[1];
-            return cc.SkewTo.create(duration,x,y);
+            return cc.skewTo(duration,x,y);
         } else {
             cc.log("BuilderReader: Failed to create animation for property: " + propName);
         }
@@ -539,7 +537,13 @@ cc.BuilderAnimationManager = cc.Class.extend({
                 // TODO only handle rotation, opacity, displayFrame, color
                 if(propName === "rotation"){
                     node.setRotation(value);
-                } else if(propName === "opacity"){
+                }  else if(propName === "rotationX")
+                {
+                    node.setRotationSkewX(value);
+                }else if(propName === "rotationY")
+                {
+                    node.setRotationSkewY(value);
+                }else if(propName === "opacity"){
                     node.setOpacity(value);
                 } else if(propName === "displayFrame"){
                     node.setSpriteFrame(value);
@@ -578,29 +582,29 @@ cc.BuilderAnimationManager = cc.Class.extend({
         if (easingType === CCB_KEYFRAME_EASING_LINEAR || easingType === CCB_KEYFRAME_EASING_INSTANT ) {
             return action;
         } else if (easingType === CCB_KEYFRAME_EASING_CUBIC_IN) {
-            return cc.EaseIn.create(action, easingOpt);
+            return action.easing(cc.easeIn(easingOpt));
         } else if (easingType === CCB_KEYFRAME_EASING_CUBIC_OUT) {
-            return cc.EaseOut.create(action, easingOpt);
+            return action.easing(cc.easeOut(easingOpt));
         } else if (easingType === CCB_KEYFRAME_EASING_CUBIC_INOUT) {
-            return cc.EaseInOut.create(action, easingOpt);
+            return action.easing(cc.easeInOut(easingOpt));
         } else if (easingType === CCB_KEYFRAME_EASING_BACK_IN) {
-            return cc.EaseBackIn.create(action);
+            return action.easing(cc.easeBackIn());
         } else if (easingType === CCB_KEYFRAME_EASING_BACK_OUT) {
-            return cc.EaseBackOut.create(action);
+            return action.easing(cc.easeBackOut());
         } else if (easingType === CCB_KEYFRAME_EASING_BACK_INOUT) {
-            return cc.EaseBackInOut.create(action);
+            return action.easing(cc.easeBackInOut());
         } else if (easingType === CCB_KEYFRAME_EASING_BOUNCE_IN) {
-            return cc.EaseBounceIn.create(action);
+            return action.easing(cc.easeBounceIn());
         } else if (easingType === CCB_KEYFRAME_EASING_BOUNCE_OUT) {
-            return cc.EaseBounceOut.create(action);
+            return action.easing(cc.easeBounceOut());
         } else if (easingType === CCB_KEYFRAME_EASING_BOUNCE_INOUT) {
-            return cc.EaseBounceInOut.create(action);
+            return action.easing(cc.easeBounceInOut());
         } else if (easingType === CCB_KEYFRAME_EASING_ELASTIC_IN) {
-            return cc.EaseElasticIn.create(action, easingOpt);
+            return action.easing(cc.easeElasticIn(easingOpt));
         } else if (easingType === CCB_KEYFRAME_EASING_ELASTIC_OUT) {
-            return cc.EaseElasticOut.create(action, easingOpt);
+            return action.easing(cc.easeElasticOut(easingOpt));
         } else if (easingType === CCB_KEYFRAME_EASING_ELASTIC_INOUT) {
-            return cc.EaseElasticInOut.create(action, easingOpt);
+            return action.easing(cc.easeElasticInOut(easingOpt));
         } else {
             cc.log("BuilderReader: Unkown easing type " + easingType);
             return action;
@@ -619,7 +623,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
             var timeFirst = keyframeFirst.getTime() + tweenDuration;
 
             if (timeFirst > 0) {
-                actions.push(cc.DelayTime.create(timeFirst));
+                actions.push(cc.delayTime(timeFirst));
             }
 
             for (var i = 0; i < numKeyframes - 1; ++i) {
@@ -634,8 +638,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
                 }
             }
 
-            var seq = cc.Sequence.create(actions);
-            node.runAction(seq);
+            node.runAction(cc.sequence(actions));
         }
     },
 
@@ -651,7 +654,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
         var nextSeqId = locRunningSequence.getChainedSequenceId();
         this._runningSequence = null;
 
-        if (nextSeqId != -1)
+        if (nextSeqId !== -1)
             this.runAnimations(nextSeqId, 0);
 
         if (this._delegate)
@@ -729,7 +732,7 @@ cc.BuilderRotateXTo = cc.ActionInterval.extend({
 });
 
 cc.BuilderRotateXTo.create = function (duration, angle) {
-    throw "rotationX has not been implemented in cocos2d-html5";
+    throw new Error("rotationX has not been implemented in cocos2d-html5");
 };
 
 //
@@ -740,7 +743,7 @@ cc.BuilderRotateYTo = cc.ActionInterval.extend({
 });
 
 cc.BuilderRotateYTo.create = function (duration, angle) {
-    throw "rotationY has not been implemented in cocos2d-html5";
+    throw new Error("rotationY has not been implemented in cocos2d-html5");
 };
 
 //

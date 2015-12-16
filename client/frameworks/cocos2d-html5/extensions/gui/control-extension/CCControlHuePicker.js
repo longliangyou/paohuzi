@@ -1,6 +1,8 @@
 /**
  *
- * Copyright (c) 2010-2012 cocos2d-x.org
+ * Copyright (c) 2008-2010 Ricardo Quesada
+ * Copyright (c) 2011-2012 cocos2d-x.org
+ * Copyright (c) 2013-2014 Chukong Technologies Inc.
  *
  * Copyright 2012 Stewart Hamilton-Arrandale.
  * http://creativewax.co.uk
@@ -48,6 +50,16 @@ cc.ControlHuePicker = cc.Control.extend(/** @lends cc.ControlHuePicker# */{
     _slider:null,
     _startPos:null,
     _className:"ControlHuePicker",
+
+    /**
+     * The constructor of cc.ControlHuePicker
+     * @param {cc.Node} target
+     * @param {cc.Point} pos position
+     */
+    ctor:function(target, pos) {
+        cc.Control.prototype.ctor.call(this);
+        pos && this.initWithTargetAndPos(target, pos);
+    },
 
     //maunally put in the setters
     getHue:function () {
@@ -133,7 +145,7 @@ cc.ControlHuePicker = cc.Control.extend(/** @lends cc.ControlHuePicker# */{
 
         // Update angle by using the direction of the location
         var angle = Math.atan2(dy, dx);
-        var angleDeg = cc.radiansToDegress(angle) + 180.0;
+        var angleDeg = cc.radiansToDegrees(angle) + 180.0;
 
         // use the position / slider width to determin the percentage the dragger is at
         this.setHue(angleDeg);
@@ -195,8 +207,12 @@ cc.defineGetterSetter(_p, "startPos", _p.getStartPos);
 
 _p = null;
 
+/**
+ * @deprecated
+ * @param target
+ * @param pos
+ * @returns {ControlHuePicker}
+ */
 cc.ControlHuePicker.create = function (target, pos) {
-    var pRet = new cc.ControlHuePicker();
-    pRet.initWithTargetAndPos(target, pos);
-    return pRet;
+    return new cc.ControlHuePicker(target, pos);
 };

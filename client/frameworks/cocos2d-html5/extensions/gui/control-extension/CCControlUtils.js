@@ -1,5 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2008-2010 Ricardo Quesada
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  Copyright 2012 Stewart Hamilton-Arrandale.
  http://creativewax.co.uk
@@ -52,7 +54,7 @@ cc.HSV = function(h,s,v){
 cc.ControlUtils = {};
 
 cc.ControlUtils.addSpriteToTargetWithPosAndAnchor = function(spriteName,target,pos,anchor){
-    var sprite =cc.Sprite.create("#" + spriteName);
+    var sprite = new cc.Sprite("#" + spriteName);
 
     if (!sprite)
         return null;

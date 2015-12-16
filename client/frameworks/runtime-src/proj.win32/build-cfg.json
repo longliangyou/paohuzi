@@ -17,8 +17,8 @@
             "to": ""
         },
         {
-            "from": "../../js-bindings/bindings/script",
-            "to": ""
+            "from": "../../cocos2d-x/cocos/scripting/js-bindings/script",
+            "to": "script"
         }
     ]
 }

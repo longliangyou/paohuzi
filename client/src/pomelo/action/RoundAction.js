@@ -11,13 +11,14 @@ var RoundAction = {
     newRound: function(roomId){
 
       var userIds = RoomList.getUserIdsByRoomId(roomId);
-      var bankIndex = 0// _.random(2);
+      var bankIndex = 0// _.random(2); //庄家
       var round = Round.createNew(userIds, bankIndex);
       RoomList.setRound(roomId, round);
 
       var cards;
       _.each(userIds, function(userId){
         cards = round.getCardsByUserId(userId);
+        console.log("牌分别是:" + cards);
 
         // 开局发牌
         var newRoundEvent = {

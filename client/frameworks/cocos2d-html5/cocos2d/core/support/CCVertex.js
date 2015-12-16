@@ -1,5 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2008-2010 Ricardo Quesada
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
  Copyright (c) 2009      Valentin Milea
 
  http://www.cocos2d-x.org
@@ -74,7 +76,7 @@ cc.vertexLineToPolygon = function (points, stroke, vertices, offset, nuPoints) {
     }
 
     // Validate vertexes
-    offset = (offset == 0) ? 0 : offset - 1;
+    offset = (offset === 0) ? 0 : offset - 1;
     for (i = offset; i < nuPointsMinus; i++) {
         idx = i * 2;
         var idx1 = idx + 2;
@@ -115,7 +117,7 @@ cc.vertexLineIntersect = function (Ax, Ay, Bx, By, Cx, Cy, Dx, Dy) {
     var distAB, theCos, theSin, newX;
 
     // FAIL: Line undefined
-    if ((Ax == Bx && Ay == By) || (Cx == Dx && Cy == Dy))
+    if ((Ax === Bx && Ay === By) || (Cx === Dx && Cy === Dy))
         return {isSuccess:false, value:0};
 
     //  Translate system to make A the origin
@@ -140,11 +142,29 @@ cc.vertexLineIntersect = function (Ax, Ay, Bx, By, Cx, Cy, Dx, Dy) {
     Dx = newX;
 
     // FAIL: Lines are parallel.
-    if (Cy == Dy) return {isSuccess:false, value:0};
+    if (Cy === Dy) return {isSuccess:false, value:0};
 
     // Discover the relative position of the intersection in the line AB
     var t = (Dx + (Cx - Dx) * Dy / (Dy - Cy)) / distAB;
 
     // Success.
     return {isSuccess:true, value:t};
+};
+
+/**
+ * returns wheter or not polygon defined by vertex list is clockwise
+ * @param {Array} verts
+ * @return {Boolean}
+ */
+cc.vertexListIsClockwise = function(verts) {
+    for (var i = 0, len = verts.length; i < len; i++) {
+        var a = verts[i];
+        var b = verts[(i + 1) % len];
+        var c = verts[(i + 2) % len];
+
+        if (cc.pCross(cc.pSub(b, a), cc.pSub(c, b)) > 0)
+            return false;
+    }
+
+    return true;
 };

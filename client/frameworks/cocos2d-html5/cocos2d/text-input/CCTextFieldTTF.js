@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -89,11 +89,25 @@ cc.TextFieldDelegate = cc.Class.extend(/** @lends cc.TextFieldDelegate# */{
  * @property {Number}       charCount           - <@readonly> Characators count
  * @property {String}       placeHolder         - Place holder for the field
  * @property {cc.Color}     colorSpaceHolder
+ *
+ * @param {String} placeholder
+ * @param {cc.Size} dimensions
+ * @param {Number} alignment
+ * @param {String} fontName
+ * @param {Number} fontSize
+ *
+ * @example
+ * //example
+ * // When five parameters
+ * var textField = new cc.TextFieldTTF("<click here for input>", cc.size(100,50), cc.TEXT_ALIGNMENT_LEFT,"Arial", 32);
+ * // When three parameters
+ * var textField = new cc.TextFieldTTF("<click here for input>", "Arial", 32);
  */
 cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
 	delegate:null,
 	colorSpaceHolder:null,
 
+    _colorText: null,
     _lens:null,
     _inputText:"",
     _placeHolder:"",
@@ -101,23 +115,17 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
     _className:"TextFieldTTF",
 
     /**
-     *  creates a cc.TextFieldTTF from a fontName, alignment, dimension and font size
-     * @constructor
+     * Constructor function, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function. <br />
+     * creates a cc.TextFieldTTF from a fontName, alignment, dimension and font size.
      * @param {String} placeholder
      * @param {cc.Size} dimensions
      * @param {Number} alignment
      * @param {String} fontName
      * @param {Number} fontSize
-     * @example
-     * //example
-     * // When five parameters
-     * var textField = cc.TextFieldTTF.create("<click here for input>", cc.size(100,50), cc.TEXT_ALIGNMENT_LEFT,"Arial", 32);
-     * // When three parameters
-     * var textField = cc.TextFieldTTF.create("<click here for input>", "Arial", 32);
      */
     ctor:function (placeholder, dimensions, alignment, fontName, fontSize) {
         this.colorSpaceHolder = cc.color(127, 127, 127);
-        cc.imeDispatcher.addDelegate(this);
+        this._colorText = cc.color(255,255,255, 255);
         cc.LabelTTF.prototype.ctor.call(this);
 
         if(fontSize !== undefined){
@@ -131,7 +139,18 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
         }
     },
 
+    onEnter: function(){
+        cc.LabelTTF.prototype.onEnter.call(this);
+        cc.imeDispatcher.addDelegate(this);
+    },
+
+    onExit: function(){
+        cc.LabelTTF.prototype.onExit.call(this);
+        cc.imeDispatcher.removeDelegate(this);
+    },
+
     /**
+     * Gets the delegate.
      * @return {cc.Node}
      */
     getDelegate:function () {
@@ -139,6 +158,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
     },
 
     /**
+     * Set the delegate.
      * @param {cc.Node} value
      */
     setDelegate:function (value) {
@@ -146,6 +166,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
     },
 
     /**
+     * Gets the char count.
      * @return {Number}
      */
     getCharCount:function () {
@@ -153,18 +174,39 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
     },
 
     /**
+     * Returns the color of space holder.
      * @return {cc.Color}
      */
     getColorSpaceHolder:function () {
-        return this.colorSpaceHolder;
+        return cc.color(this.colorSpaceHolder);
     },
 
     /**
+     * Sets the color of space holder.
      * @param {cc.Color} value
      */
     setColorSpaceHolder:function (value) {
-        this.colorSpaceHolder = value;
+        this.colorSpaceHolder.r = value.r;
+        this.colorSpaceHolder.g = value.g;
+        this.colorSpaceHolder.b = value.b;
+        this.colorSpaceHolder.a = cc.isUndefined(value.a) ? 255 : value.a;
+        if(!this._inputText.length)
+            this.setColor(this.colorSpaceHolder);
     },
+
+    /**
+     * Sets the color of cc.TextFieldTTF's text.
+     * @param {cc.Color} textColor
+     */
+    setTextColor:function(textColor){
+        this._colorText.r = textColor.r;
+        this._colorText.g = textColor.g;
+        this._colorText.b = textColor.b;
+        this._colorText.a = cc.isUndefined(textColor.a) ? 255 : textColor.a;
+        if(this._inputText.length)
+            this.setColor(this._colorText);
+    },
+
     /**
      * Initializes the cc.TextFieldTTF with a font name, alignment, dimension and font size
      * @param {String} placeholder
@@ -184,19 +226,17 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
     initWithPlaceHolder:function (placeholder, dimensions, alignment, fontName, fontSize) {
         switch (arguments.length) {
             case 5:
-                if (placeholder) {
+                if (placeholder)
                     this.setPlaceHolder(placeholder);
-                }
                 return this.initWithString(this._placeHolder,fontName, fontSize, dimensions, alignment);
                 break;
             case 3:
-                if (placeholder) {
+                if (placeholder)
                     this.setPlaceHolder(placeholder);
-                }
                 return this.initWithString(this._placeHolder, arguments[1], arguments[2]);
                 break;
             default:
-                throw "Argument must be non-nil ";
+                throw new Error("Argument must be non-nil ");
                 break;
         }
     },
@@ -210,14 +250,20 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
         this._inputText = text || "";
 
         // if there is no input text, display placeholder instead
-        if (!this._inputText.length)
+        if (!this._inputText.length){
             cc.LabelTTF.prototype.setString.call(this, this._placeHolder);
-        else
+            this.setColor(this.colorSpaceHolder);
+        } else {
             cc.LabelTTF.prototype.setString.call(this,this._inputText);
+            this.setColor(this._colorText);
+        }
+        if(cc._renderType === cc.game.RENDER_TYPE_CANVAS)
+            this._renderCmd._updateTexture();
         this._charCount = this._inputText.length;
     },
 
     /**
+     * Gets the string
      * @return {String}
      */
     getString:function () {
@@ -225,16 +271,21 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
     },
 
     /**
+     * Set the place holder. <br />
+     * display this string if string equal "".
      * @param {String} text
      */
     setPlaceHolder:function (text) {
         this._placeHolder = text || "";
         if (!this._inputText.length) {
             cc.LabelTTF.prototype.setString.call(this,this._placeHolder);
+            this.setColor(this.colorSpaceHolder);
         }
     },
 
     /**
+     * Gets the place holder. <br />
+     * default display string.
      * @return {String}
      */
     getPlaceHolder:function () {
@@ -242,7 +293,8 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
     },
 
     /**
-     * @param {CanvasContext} ctx
+     * Render function using the canvas 2d context or WebGL context, internal usage only, please do not call this function.
+     * @param {CanvasRenderingContext2D | WebGLRenderingContext} ctx The render context
      */
     draw:function (ctx) {
         //console.log("size",this._contentSize);
@@ -250,20 +302,13 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
         if (this.delegate && this.delegate.onDraw(this))
             return;
 
-        if (this._inputText && this._inputText.length > 0) {
-            cc.LabelTTF.prototype.draw.call(this, context);
-            return;
-        }
-
-        // draw placeholder
-        var color = this.color;
-        this.color = this.colorSpaceHolder;
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
-            this._updateTexture();
         cc.LabelTTF.prototype.draw.call(this, context);
-        this.color = color;
     },
 
+    /**
+     * Recursive method that visit its children and draw them.
+     * @param {CanvasRenderingContext2D|WebGLRenderingContext} ctx
+     */
     visit: function(ctx){
         this._super(ctx);
     },
@@ -288,6 +333,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
     },
 
     /**
+     * Return whether to allow attach with IME.
      * @return {Boolean}
      */
     canAttachWithIME:function () {
@@ -301,6 +347,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
     },
 
     /**
+     * Return whether to allow detach with IME.
      * @return {Boolean}
      */
     canDetachWithIME:function () {
@@ -314,11 +361,11 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
     },
 
     /**
-     *  Delete backward
+     * Delete backward
      */
     deleteBackward:function () {
         var strLen = this._inputText.length;
-        if (strLen == 0)
+        if (strLen === 0)
             return;
 
         // get the delete byte number
@@ -334,6 +381,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
             this._inputText = "";
             this._charCount = 0;
             cc.LabelTTF.prototype.setString.call(this,this._placeHolder);
+            this.setColor(this.colorSpaceHolder);
             return;
         }
 
@@ -348,7 +396,28 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
         cc.imeDispatcher.removeDelegate(this);
     },
 
+    _tipMessage: "please enter your word:",
     /**
+     * Sets the input tip message to show on mobile browser.  (mobile Web only)
+     * @param {string} tipMessage
+     */
+    setTipMessage: function (tipMessage) {
+        if (tipMessage == null)
+            return;
+        this._tipMessage = tipMessage;
+    },
+
+    /**
+     * Gets the input tip message to show on mobile browser.   (mobile Web only)
+     * @returns {string}
+     */
+    getTipMessage: function () {
+        return this._tipMessage;
+    },
+
+    /**
+     * Append the text. <br />
+     * Input the character.
      * @param {String} text
      * @param {Number} len
      */
@@ -372,7 +441,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
             this.string = sText;
         }
 
-        if (pos == -1)
+        if (pos === -1)
             return;
 
         // '\n' has inserted,  let delegate process first
@@ -382,7 +451,9 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
         // if delegate hasn't process, detach with ime as default
         this.detachWithIME();
     },
+
     /**
+     * Gets the input text.
      * @return {String}
      */
     getContentText:function () {
@@ -412,21 +483,16 @@ cc.defineGetterSetter(_p, "charCount", _p.getCharCount);
 _p.placeHolder;
 cc.defineGetterSetter(_p, "placeHolder", _p.getPlaceHolder, _p.setPlaceHolder);
 
-
 /**
- *  creates a cc.TextFieldTTF from a fontName, alignment, dimension and font size
+ * Please use new TextFieldTTF instead. <br />
+ * Creates a cc.TextFieldTTF from a fontName, alignment, dimension and font size.
+ * @deprecated since v3.0 Please use new TextFieldTTF instead.
  * @param {String} placeholder
  * @param {cc.Size} dimensions
  * @param {Number} alignment
  * @param {String} fontName
  * @param {Number} fontSize
  * @return {cc.TextFieldTTF|Null}
- * @example
- * //example
- * // When five parameters
- * var textField = cc.TextFieldTTF.create("<click here for input>", cc.size(100,50), cc.TEXT_ALIGNMENT_LEFT,"Arial", 32);
- * // When three parameters
- * var textField = cc.TextFieldTTF.create("<click here for input>", "Arial", 32);
  */
 cc.TextFieldTTF.create = function (placeholder, dimensions, alignment, fontName, fontSize) {
     return new cc.TextFieldTTF(placeholder, dimensions, alignment, fontName, fontSize);

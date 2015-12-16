@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -28,12 +28,12 @@
  * the dollar sign, classic like jquery, this selector add extra methods to HTMLElement without touching its prototype</br>
  * it is also chainable like jquery
  * @param {HTMLElement|String} x pass in a css selector in string or the whole HTMLElement
- * @class
+ * @function
  * @return {cc.$}
  */
 cc.$ = function (x) {
     /** @lends cc.$# */
-    var parent = (this == cc) ? document : this;
+    var parent = (this === cc) ? document : this;
 
     var el = (x instanceof HTMLElement) ? x : parent.querySelector(x);
 

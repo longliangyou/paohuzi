@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -25,14 +25,18 @@
  ****************************************************************************/
 
 /**
- *
- * @namespace A SAX Parser
+ * A SAX Parser
+ * @class
  * @name cc.saxParser
+ * @extends cc.Class
  */
 cc.SAXParser = cc.Class.extend(/** @lends cc.saxParser# */{
     _parser: null,
     _isSupportDOMParser: null,
 
+    /**
+     * Constructor of cc.SAXParser
+     */
     ctor: function () {
         if (window.DOMParser) {
             this._isSupportDOMParser = true;
@@ -42,6 +46,11 @@ cc.SAXParser = cc.Class.extend(/** @lends cc.saxParser# */{
         }
     },
 
+    /**
+     * @function
+     * @param {String} xmlTxt
+     * @return {Document}
+     */
     parse : function(xmlTxt){
         return this._parseXML(xmlTxt);
     },
@@ -64,8 +73,10 @@ cc.SAXParser = cc.Class.extend(/** @lends cc.saxParser# */{
 
 /**
  *
- * @namespace A plist Parser
+ * cc.plistParser is a singleton object for parsing plist files
+ * @class
  * @name cc.plistParser
+ * @extends cc.SAXParser
  */
 cc.PlistParser = cc.SAXParser.extend(/** @lends cc.plistParser# */{
 
@@ -77,14 +88,16 @@ cc.PlistParser = cc.SAXParser.extend(/** @lends cc.plistParser# */{
     parse : function (xmlTxt) {
         var xmlDoc = this._parseXML(xmlTxt);
         var plist = xmlDoc.documentElement;
-        if (plist.tagName != 'plist')
-            throw "Not a plist file!";
+        if (plist.tagName !== 'plist') {
+            cc.warn("Not a plist file!");
+            return {};
+        }
 
         // Get first real node
         var node = null;
         for (var i = 0, len = plist.childNodes.length; i < len; i++) {
             node = plist.childNodes[i];
-            if (node.nodeType == 1)
+            if (node.nodeType === 1)
                 break;
         }
         xmlDoc = null;
@@ -93,12 +106,12 @@ cc.PlistParser = cc.SAXParser.extend(/** @lends cc.plistParser# */{
 
     _parseNode: function (node) {
         var data = null, tagName = node.tagName;
-        if(tagName == "dict"){
+        if(tagName === "dict"){
             data = this._parseDict(node);
-        }else if(tagName == "array"){
+        }else if(tagName === "array"){
             data = this._parseArray(node);
-        }else if(tagName == "string"){
-            if (node.childNodes.length == 1)
+        }else if(tagName === "string"){
+            if (node.childNodes.length === 1)
                 data = node.firstChild.nodeValue;
             else {
                 //handle Firefox's 4KB nodeValue limit
@@ -106,13 +119,13 @@ cc.PlistParser = cc.SAXParser.extend(/** @lends cc.plistParser# */{
                 for (var i = 0; i < node.childNodes.length; i++)
                     data += node.childNodes[i].nodeValue;
             }
-        }else if(tagName == "false"){
+        }else if(tagName === "false"){
             data = false;
-        }else if(tagName == "true"){
+        }else if(tagName === "true"){
             data = true;
-        }else if(tagName == "real"){
+        }else if(tagName === "real"){
             data = parseFloat(node.firstChild.nodeValue);
-        }else if(tagName == "integer"){
+        }else if(tagName === "integer"){
             data = parseInt(node.firstChild.nodeValue, 10);
         }
         return data;
@@ -122,7 +135,7 @@ cc.PlistParser = cc.SAXParser.extend(/** @lends cc.plistParser# */{
         var data = [];
         for (var i = 0, len = node.childNodes.length; i < len; i++) {
             var child = node.childNodes[i];
-            if (child.nodeType != 1)
+            if (child.nodeType !== 1)
                 continue;
             data.push(this._parseNode(child));
         }
@@ -134,16 +147,23 @@ cc.PlistParser = cc.SAXParser.extend(/** @lends cc.plistParser# */{
         var key = null;
         for (var i = 0, len = node.childNodes.length; i < len; i++) {
             var child = node.childNodes[i];
-            if (child.nodeType != 1)
+            if (child.nodeType !== 1)
                 continue;
 
             // Grab the key, next noe should be the value
-            if (child.tagName == 'key')
+            if (child.tagName === 'key')
                 key = child.firstChild.nodeValue;
             else
                 data[key] = this._parseNode(child);                 // Parse the value node
         }
         return data;
     }
-
 });
+
+cc.saxParser = new cc.SAXParser();
+/**
+ * @type {cc.PlistParser}
+ * @name cc.plistParser
+ * A Plist Parser
+ */
+cc.plistParser = new cc.PlistParser();

@@ -1,5 +1,7 @@
 /****************************************************************************
- Copyright (c) 2012 cocos2d-x.org
+ Copyright (c) 2008-2010 Ricardo Quesada
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
  Copyright (c) 2010 Sangwoo Im
 
  http://www.cocos2d-x.org
@@ -81,11 +83,12 @@ cc.ArrayForObjectSorting = cc.Class.extend(/** @lends cc.ArrayForObjectSorting# 
      * If the compare message does not result NSComparisonResult, sorting behavior
      * is not defined. It ignores duplicate entries and inserts next to it.
      *
-     * @param {object} addObject
+     * @function
+     * @param {Object} addObject    Object to insert
      */
     insertSortedObject:function (addObject) {
         if(!addObject)
-            throw "cc.ArrayForObjectSorting.insertSortedObject(): addObject should be non-null.";
+            throw new Error("cc.ArrayForObjectSorting.insertSortedObject(): addObject should be non-null.");
         var idx = this.indexOfSortedObject(addObject);
         this.insertObject(addObject, idx);
     },
@@ -96,17 +99,18 @@ cc.ArrayForObjectSorting = cc.Class.extend(/** @lends cc.ArrayForObjectSorting# 
      * Removes an object with given key and value. If no object is found in array
      * with the key and value, no action is taken.
      *
-     * @param value to remove
+     * @function
+     * @param {Object} delObject    Object to remove
      */
     removeSortedObject:function (delObject) {
-        if (this.count() == 0) {
+        if (this.count() === 0) {
             return;
         }
 
         var idx = this.indexOfSortedObject(delObject);
-        if (idx < this.count() && idx != cc.INVALID_INDEX) {
+        if (idx < this.count() && idx !== cc.INVALID_INDEX) {
             var foundObj = this.objectAtIndex(idx);
-            if (foundObj.getObjectID() == delObject.getObjectID()) {
+            if (foundObj.getObjectID() === delObject.getObjectID()) {
                 this.removeObjectAtIndex(idx);
             }
         }
@@ -119,14 +123,15 @@ cc.ArrayForObjectSorting = cc.Class.extend(/** @lends cc.ArrayForObjectSorting# 
      * keep consistency of being sorted. If it is changed externally, it must be
      * sorted completely again.
      *
-     * @param value to set
-     * @param object the object which has the value
+     * @function
+     * @param {Number} tag          Tag to set
+     * @param {Object} setObject    The object which would be set
      */
     setObjectID_ofSortedObject:function (tag, setObject) {
         var idx = this.indexOfSortedObject(setObject);
-        if (idx < this.count() && idx != cc.INVALID_INDEX) {
+        if (idx < this.count() && idx !== cc.INVALID_INDEX) {
             var foundObj = this.objectAtIndex(idx);
-            if (foundObj.getObjectID() == setObject.getObjectID()) {
+            if (foundObj.getObjectID() === setObject.getObjectID()) {
                 this.removeObjectAtIndex(idx);
                 foundObj.setObjectID(tag);
                 this.insertSortedObject(foundObj);
@@ -135,16 +140,16 @@ cc.ArrayForObjectSorting = cc.Class.extend(/** @lends cc.ArrayForObjectSorting# 
     },
 
     objectWithObjectID:function (tag) {
-        if (this.count() == 0) {
+        if (this.count() === 0) {
             return null;
         }
         var foundObj = new cc.SortedObject();
         foundObj.setObjectID(tag);
 
         var idx = this.indexOfSortedObject(foundObj);
-        if (idx < this.count() && idx != cc.INVALID_INDEX) {
+        if (idx < this.count() && idx !== cc.INVALID_INDEX) {
             foundObj = this.objectAtIndex(idx);
-            if (foundObj.getObjectID() != tag)
+            if (foundObj.getObjectID() !== tag)
                 foundObj = null;
         }
         return foundObj;
@@ -156,8 +161,9 @@ cc.ArrayForObjectSorting = cc.Class.extend(/** @lends cc.ArrayForObjectSorting# 
      * Returns an object with given key and value. If no object is found,
      * it returns nil.
      *
-     * @param value to locate object
-     * @return object found or nil.
+     * @function
+     * @param {Number} tag  Tag to locate object
+     * @return {Object|null}
      */
     getObjectWithObjectID:function (tag) {
         return null;
@@ -171,8 +177,9 @@ cc.ArrayForObjectSorting = cc.Class.extend(/** @lends cc.ArrayForObjectSorting# 
      * would have been located. If object must be located at the end of array,
      * it returns the length of the array, which is out of bound.
      *
-     * @param value to locate object
-     * @return index of an object found
+     * @function
+     * @param {Number} idxObj   Id to locate object
+     * @return {Number} index of an object found
      */
     indexOfSortedObject:function (idxObj) {
         var idx = 0;
@@ -186,7 +193,7 @@ cc.ArrayForObjectSorting = cc.Class.extend(/** @lends cc.ArrayForObjectSorting# 
             for (var i = 0; i < locObjectArr.length; i++) {
                 var pSortableObj = locObjectArr[i];
                 var curObjectID = pSortableObj.getObjectID();
-                if ((uOfSortObjectID == curObjectID) ||
+                if ((uOfSortObjectID === curObjectID) ||
                     (uOfSortObjectID >= uPrevObjectID && uOfSortObjectID < curObjectID)) {
                     break;
                 }
@@ -206,7 +213,7 @@ cc.ArrayForObjectSorting = cc.Class.extend(/** @lends cc.ArrayForObjectSorting# 
 
     lastObject:function () {
         var locObjectArr = this._saveObjectArr;
-        if (locObjectArr.length == 0)
+        if (locObjectArr.length === 0)
             return null;
         return locObjectArr[locObjectArr.length - 1];
     },

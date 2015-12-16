@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -27,6 +27,7 @@
 
 /**
  * Load binary data by url.
+ * @function
  * @param {String} url
  * @param {Function} [cb]
  */
@@ -36,11 +37,11 @@ cc.loader.loadBinary = function (url, cb) {
     var xhr = this.getXMLHttpRequest(),
         errInfo = "load " + url + " failed!";
     xhr.open("GET", url, true);
-    if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
+    if (cc.loader.loadBinary._IEFilter) {
         // IE-specific logic here
         xhr.setRequestHeader("Accept-Charset", "x-user-defined");
         xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
+            if (xhr.readyState === 4 && xhr.status === 200) {
                 var fileContents = cc._convertResponseBodyToText(xhr["responseBody"]);
                 cb(null, self._str2Uint8Array(fileContents));
             } else cb(errInfo);
@@ -48,11 +49,13 @@ cc.loader.loadBinary = function (url, cb) {
     } else {
         if (xhr.overrideMimeType) xhr.overrideMimeType("text\/plain; charset=x-user-defined");
         xhr.onload = function () {
-            xhr.readyState == 4 && xhr.status == 200 ? cb(null, self._str2Uint8Array(xhr.responseText)) : cb(errInfo);
+            xhr.readyState === 4 && xhr.status === 200 ? cb(null, self._str2Uint8Array(xhr.responseText)) : cb(errInfo);
         };
     }
     xhr.send(null);
 };
+
+cc.loader.loadBinary._IEFilter = (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent) && window.IEBinaryToArray_ByteStr && window.IEBinaryToArray_ByteStr_Last);
 
 cc.loader._str2Uint8Array = function (strData) {
     if (!strData)
@@ -65,16 +68,22 @@ cc.loader._str2Uint8Array = function (strData) {
     return arrData;
 };
 
+/**
+ * Load binary data by url synchronously
+ * @function
+ * @param {String} url
+ * @return {Uint8Array}
+ */
 cc.loader.loadBinarySync = function (url) {
     var self = this;
     var req = this.getXMLHttpRequest();
     var errInfo = "load " + url + " failed!";
     req.open('GET', url, false);
     var arrayInfo = null;
-    if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
+    if (cc.loader.loadBinary._IEFilter) {
         req.setRequestHeader("Accept-Charset", "x-user-defined");
         req.send(null);
-        if (req.status != 200) {
+        if (req.status !== 200) {
             cc.log(errInfo);
             return null;
         }
@@ -87,7 +96,7 @@ cc.loader.loadBinarySync = function (url) {
         if (req.overrideMimeType)
             req.overrideMimeType('text\/plain; charset=x-user-defined');
         req.send(null);
-        if (req.status != 200) {
+        if (req.status !== 200) {
             cc.log(errInfo);
             return null;
         }
@@ -98,9 +107,9 @@ cc.loader.loadBinarySync = function (url) {
 };
 
 //Compatibility with IE9
-var Uint8Array = Uint8Array || Array;
+window.Uint8Array = window.Uint8Array || window.Array;
 
-if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
+if (cc.loader.loadBinary._IEFilter) {
     var IEBinaryToArray_ByteStr_Script =
         "<!-- IEBinaryToArray_ByteStr -->\r\n" +
             //"<script type='text/vbscript'>\r\n" +
@@ -120,7 +129,7 @@ if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
 
     // inject VBScript
     //document.write(IEBinaryToArray_ByteStr_Script);
-    var myVBScript = cc.newElement('script');
+    var myVBScript = document.createElement('script');
     myVBScript.type = "text/vbscript";
     myVBScript.textContent = IEBinaryToArray_ByteStr_Script;
     document.body.appendChild(myVBScript);

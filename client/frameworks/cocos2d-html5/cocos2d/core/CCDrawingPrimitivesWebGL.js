@@ -1,5 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2014 cocos2d-x.org
+ Copyright (c) 2008-2010 Ricardo Quesada
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -23,7 +25,7 @@
  ****************************************************************************/
 
 /**
- * Canvas of DrawingPrimitive implement version
+ * Canvas of DrawingPrimitive implement version use for WebGlMode
  * @class
  * @extends cc.Class
  */
@@ -35,12 +37,16 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
     _colorArray: null,
     _pointSizeLocation:-1,
     _pointSize:-1,
+    /**
+     * contructor of cc.DrawingPrimitiveWebGL
+     * @param ctx rendercontext
+     */
     ctor:function (ctx) {
         if (ctx == null)
             ctx = cc._renderContext;
 
         if (!ctx instanceof  WebGLRenderingContext)
-            throw "Can't initialise DrawingPrimitiveWebGL. context need is WebGLRenderingContext";
+            throw new Error("Can't initialise DrawingPrimitiveWebGL. context need is WebGLRenderingContext");
 
         this._renderContext = ctx;
         this._colorArray = new Float32Array([1.0, 1.0, 1.0, 1.0]);
@@ -98,7 +104,7 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
      * @param {Number} numberOfPoints
      */
     drawPoints:function (points, numberOfPoints) {
-        if (!points || points.length == 0)
+        if (!points || points.length === 0)
             return;
 
         this.lazy_init();
@@ -389,7 +395,7 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
             var dt = i / segments;
 
             // border
-            if (dt == 1) {
+            if (dt === 1) {
                 p = config.length - 1;
                 lt = 1;
             } else {
@@ -397,7 +403,7 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
                 lt = (dt - deltaT * p) / deltaT;
             }
 
-            var newPos = cc.CardinalSplineAt(
+            var newPos = cc.cardinalSplineAt(
                 cc.getControlPointAt(config, p - 1),
                 cc.getControlPointAt(config, p),
                 cc.getControlPointAt(config, p + 1),

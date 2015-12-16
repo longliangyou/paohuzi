@@ -1,5 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2008-2010 Ricardo Quesada
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -46,10 +48,9 @@ cc.Spacer.horizontalSpacer = function (space) {
 /**
  * MenuPassive: The menu passive ui component
  * @class
- * @extend cc.Layer
+ * @extends cc.Layer
  */
 cc.MenuPassive = cc.Layer.extend(/** @lends cc.MenuPassive# */{
-    RGBAProtocol:true,
 
     _color:null,
     _opacity:0,
@@ -71,7 +72,7 @@ cc.MenuPassive = cc.Layer.extend(/** @lends cc.MenuPassive# */{
 
         if (this._children && this._children.length > 0) {
             for (var i = 0; i < this._children.length; i++) {
-                if (this._children[i] && this._children[i].RGBAProtocol) {
+                if (this._children[i]) {
                     this._children[i].setColor(color);
                 }
             }
@@ -91,7 +92,7 @@ cc.MenuPassive = cc.Layer.extend(/** @lends cc.MenuPassive# */{
 
         if (this._children && this._children.length > 0) {
             for (var i = 0; i < this._children.length; i++) {
-                if (this._children[i] && this._children[i].RGBAProtocol) {
+                if (this._children[i]) {
                     this._children[i].setOpacity(opacity);
                 }
             }
@@ -256,7 +257,7 @@ cc.MenuPassive = cc.Layer.extend(/** @lends cc.MenuPassive# */{
         if (this._children && this._children.length > 0) {
             for (i = 0; i < this._children.length; i++) {
                 if (this._children[i]) {
-                    if (rowColumns == 0) {
+                    if (rowColumns === 0) {
                         rowColumns = rows[row];
                         w = winSize.width / (1 + rowColumns);
                         x = w;

@@ -106,7 +106,7 @@ RoomList.getUserIdsByRoomId = function(roomId){
   return this.rooms[roomId].userIds;
 };
 
-// public 通过userID获取其在房间所在的方位
+// public 通过userID获取其在房间所在的方位  0 1 2 分别为左上  中间  右上  三个方向
 RoomList.getServerDirectByUserId = function(userId){
     var roomId = this.getRoomIdByUserId(userId);
     var userIds = this.rooms[roomId].userIds;

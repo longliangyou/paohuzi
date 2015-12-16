@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -25,7 +25,11 @@
  ****************************************************************************/
 
 /**
- * @namespace cc.configuration contains some openGL variables
+ * cc.configuration is a singleton object which contains some openGL variables
+ * @class
+ * @name cc.configuration
+ * @example
+ * var textureSize = cc.configuration.getMaxTextureSize();
  */
 cc.configuration = /** @lends cc.configuration# */{
 	// Type constants
@@ -227,7 +231,7 @@ cc.configuration = /** @lends cc.configuration# */{
      * gathers OpenGL / GPU information
      */
     gatherGPUInfo: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc._renderType === cc.game.RENDER_TYPE_CANVAS)
             return;
 
 	    if(!this._inited)
@@ -274,7 +278,7 @@ cc.configuration = /** @lends cc.configuration# */{
 	    if(!this._inited)
 		    this._init();
         var dict = cc.loader.getRes(url);
-        if(!dict) throw "Please load the resource first : " + url;
+        if(!dict) throw new Error("Please load the resource first : " + url);
         cc.assert(dict, cc._LogInfos.configuration_loadConfigFile_2, url);
 
         var getDatas = dict["data"];

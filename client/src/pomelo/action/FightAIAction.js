@@ -51,14 +51,13 @@ var FightAIAction = {
 //            return;
 //        }else
         if(actions.canPeng){
-            PengAction.peng(nextUserId, cardId, null)
+            PengAction.peng(nextUserId, cardId, null);
             return;
         }else if(actions.canGang){
-            GangAction.gang(nextUserId, cardId, null)
+            GangAction.gang(nextUserId, cardId, null);
             return;
         }else if(actions.canChi){
-
-
+            EatAction.eat(nextUserId,cardId,null);
         }
 
 

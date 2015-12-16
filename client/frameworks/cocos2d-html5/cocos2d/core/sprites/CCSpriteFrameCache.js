@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -25,13 +25,15 @@
  ****************************************************************************/
 
 /**
- * @namespace <p>
- * Singleton that handles the loading of the sprite frames. It saves in a cache the sprite frames.<br/>
+ * <p>
+ * cc.spriteFrameCache is a singleton that handles the loading of the sprite frames. It saves in a cache the sprite frames.<br/>
  * <br/>
  * example<br/>
  * // add SpriteFrames to spriteFrameCache With File<br/>
  * cc.spriteFrameCache.addSpriteFrames(s_grossiniPlist);<br/>
  * </p>
+ * @class
+ * @name cc.spriteFrameCache
  */
 cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
     _CCNS_REG1 : /^\s*\{\s*([\-]?\d+[.]?\d*)\s*,\s*([\-]?\d+[.]?\d*)\s*\}\s*$/,
@@ -41,70 +43,24 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
     _spriteFramesAliases: {},
     _frameConfigCache : {},
 
-    /**
-     * Returns a Core Graphics rectangle structure corresponding to the data in a given string. <br/>
-     * The string is not localized, so items are always separated with a comma. <br/>
-     * If the string is not well-formed, the function returns cc.rect(0, 0, 0, 0).
-     * @function
-     * @param {String} content content A string object whose contents are of the form "{{x,y},{w, h}}",<br/>
-     * where x is the x coordinate, y is the y coordinate, w is the width, and h is the height. <br/>
-     * These components can represent integer or float values.
-     * @return {cc.Rect} A Core Graphics structure that represents a rectangle.
-     * Constructor
-     * @example
-     * // example
-     * var rect = this._rectFromString("{{3,2},{4,5}}");
-     */
     _rectFromString :  function (content) {
         var result = this._CCNS_REG2.exec(content);
         if(!result) return cc.rect(0, 0, 0, 0);
         return cc.rect(parseFloat(result[1]), parseFloat(result[2]), parseFloat(result[3]), parseFloat(result[4]));
     },
 
-    /**
-     * Returns a Core Graphics point structure corresponding to the data in a given string.
-     * @function
-     * @param {String} content   A string object whose contents are of the form "{x,y}",
-     * where x is the x coordinate and y is the y coordinate.<br/>
-     * The x and y values can represent integer or float values. <br/>
-     * The string is not localized, so items are always separated with a comma.<br/>
-     * @return {cc.Point} A Core Graphics structure that represents a point.<br/>
-     * If the string is not well-formed, the function returns cc.p(0,0).
-     * Constructor
-     * @example
-     * //example
-     * var point = this._pointFromString("{3.0,2.5}");
-     */
     _pointFromString : function (content) {
         var result = this._CCNS_REG1.exec(content);
         if(!result) return cc.p(0,0);
         return cc.p(parseFloat(result[1]), parseFloat(result[2]));
     },
-    /**
-     * Returns a Core Graphics size structure corresponding to the data in a given string.
-     * @function
-     * @param {String} content   A string object whose contents are of the form "{w, h}",<br/>
-     * where w is the width and h is the height.<br/>
-     * The w and h values can be integer or float values. <br/>
-     * The string is not localized, so items are always separated with a comma.<br/>
-     * @return {cc.Size} A Core Graphics structure that represents a size.<br/>
-     * If the string is not well-formed, the function returns cc.size(0,0).
-     * @example
-     * // example
-     * var size = this._sizeFromString("{3.0,2.5}");
-     */
+
     _sizeFromString : function (content) {
         var result = this._CCNS_REG1.exec(content);
         if(!result) return cc.size(0, 0);
         return cc.size(parseFloat(result[1]), parseFloat(result[2]));
     },
 
-    /**
-     * Get the real data structure of frame used by engine.
-     * @param url
-     * @returns {*}
-     * @private
-     */
     _getFrameConfig : function(url){
         var dict = cc.loader.getRes(url);
 
@@ -115,6 +71,17 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
             this._frameConfigCache[url] = dict;
             return dict;
         }
+        this._frameConfigCache[url] = this._parseFrameConfig(dict);
+        return this._frameConfigCache[url];
+    },
+
+    _getFrameConfigByJsonObject: function(url, jsonObject) {
+        cc.assert(jsonObject, cc._LogInfos.spriteFrameCache__getFrameConfig_2, url);
+        this._frameConfigCache[url] = this._parseFrameConfig(jsonObject);
+        return this._frameConfigCache[url];
+    },
+
+    _parseFrameConfig: function(dict) {
         var tempFrames = dict["frames"], tempMeta = dict["metadata"] || dict["meta"];
         var frames = {}, meta = {};
         var format = 0;
@@ -169,12 +136,68 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
             }
             frames[key] = tempFrame;
         }
-        var cfg = this._frameConfigCache[url] = {
-            _inited : true,
-            frames : frames,
-            meta : meta
-        };
-        return cfg;
+        return {_inited: true, frames: frames, meta: meta};
+    },
+
+    // Adds multiple Sprite Frames from a json object. it uses for local web view app.
+    _addSpriteFramesByObject: function(url, jsonObject, texture) {
+        cc.assert(url, cc._LogInfos.spriteFrameCache_addSpriteFrames_2);
+        if(!jsonObject || !jsonObject["frames"])
+            return;
+
+        var frameConfig = this._frameConfigCache[url] || this._getFrameConfigByJsonObject(url, jsonObject);
+        //this._checkConflict(frameConfig);                             //TODO
+        this._createSpriteFrames(url, frameConfig, texture);
+    },
+
+    _createSpriteFrames: function(url, frameConfig, texture) {
+        var frames = frameConfig.frames, meta = frameConfig.meta;
+        if(!texture){
+            var texturePath = cc.path.changeBasename(url, meta.image || ".png");
+            texture = cc.textureCache.addImage(texturePath);
+        }else if(texture instanceof cc.Texture2D){
+            //do nothing
+        }else if(cc.isString(texture)){//string
+            texture = cc.textureCache.addImage(texture);
+        }else{
+            cc.assert(0, cc._LogInfos.spriteFrameCache_addSpriteFrames_3);
+        }
+
+        //create sprite frames
+        var spAliases = this._spriteFramesAliases, spriteFrames = this._spriteFrames;
+        for (var key in frames) {
+            var frame = frames[key];
+            var spriteFrame = spriteFrames[key];
+            if (!spriteFrame) {
+                spriteFrame = new cc.SpriteFrame(texture, frame.rect, frame.rotated, frame.offset, frame.size);
+                var aliases = frame.aliases;
+                if(aliases){//set aliases
+                    for(var i = 0, li = aliases.length; i < li; i++){
+                        var alias = aliases[i];
+                        if (spAliases[alias])
+                            cc.log(cc._LogInfos.spriteFrameCache_addSpriteFrames, alias);
+                        spAliases[alias] = key;
+                    }
+                }
+
+                if (cc._renderType === cc.game.RENDER_TYPE_CANVAS && spriteFrame.isRotated()) {
+                    //clip to canvas
+                    var locTexture = spriteFrame.getTexture();
+                    if (locTexture.isLoaded()) {
+                        var tempElement = spriteFrame.getTexture().getHtmlElementObj();
+                        tempElement = cc.Sprite.CanvasRenderCmd._cutRotateImageToCanvas(tempElement, spriteFrame.getRectInPixels());
+                        var tempTexture = new cc.Texture2D();
+                        tempTexture.initWithElement(tempElement);
+                        tempTexture.handleLoadedTexture();
+                        spriteFrame.setTexture(tempTexture);
+
+                        var rect = spriteFrame._rect;
+                        spriteFrame.setRect(cc.rect(0, 0, rect.width, rect.height));
+                    }
+                }
+                spriteFrames[key] = spriteFrame;
+            }
+        }
     },
 
     /**
@@ -191,59 +214,16 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
      * cc.spriteFrameCache.addSpriteFrames(s_grossiniJson);
      */
     addSpriteFrames: function (url, texture) {
-
         cc.assert(url, cc._LogInfos.spriteFrameCache_addSpriteFrames_2);
 
-        var self = this;
-        var frameConfig = self._frameConfigCache[url] || self._getFrameConfig(url);
-        //self._checkConflict(frameConfig);                             //TODO
-        var frames = frameConfig.frames, meta = frameConfig.meta;
-        if(!texture){
-            var texturePath = cc.path.changeBasename(url, meta.image || ".png");
-            texture = cc.textureCache.addImage(texturePath);
-        }else if(texture instanceof cc.Texture2D){
-            //do nothing
-        }else if(typeof texture == "string"){//string
-            texture = cc.textureCache.addImage(texture);
-        }else{
-            cc.assert(0, cc._LogInfos.spriteFrameCache_addSpriteFrames_3);
-        }
+        //Is it a SpriteFrame plist?
+        var dict = this._frameConfigCache[url] || cc.loader.getRes(url);
+        if(!dict || !dict["frames"])
+            return;
 
-        //create sprite frames
-        var spAliases = self._spriteFramesAliases, spriteFrames = self._spriteFrames;
-        for (var key in frames) {
-            var frame = frames[key];
-            var spriteFrame = spriteFrames[key];
-            if (!spriteFrame) {
-                spriteFrame = cc.SpriteFrame.create(texture, frame.rect, frame.rotated, frame.offset, frame.size);
-                var aliases = frame.aliases;
-                if(aliases){//set aliases
-                    for(var i = 0, li = aliases.length; i < li; i++){
-                        var alias = aliases[i];
-                        if (spAliases[alias]) {
-                            cc.log(cc._LogInfos.spriteFrameCache_addSpriteFrames, alias);
-                        }
-                        spAliases[alias] = key;
-                    }
-                }
-                if (cc._renderType === cc._RENDER_TYPE_CANVAS && spriteFrame.isRotated()) {
-                    //clip to canvas
-                    var locTexture = spriteFrame.getTexture();
-                    if (locTexture.isLoaded()) {
-                        var tempElement = spriteFrame.getTexture().getHtmlElementObj();
-                        tempElement = cc.cutRotateImageToCanvas(tempElement, spriteFrame.getRectInPixels());
-                        var tempTexture = new cc.Texture2D();
-                        tempTexture.initWithElement(tempElement);
-                        tempTexture.handleLoadedTexture();
-                        spriteFrame.setTexture(tempTexture);
-
-                        var rect = spriteFrame._rect;
-                        spriteFrame.setRect(cc.rect(0, 0, rect.width, rect.height));
-                    }
-                }
-                spriteFrames[key] = spriteFrame;
-            }
-        }
+        var frameConfig = this._frameConfigCache[url] || this._getFrameConfig(url);
+        //this._checkConflict(frameConfig);                             //TODO
+        this._createSpriteFrames(url, frameConfig, texture);
     },
 
     // Function to check if frames to add exists already, if so there may be name conflit that must be solved
@@ -309,7 +289,7 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
      *     Sprite Frames stored in this file will be removed.<br/>
      *     It is convinient to call this method when a specific texture needs to be removed.<br/>
      * </p>
-     * @param {String} url plist filename
+     * @param {String} url Plist filename
      */
     removeSpriteFramesFromFile: function (url) {
         var self = this, spriteFrames = self._spriteFrames,
@@ -320,7 +300,7 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
             if (spriteFrames[key]) {
                 delete(spriteFrames[key]);
                 for (var alias in aliases) {//remove alias
-                    if(aliases[alias] == key) delete aliases[alias];
+                    if(aliases[alias] === key) delete aliases[alias];
                 }
             }
         }
@@ -329,7 +309,7 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
     /**
      * <p>
      *    Removes all Sprite Frames associated with the specified textures.<br/>
-     *    It is convinient to call this method when a specific texture needs to be removed.
+     *    It is convenient to call this method when a specific texture needs to be removed.
      * </p>
      * @param {HTMLImageElement|HTMLCanvasElement|cc.Texture2D} texture
      */
@@ -337,10 +317,10 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
         var self = this, spriteFrames = self._spriteFrames, aliases = self._spriteFramesAliases;
         for (var key in spriteFrames) {
             var frame = spriteFrames[key];
-            if (frame && (frame.getTexture() == texture)) {
+            if (frame && (frame.getTexture() === texture)) {
                 delete(spriteFrames[key]);
                 for (var alias in aliases) {//remove alias
-                    if(aliases[alias] == key) delete aliases[alias];
+                    if(aliases[alias] === key) delete aliases[alias];
                 }
             }
         }
@@ -368,7 +348,6 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
                 if(!frame) delete self._spriteFramesAliases[name];
             }
         }
-        if (!frame) cc.log(cc._LogInfos.spriteFrameCache_getSpriteFrame, name);
         return frame;
     },
 

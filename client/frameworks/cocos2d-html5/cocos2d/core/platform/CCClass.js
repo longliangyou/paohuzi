@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -23,53 +23,17 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-/* Managed JavaScript Inheritance
- * Based on John Resig's Simple JavaScript Inheritance http://ejohn.org/blog/simple-javascript-inheritance/
- * MIT Licensed.
- */
+
+var cc = cc || {};
 
 /**
  * @namespace
+ * @name ClassManager
  */
-var cc = cc || {};
-
-//
 var ClassManager = {
     id : (0|(Math.random()*998)),
 
     instanceId : (0|(Math.random()*998)),
-
-    compileSuper : function(func, name, id){
-        //make the func to a string
-        var str = func.toString();
-        //find parameters
-        var pstart = str.indexOf('('), pend = str.indexOf(')');
-        var params = str.substring(pstart+1, pend);
-        params = params.trim();
-
-        //find function body
-        var bstart = str.indexOf('{'), bend = str.lastIndexOf('}');
-        var str = str.substring(bstart+1, bend);
-
-        //now we have the content of the function, replace this._super
-        //find this._super
-        while(str.indexOf('this._super')!= -1)
-        {
-            var sp = str.indexOf('this._super');
-            //find the first '(' from this._super)
-            var bp = str.indexOf('(', sp);
-
-            //find if we are passing params to super
-            var bbp = str.indexOf(')', bp);
-            var superParams = str.substring(bp+1, bbp);
-            superParams = superParams.trim();
-            var coma = superParams? ',':'';
-
-            //replace this._super
-            str = str.substring(0, sp)+  'ClassManager['+id+'].'+name+'.call(this'+coma+str.substring(bp+1);
-        }
-        return Function(params, str);
-    },
 
     getNewID : function(){
         return this.id++;
@@ -79,15 +43,13 @@ var ClassManager = {
         return this.instanceId++;
     }
 };
-ClassManager.compileSuper.ClassManager = ClassManager;
 
+/* Managed JavaScript Inheritance
+ * Based on John Resig's Simple JavaScript Inheritance http://ejohn.org/blog/simple-javascript-inheritance/
+ * MIT Licensed.
+ */
 (function () {
-    var initializing = false, fnTest = /\b_super\b/;
-    var config = cc.game.config;
-    var releaseMode = config[cc.game.CONFIG_KEY.classReleaseMode];
-    if(releaseMode) {
-        console.log("release Mode");
-    }
+    var fnTest = /\b_super\b/;
 
     /**
      * The base Class implementation (does nothing)
@@ -98,10 +60,11 @@ ClassManager.compileSuper.ClassManager = ClassManager;
 
     /**
      * Create a new Class that inherits from this Class
-     * @param {object} prop
+     * @static
+     * @param {object} props
      * @return {function}
      */
-    cc.Class.extend = function (prop) {
+    cc.Class.extend = function (props) {
         var _super = this.prototype;
 
         // Instantiate a base Class (but only create the instance,
@@ -144,63 +107,63 @@ ClassManager.compileSuper.ClassManager = ClassManager;
 	    this.__getters__ && (Class.__getters__ = cc.clone(this.__getters__));
 	    this.__setters__ && (Class.__setters__ = cc.clone(this.__setters__));
 
-        for (var name in prop) {
-	        var isFunc = (typeof prop[name] === "function");
-	        var override = (typeof _super[name] === "function");
-	        var hasSuperCall = fnTest.test(prop[name]);
+        for(var idx = 0, li = arguments.length; idx < li; ++idx) {
+            var prop = arguments[idx];
+            for (var name in prop) {
+                var isFunc = (typeof prop[name] === "function");
+                var override = (typeof _super[name] === "function");
+                var hasSuperCall = fnTest.test(prop[name]);
 
-            if(releaseMode && isFunc && override && hasSuperCall) {
-                desc.value = ClassManager.compileSuper(prop[name], name, classId);
-                Object.defineProperty(prototype, name, desc);
-            } else if(isFunc && override && hasSuperCall){
-                desc.value = (function (name, fn) {
-                    return function () {
-                        var tmp = this._super;
+                if (isFunc && override && hasSuperCall) {
+                    desc.value = (function (name, fn) {
+                        return function () {
+                            var tmp = this._super;
 
-                        // Add a new ._super() method that is the same method
-                        // but on the super-Class
-                        this._super = _super[name];
+                            // Add a new ._super() method that is the same method
+                            // but on the super-Class
+                            this._super = _super[name];
 
-                        // The method only need to be bound temporarily, so we
-                        // remove it when we're done executing
-                        var ret = fn.apply(this, arguments);
-                        this._super = tmp;
+                            // The method only need to be bound temporarily, so we
+                            // remove it when we're done executing
+                            var ret = fn.apply(this, arguments);
+                            this._super = tmp;
 
-                        return ret;
-                    };
-                })(name, prop[name]);
-                Object.defineProperty(prototype, name, desc);
-            } else if(isFunc) {
-                desc.value = prop[name];
-                Object.defineProperty(prototype, name, desc);
-            } else{
-                prototype[name] = prop[name];
+                            return ret;
+                        };
+                    })(name, prop[name]);
+                    Object.defineProperty(prototype, name, desc);
+                } else if (isFunc) {
+                    desc.value = prop[name];
+                    Object.defineProperty(prototype, name, desc);
+                } else {
+                    prototype[name] = prop[name];
+                }
+
+                if (isFunc) {
+                    // Override registered getter/setter
+                    var getter, setter, propertyName;
+                    if (this.__getters__ && this.__getters__[name]) {
+                        propertyName = this.__getters__[name];
+                        for (var i in this.__setters__) {
+                            if (this.__setters__[i] === propertyName) {
+                                setter = i;
+                                break;
+                            }
+                        }
+                        cc.defineGetterSetter(prototype, propertyName, prop[name], prop[setter] ? prop[setter] : prototype[setter], name, setter);
+                    }
+                    if (this.__setters__ && this.__setters__[name]) {
+                        propertyName = this.__setters__[name];
+                        for (var i in this.__getters__) {
+                            if (this.__getters__[i] === propertyName) {
+                                getter = i;
+                                break;
+                            }
+                        }
+                        cc.defineGetterSetter(prototype, propertyName, prop[getter] ? prop[getter] : prototype[getter], prop[name], getter, name);
+                    }
+                }
             }
-
-	        if (isFunc) {
-		        // Override registered getter/setter
-		        var getter, setter, propertyName;
-		        if( this.__getters__ && this.__getters__[name] ) {
-			        propertyName = this.__getters__[name];
-			        for (var i in this.__setters__) {
-				        if (this.__setters__[i] == propertyName) {
-					        setter = i;
-				            break;
-				        }
-			        }
-			        cc.defineGetterSetter(prototype, propertyName, prop[name], prop[setter] ? prop[setter] : prototype[setter], name, setter);
-		        }
-		        if( this.__setters__ && this.__setters__[name] ) {
-			        propertyName = this.__setters__[name];
-			        for (var i in this.__getters__) {
-				        if (this.__getters__[i] == propertyName) {
-					        getter = i;
-					        break;
-				        }
-			        }
-			        cc.defineGetterSetter(prototype, propertyName, prop[getter] ? prop[getter] : prototype[getter], prop[name], getter, name);
-		        }
-	        }
         }
 
         // And make this Class extendable
@@ -213,14 +176,6 @@ ClassManager.compileSuper.ClassManager = ClassManager;
             }
         };
         return Class;
-    };
-
-    Function.prototype.bind = Function.prototype.bind || function (bind) {
-        var self = this;
-        return function () {
-            var args = Array.prototype.slice.call(arguments);
-            return self.apply(bind || null, args);
-        };
     };
 })();
 
@@ -287,10 +242,10 @@ cc.defineGetterSetter = function (proto, prop, getter, setter, getterName, sette
 };
 
 /**
- * copy an new object
+ * Create a new object and copy all properties in an exist object to the new object
  * @function
- * @param {object|Array} obj source object
- * @return {Array|object}
+ * @param {object|Array} obj The source object
+ * @return {Array|object} The created object
  */
 cc.clone = function (obj) {
     // Cloning is better if the new object is having the same prototype chain
@@ -320,7 +275,7 @@ cc.clone = function (obj) {
     for (var key in obj) {
         var copy = obj[key];
         // Beware that typeof null == "object" !
-        if (((typeof copy) == "object") && copy &&
+        if (((typeof copy) === "object") && copy &&
             !(copy instanceof cc.Node) && !(copy instanceof HTMLElement)) {
             newObj[key] = cc.clone(copy);
         } else {
@@ -328,5 +283,10 @@ cc.clone = function (obj) {
         }
     }
     return newObj;
+};
+
+cc.inject = function(srcPrototype, destPrototype){
+    for(var key in srcPrototype)
+        destPrototype[key] = srcPrototype[key];
 };
 

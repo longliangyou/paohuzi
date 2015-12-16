@@ -1,7 +1,27 @@
-/**
- * Created by small on 14-4-3.
- */
+/****************************************************************************
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
+ http://www.cocos2d-x.org
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
 
 cc._LogInfos = {
     ActionManager_addAction: "cc.ActionManager.addAction(): action must be non-null",
@@ -24,7 +44,7 @@ cc._LogInfos = {
 
     arrayVerifyType: "element type is wrong!",
 
-    Scheduler_scheduleCallbackForTarget: "CCSheduler#scheduleCallback. Callback already scheduled. Updating interval from:%d to %d",
+    Scheduler_scheduleCallbackForTarget: "CCSheduler#scheduleCallback. Callback already scheduled. Updating interval from:%s to %s",
     Scheduler_scheduleCallbackForTarget_2: "cc.scheduler.scheduleCallbackForTarget(): callback_fn should be non-null.",
     Scheduler_scheduleCallbackForTarget_3: "cc.scheduler.scheduleCallbackForTarget(): target should be non-null.",
     Scheduler_pauseTarget: "cc.Scheduler.pauseTarget():target should be non-null",
@@ -39,6 +59,7 @@ cc._LogInfos = {
     Node_addChild_2: "child already added. It can't be added again",
     Node_addChild_3: "child must be non-null",
     Node_removeFromParentAndCleanup: "removeFromParentAndCleanup is deprecated. Use removeFromParent instead",
+    Node_boundingBox: "boundingBox is deprecated. Use getBoundingBox instead",
     Node_removeChildByTag: "argument tag is an invalid tag",
     Node_removeChildByTag_2: "cocos2d: removeChildByTag(tag = %s): child not found!",
     Node_removeAllChildrenWithCleanup: "removeAllChildrenWithCleanup is deprecated. Use removeAllChildren instead",
@@ -53,8 +74,9 @@ cc._LogInfos = {
     Node_schedule_2: "interval must be positive",
     Node_initWithTexture: "cocos2d: Could not initialize cc.AtlasNode. Invalid Texture.",
 
-    AtlasNode_updateAtlasValues: "Shall be overridden in subclasses",
+    AtlasNode_updateAtlasValues: "cc.AtlasNode.updateAtlasValues(): Shall be overridden in subclasses",
     AtlasNode_initWithTileFile: "",
+    AtlasNode__initWithTexture: "cocos2d: Could not initialize cc.AtlasNode. Invalid Texture.",
 
     _EventListenerKeyboard_checkAvailable: "cc._EventListenerKeyboard.checkAvailable(): Invalid EventListenerKeyboard!",
     _EventListenerTouchOneByOne_checkAvailable: "cc._EventListenerTouchOneByOne.checkAvailable(): Invalid EventListenerTouchOneByOne!",
@@ -71,7 +93,7 @@ cc._LogInfos = {
     eventManager_setPriority: "Can't set fixed priority with scene graph based listener.",
     eventManager_addListener_2: "Invalid parameters.",
     eventManager_addListener_3: "listener must be a cc.EventListener object when adding a fixed priority listener",
-    eventManager_addListener_4: "The listener has been registered.",
+    eventManager_addListener_4: "The listener has been registered, please don't register it again.",
 
     LayerMultiplex_initWithLayers: "parameters should not be ending with null in Javascript",
     LayerMultiplex_switchTo: "Invalid index in MultiplexLayer switchTo message",
@@ -122,7 +144,6 @@ cc._LogInfos = {
     Sprite_setTexture_2: "Invalid argument: cc.Sprite.texture setter expects a CCTexture2D.",
     Sprite_updateQuadFromSprite_2: "cc.SpriteBatchNode.updateQuadFromSprite(): sprite should be non-null",
     Sprite_insertQuadFromSprite_2: "cc.SpriteBatchNode.insertQuadFromSprite(): sprite should be non-null",
-    Sprite_addChild_6: "cc.SpriteBatchNode.addChild(): child should be non-null",
 
     SpriteBatchNode_addSpriteWithoutQuad: "cc.SpriteBatchNode.addQuadFromSprite(): SpriteBatchNode only supports cc.Sprites as children",
     SpriteBatchNode_increaseAtlasCapacity: "cocos2d: CCSpriteBatchNode: resizing TextureAtlas capacity from %s to %s.",
@@ -130,7 +151,7 @@ cc._LogInfos = {
     SpriteBatchNode_reorderChild: "cc.SpriteBatchNode.addChild(): Child doesn't belong to Sprite",
     SpriteBatchNode_removeChild: "cc.SpriteBatchNode.addChild(): sprite batch node should contain the child",
     SpriteBatchNode_addSpriteWithoutQuad_2: "cc.SpriteBatchNode.addQuadFromSprite(): child should be non-null",
-    SpriteBatchNode_reorderChild_2: "cc.SpriteBatchNode.addChild():child should be non-null",
+    SpriteBatchNode_reorderChild_2: "cc.SpriteBatchNode.addChild(): child should be non-null",
 
     spriteFrameCache__getFrameConfig: "cocos2d: WARNING: originalWidth/Height not found on the cc.SpriteFrame. AnchorPoint won't work as expected. Regenrate the .plist",
     spriteFrameCache_addSpriteFrames: "cocos2d: WARNING: an alias with name %s already exists",
@@ -168,6 +189,7 @@ cc._LogInfos = {
 
     textureCache_addPVRTCImage: "TextureCache:addPVRTCImage does not support on HTML5",
     textureCache_addETCImage: "TextureCache:addPVRTCImage does not support on HTML5",
+    textureCache_textureForKey: "textureForKey is deprecated. Please use getTextureForKey instead.",
     textureCache_addPVRImage: "addPVRImage does not support on HTML5",
     textureCache_addUIImage: "cocos2d: Couldn't add UIImage in TextureCache",
     textureCache_dumpCachedTextureInfo: "cocos2d: '%s' id=%s %s x %s",
@@ -188,8 +210,15 @@ cc._LogInfos = {
     Texture2D_bitsPerPixelForFormat: "bitsPerPixelForFormat: %s, cannot give useful result, it's a illegal pixel format",
     Texture2D__initPremultipliedATextureWithImage: "cocos2d: cc.Texture2D: Using RGB565 texture since image has no alpha",
     Texture2D_addImage_2: "cc.Texture.addImage(): path should be non-null",
-    Texture2D_initWithData: "NSInternalInconsistencyException"
+    Texture2D_initWithData: "NSInternalInconsistencyException",
 
+    MissingFile: "Missing file: %s",
+    radiansToDegress: "cc.radiansToDegress() should be called cc.radiansToDegrees()",
+    RectWidth: "Rect width exceeds maximum margin: %s",
+    RectHeight: "Rect height exceeds maximum margin: %s",
+
+    EventManager__updateListeners: "If program goes here, there should be event in dispatch.",
+    EventManager__updateListeners_2: "_inDispatch should be 1 here."
 };
 
 //+++++++++++++++++++++++++something about log start++++++++++++++++++++++++++++
@@ -231,71 +260,76 @@ cc._logToWebPage = function (msg) {
         logListStyle.margin = 0;
 
     }
-    msg = typeof msg == "string" ? msg : JSON.stringify(msg);
     logList.value = logList.value + msg + "\r\n";
     logList.scrollTop = logList.scrollHeight;
 };
 
 //to make sure the cc.log, cc.warn, cc.error and cc.assert would not throw error before init by debugger mode.
-if (console.log) {
-    cc.log = Function.prototype.bind.call(console.log, console);
-    cc.warn = console.warn ?
-        Function.prototype.bind.call(console.warn, console) :
-        cc.log;
-    cc.error = console.error ?
-        Function.prototype.bind.call(console.error, console) :
-        cc.log;
-    cc.assert = function (cond, msg) {
-        if (!cond && msg) {
-            for (var i = 2; i < arguments.length; i++) {
-                msg = msg.replace("%s", arguments[i]);
-            }
-            throw msg;
+cc._formatString = function (arg) {
+    if (cc.isObject(arg)) {
+        try {
+            return JSON.stringify(arg);
+        } catch (err) {
+            return "";
         }
-    };
-}
-
+    } else
+        return arg;
+};
 /**
  * Init Debug setting.
  * @function
+ * @param {Number} mode
  */
-var mode = cc.game.config[cc.game.CONFIG_KEY.debugMode];
-var ccGame = cc.game;
+cc._initDebugSetting = function (mode) {
+    var ccGame = cc.game;
+    if(mode === ccGame.DEBUG_MODE_NONE)
+        return;
 
-//log
-if (console.log && mode === ccGame.DEBUG_MODE_INFO) {
-}
-else if (mode == ccGame.DEBUG_MODE_INFO_FOR_WEB_PAGE)
-    cc.log = cc._logToWebPage.bind(cc);
-else
-//Clear
-    cc.log = function () {
-    };
-
-//warn
-if (!mode || mode == ccGame.DEBUG_MODE_NONE || mode == ccGame.DEBUG_MODE_ERROR || mode == ccGame.DEBUG_MODE_ERROR_FOR_WEB_PAGE)
-    cc.warn = function () {
-    };
-if (mode == ccGame.DEBUG_MODE_INFO_FOR_WEB_PAGE || mode == ccGame.DEBUG_MODE_WARN_FOR_WEB_PAGE || !console.warn)
-    cc.warn = cc._logToWebPage.bind(cc);
-
-
-//error and assert
-if (!mode || mode == ccGame.DEBUG_MODE_NONE) {
-    cc.error = function () {
-    };
-    cc.assert = function () {
-    };
-} else if (mode == ccGame.DEBUG_MODE_INFO_FOR_WEB_PAGE || mode == ccGame.DEBUG_MODE_WARN_FOR_WEB_PAGE || mode == ccGame.DEBUG_MODE_ERROR_FOR_WEB_PAGE || !console.error) {
-    cc.error = cc._logToWebPage.bind(cc);
-    cc.assert = function (cond, msg) {
-        if (!cond && msg) {
-            for (var i = 2; i < arguments.length; i++) {
-                msg = msg.replace("%s", arguments[i]);
+    var locLog;
+    if(mode > ccGame.DEBUG_MODE_ERROR){
+        //log to web page
+        locLog = cc._logToWebPage.bind(cc);
+        cc.error = function(){
+            locLog("ERROR :  " + cc.formatStr.apply(cc, arguments));
+        };
+        cc.assert = function(cond, msg) {
+            if (!cond && msg) {
+                for (var i = 2; i < arguments.length; i++)
+                    msg = msg.replace(/(%s)|(%d)/, cc._formatString(arguments[i]));
+                locLog("Assert: " + msg);
             }
-            cc._logToWebPage(msg);
+        };
+        if(mode !== ccGame.DEBUG_MODE_ERROR_FOR_WEB_PAGE){
+            cc.warn = function(){
+                locLog("WARN :  " + cc.formatStr.apply(cc, arguments));
+            };
         }
-    }
-}
+        if(mode === ccGame.DEBUG_MODE_INFO_FOR_WEB_PAGE){
+            cc.log = function(){
+                locLog(cc.formatStr.apply(cc, arguments));
+            };
+        }
+    } else if(console && console.log.apply){//console is null when user doesn't open dev tool on IE9
+        //log to console
 
+        cc.error = function(){
+            return console.error.apply(console, arguments);
+        };
+        cc.assert = function (cond, msg) {
+            if (!cond && msg) {
+                for (var i = 2; i < arguments.length; i++)
+                    msg = msg.replace(/(%s)|(%d)/, cc._formatString(arguments[i]));
+                throw new Error(msg);
+            }
+        };
+        if(mode !== ccGame.DEBUG_MODE_ERROR)
+            cc.warn = function(){
+                return console.warn.apply(console, arguments);
+            };
+        if(mode === ccGame.DEBUG_MODE_INFO)
+            cc.log = function(){
+                return console.log.apply(console, arguments);
+            };
+    }
+};
 //+++++++++++++++++++++++++something about log end+++++++++++++++++++++++++++++

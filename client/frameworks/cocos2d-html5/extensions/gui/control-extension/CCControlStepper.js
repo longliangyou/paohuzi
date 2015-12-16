@@ -1,5 +1,8 @@
 /**
- * Copyright (c) 2012 cocos2d-x.org
+ * Copyright (c) 2008-2010 Ricardo Quesada
+ * Copyright (c) 2011-2012 cocos2d-x.org
+ * Copyright (c) 2013-2014 Chukong Technologies Inc.
+ *
  * http://www.cocos2d-x.org
  *
  * Copyright 2012 Yannick Loriot. All rights reserved.
@@ -69,7 +72,7 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
     _touchedPart:cc.CONTROL_STEPPER_PARTNONE,
     _autorepeatCount:0,
     _className:"ControlStepper",
-    ctor:function () {
+    ctor:function (minusSprite, plusSprite) {
         cc.Control.prototype.ctor.call(this);
         this._minusSprite = null;
         this._plusSprite = null;
@@ -85,13 +88,16 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
         this._touchInsideFlag = false;
         this._touchedPart = cc.CONTROL_STEPPER_PARTNONE;
         this._autorepeatCount = 0;
+
+        plusSprite && this.initWithMinusSpriteAndPlusSprite(minusSprite, plusSprite);
+
     },
 
     initWithMinusSpriteAndPlusSprite:function (minusSprite, plusSprite) {
         if(!minusSprite)
-            throw "cc.ControlStepper.initWithMinusSpriteAndPlusSprite(): Minus sprite should be non-null.";
+            throw new Error("cc.ControlStepper.initWithMinusSpriteAndPlusSprite(): Minus sprite should be non-null.");
         if(!plusSprite)
-            throw "cc.ControlStepper.initWithMinusSpriteAndPlusSprite(): Plus sprite should be non-null.";
+            throw new Error("cc.ControlStepper.initWithMinusSpriteAndPlusSprite(): Plus sprite should be non-null.");
 
         if (this.init()) {
             // Set the default values
@@ -109,7 +115,7 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
             this._minusSprite.setPosition(minusSprite.getContentSize().width / 2, minusSprite.getContentSize().height / 2);
             this.addChild(this._minusSprite);
 
-            this.setMinusLabel(cc.LabelTTF.create("-", cc.CONTROL_STEPPER_LABELFONT, 40, cc.size(40, 40), cc.TEXT_ALIGNMENT_CENTER, cc.VERTICAL_TEXT_ALIGNMENT_CENTER));
+            this.setMinusLabel(new cc.LabelTTF("-", cc.CONTROL_STEPPER_LABELFONT, 40, cc.size(40, 40), cc.TEXT_ALIGNMENT_CENTER, cc.VERTICAL_TEXT_ALIGNMENT_CENTER));
             this._minusLabel.setColor(cc.CONTROL_STEPPER_LABELCOLOR_DISABLED);
             this._minusLabel.setPosition(this._minusSprite.getContentSize().width / 2, this._minusSprite.getContentSize().height / 2);
             this._minusSprite.addChild(this._minusLabel);
@@ -120,7 +126,7 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
                 minusSprite.getContentSize().height / 2);
             this.addChild(this._plusSprite);
 
-            this.setPlusLabel(cc.LabelTTF.create("+", cc.CONTROL_STEPPER_LABELFONT, 40, cc.size(40, 40), cc.TEXT_ALIGNMENT_CENTER, cc.VERTICAL_TEXT_ALIGNMENT_CENTER));
+            this.setPlusLabel(new cc.LabelTTF("+", cc.CONTROL_STEPPER_LABELFONT, 40, cc.size(40, 40), cc.TEXT_ALIGNMENT_CENTER, cc.VERTICAL_TEXT_ALIGNMENT_CENTER));
             this._plusLabel.setColor(cc.CONTROL_STEPPER_LABELCOLOR_ENABLED);
             this._plusLabel.setPosition(this._plusSprite.getContentSize().width / 2, this._plusSprite.getContentSize().height / 2);
             this._plusSprite.addChild(this._plusLabel);
@@ -152,7 +158,7 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
 
     setMinimumValue:function (minimumValue) {
         if (minimumValue >= this._maximumValue)
-            throw "cc.ControlStepper.setMinimumValue(): minimumValue should be numerically less than maximumValue.";
+            throw new Error("cc.ControlStepper.setMinimumValue(): minimumValue should be numerically less than maximumValue.");
 
         this._minimumValue = minimumValue;
         this.setValue(this._value);
@@ -163,7 +169,7 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
 
     setMaximumValue:function (maximumValue) {
         if (maximumValue <= this._minimumValue)
-            throw "cc.ControlStepper.setMaximumValue(): maximumValue should be numerically less than maximumValue.";
+            throw new Error("cc.ControlStepper.setMaximumValue(): maximumValue should be numerically less than maximumValue.");
 
         this._maximumValue = maximumValue;
         this.setValue(this._value);
@@ -182,7 +188,7 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
 
     setStepValue:function (stepValue) {
         if (stepValue <= 0)
-            throw "cc.ControlStepper.setMaximumValue(): stepValue should be numerically greater than 0.";
+            throw new Error("cc.ControlStepper.setMaximumValue(): stepValue should be numerically greater than 0.");
         this._stepValue = stepValue;
     },
 
@@ -204,8 +210,8 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
         this._value = value;
 
         if (!this._wraps) {
-            this._minusLabel.setColor((value == this._minimumValue) ? cc.CONTROL_STEPPER_LABELCOLOR_DISABLED : cc.CONTROL_STEPPER_LABELCOLOR_ENABLED);
-            this._plusLabel.setColor((value == this._maximumValue) ? cc.CONTROL_STEPPER_LABELCOLOR_DISABLED : cc.CONTROL_STEPPER_LABELCOLOR_ENABLED);
+            this._minusLabel.setColor((value === this._minimumValue) ? cc.CONTROL_STEPPER_LABELCOLOR_DISABLED : cc.CONTROL_STEPPER_LABELCOLOR_ENABLED);
+            this._plusLabel.setColor((value === this._maximumValue) ? cc.CONTROL_STEPPER_LABELCOLOR_DISABLED : cc.CONTROL_STEPPER_LABELCOLOR_ENABLED);
         }
 
         if (send) {
@@ -226,12 +232,12 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
     update:function (dt) {
         this._autorepeatCount++;
 
-        if ((this._autorepeatCount < cc.AUTOREPEAT_INCREASETIME_INCREMENT) && (this._autorepeatCount % 3) != 0)
+        if ((this._autorepeatCount < cc.AUTOREPEAT_INCREASETIME_INCREMENT) && (this._autorepeatCount % 3) !== 0)
             return;
 
-        if (this._touchedPart == cc.CONTROL_STEPPER_PARTMINUS) {
+        if (this._touchedPart === cc.CONTROL_STEPPER_PARTMINUS) {
             this.setValueWithSendingEvent(this._value - this._stepValue, this._continuous);
-        } else if (this._touchedPart == cc.CONTROL_STEPPER_PARTPLUS) {
+        } else if (this._touchedPart === cc.CONTROL_STEPPER_PARTPLUS) {
             this.setValueWithSendingEvent(this._value + this._stepValue, this._continuous);
         }
     },
@@ -373,10 +379,12 @@ cc.defineGetterSetter(_p, "plusLabel", _p.getPlusLabel, _p.setPlusLabel);
 
 _p = null;
 
+/**
+ * Creates a cc.ControlStepper
+ * @param {cc.Sprite} minusSprite
+ * @param {cc.Sprite} plusSprite
+ * @returns {ControlStepper}
+ */
 cc.ControlStepper.create = function (minusSprite, plusSprite) {
-    var pRet = new cc.ControlStepper();
-    if (pRet && pRet.initWithMinusSpriteAndPlusSprite(minusSprite, plusSprite)) {
-        return pRet;
-    }
-    return null;
+    return new cc.ControlStepper(minusSprite, plusSprite);
 };

@@ -1,5 +1,8 @@
 /**
- * Copyright (c) 2012 cocos2d-x.org
+ * Copyright (c) 2008-2010 Ricardo Quesada
+ * Copyright (c) 2011-2012 cocos2d-x.org
+ * Copyright (c) 2013-2014 Chukong Technologies Inc.
+ *
  * http://www.cocos2d-x.org
  *
  * Copyright 2012 Yannick Loriot. All rights reserved.
@@ -51,6 +54,21 @@ cc.ControlPotentiometer = cc.Control.extend(/** @lends cc.ControlPotentiometer# 
     _maximumValue:1,
     _className:"ControlPotentiometer",
 
+    ctor:function (backgroundFile, progressFile, thumbFile) {
+        cc.Control.prototype.ctor.call(this);
+        if (thumbFile != undefined) {
+            // Prepare track for potentiometer
+            var backgroundSprite = new cc.Sprite(backgroundFile);
+
+            // Prepare thumb for potentiometer
+            var thumbSprite = new cc.Sprite(thumbFile);
+
+            // Prepare progress for potentiometer
+            var progressTimer = new cc.ProgressTimer(new cc.Sprite(progressFile));
+            this.initWithTrackSprite_ProgressTimer_ThumbSprite(backgroundSprite, progressTimer, thumbSprite);
+        }
+    },
+
     /**
      *
      * @param {cc.Sprite} trackSprite
@@ -81,7 +99,7 @@ cc.ControlPotentiometer = cc.Control.extend(/** @lends cc.ControlPotentiometer# 
 
     setEnabled:function (enabled) {
         this.setEnabled(enabled);
-        if (this._thumbSprite != NULL) {
+        if (this._thumbSprite !== null) {
             this._thumbSprite.setOpacity((enabled) ? 255 : 128);
         }
     },
@@ -270,20 +288,13 @@ cc.defineGetterSetter(_p, "prevLocation", _p.getPreviousLocation, _p.setPrevious
 
 _p = null;
 
+/**
+ * @deprecated
+ * @param backgroundFile
+ * @param progressFile
+ * @param thumbFile
+ * @returns {ControlPotentiometer}
+ */
 cc.ControlPotentiometer.create = function (backgroundFile, progressFile, thumbFile) {
-    var pRet = new cc.ControlPotentiometer();
-    if (pRet) {
-        // Prepare track for potentiometer
-        var backgroundSprite = cc.Sprite.create(backgroundFile);
-
-        // Prepare thumb for potentiometer
-        var thumbSprite = cc.Sprite.create(thumbFile);
-
-        // Prepare progress for potentiometer
-        var progressTimer = cc.ProgressTimer.create(cc.Sprite.create(progressFile));
-        if (pRet.initWithTrackSprite_ProgressTimer_ThumbSprite(backgroundSprite, progressTimer, thumbSprite)) {
-            return pRet;
-        }
-    }
-    return null;
+    return new cc.ControlPotentiometer(backgroundFile, progressFile, thumbFile);
 };

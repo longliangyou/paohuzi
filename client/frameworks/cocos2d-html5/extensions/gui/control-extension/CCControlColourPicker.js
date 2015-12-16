@@ -1,6 +1,8 @@
 /**
  *
- * Copyright (c) 2010-2012 cocos2d-x.org
+ * Copyright (c) 2008-2010 Ricardo Quesada
+ * Copyright (c) 2011-2012 cocos2d-x.org
+ * Copyright (c) 2013-2014 Chukong Technologies Inc.
  *
  * Copyright 2012 Stewart Hamilton-Arrandale.
  * http://creativewax.co.uk
@@ -24,10 +26,8 @@
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * THE SOFTWARE. *
  *
- *
- * converted to Javascript / cocos2d-x by Angus C
  */
 
 /**
@@ -44,6 +44,10 @@ cc.ControlColourPicker = cc.Control.extend(/** @lends cc.ControlColourPicker# */
 
     _background:null,
     _className:"ControlColourPicker",
+    ctor:function () {
+        cc.Control.prototype.ctor.call(this);
+        this.init();
+    },
     hueSliderValueChanged:function (sender, controlEvent) {
         this._hsv.h = sender.getHue();
 
@@ -92,7 +96,7 @@ cc.ControlColourPicker = cc.Control.extend(/** @lends cc.ControlColourPicker# */
             cc.spriteFrameCache.addSpriteFrames(res.CCControlColourPickerSpriteSheet_plist);
 
             // Create the sprite batch node
-            var spriteSheet = cc.SpriteBatchNode.create(res.CCControlColourPickerSpriteSheet_png);
+            var spriteSheet = new cc.SpriteBatchNode(res.CCControlColourPickerSpriteSheet_png);
             this.addChild(spriteSheet);
 
           /*// MIPMAP
@@ -115,8 +119,8 @@ cc.ControlColourPicker = cc.Control.extend(/** @lends cc.ControlColourPicker# */
             var hueShift = 8;
             var colourShift = 28;
 
-            this._huePicker = cc.ControlHuePicker.create(spriteSheet, cc.p(backgroundPointZero.x + hueShift, backgroundPointZero.y + hueShift));
-            this._colourPicker = cc.ControlSaturationBrightnessPicker.create(spriteSheet, cc.p(backgroundPointZero.x + colourShift, backgroundPointZero.y + colourShift));
+            this._huePicker = new cc.ControlHuePicker(spriteSheet, cc.p(backgroundPointZero.x + hueShift, backgroundPointZero.y + hueShift));
+            this._colourPicker = new cc.ControlSaturationBrightnessPicker(spriteSheet, cc.p(backgroundPointZero.x + colourShift, backgroundPointZero.y + colourShift));
 
             // Setup events
             this._huePicker.addTargetWithActionForControlEvents(this, this.hueSliderValueChanged, cc.CONTROL_EVENT_VALUECHANGED);
@@ -147,7 +151,7 @@ cc.ControlColourPicker = cc.Control.extend(/** @lends cc.ControlColourPicker# */
     },
     setEnabled:function (enabled) {
         cc.Control.prototype.setEnabled.call(this, enabled);
-        if (this._huePicker != null) {
+        if (this._huePicker !== null) {
             this._huePicker.setEnabled(enabled);
         }
         if (this._colourPicker) {
@@ -169,10 +173,12 @@ cc.defineGetterSetter(_p, "background", _p.getBackground);
 
 _p = null;
 
+/**
+ * @deprecated
+ * @returns {ControlColourPicker}
+ */
 cc.ControlColourPicker.create = function () {
-    var pRet = new cc.ControlColourPicker();
-    pRet.init();
-    return pRet;
+    return new cc.ControlColourPicker();
 };
 
 // compatible with NPM

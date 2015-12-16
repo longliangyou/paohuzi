@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -24,7 +24,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-/** FBO class that grabs the the contents of the screen */
+/**
+ * FBO class that grabs the the contents of the screen
+ * @class
+ * @extends cc.Class
+ */
 cc.Grabber = cc.Class.extend({
     _FBO:null,
     _oldFBO:null,
@@ -32,8 +36,11 @@ cc.Grabber = cc.Class.extend({
 
     _gl:null,
 
+    /**
+     * constructor of cc.Grabber
+     */
     ctor:function () {
-        cc._checkWebGLRenderMode();
+        cc.sys._checkWebGLRenderMode();
         this._gl = cc._renderContext;
         this._oldClearColor = [0, 0, 0, 0];
         this._oldFBO = null;
@@ -41,6 +48,10 @@ cc.Grabber = cc.Class.extend({
         this._FBO = this._gl.createFramebuffer();
     },
 
+    /**
+     * grab
+     * @param {cc.Texture2D} texture
+     */
     grab:function (texture) {
         var locGL = this._gl;
         this._oldFBO = locGL.getParameter(locGL.FRAMEBUFFER_BINDING);
@@ -51,11 +62,15 @@ cc.Grabber = cc.Class.extend({
 
         // check if it worked (probably worth doing :) )
         var status = locGL.checkFramebufferStatus(locGL.FRAMEBUFFER);
-        if (status != locGL.FRAMEBUFFER_COMPLETE)
+        if (status !== locGL.FRAMEBUFFER_COMPLETE)
             cc.log("Frame Grabber: could not attach texture to frmaebuffer");
         locGL.bindFramebuffer(locGL.FRAMEBUFFER, this._oldFBO);
     },
 
+    /**
+     * should be invoked before drawing
+     * @param {cc.Texture2D} texture
+     */
     beforeRender:function (texture) {
         var locGL = this._gl;
         this._oldFBO = locGL.getParameter(locGL.FRAMEBUFFER_BINDING);
@@ -76,12 +91,19 @@ cc.Grabber = cc.Class.extend({
         //  glColorMask(true, true, true, false);    // #631
     },
 
+    /**
+     * should be invoked after drawing
+     * @param {cc.Texture2D} texture
+     */
     afterRender:function (texture) {
         var locGL = this._gl;
         locGL.bindFramebuffer(locGL.FRAMEBUFFER, this._oldFBO);
         locGL.colorMask(true, true, true, true);      // #631
     },
 
+    /**
+     * delete FBO
+     */
     destroy:function(){
         this._gl.deleteFramebuffer(this._FBO);
     }

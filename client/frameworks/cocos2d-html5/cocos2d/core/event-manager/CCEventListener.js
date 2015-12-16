@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2010-2014 Chukong Technologies Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -40,7 +41,7 @@ cc.EventListener = cc.Class.extend(/** @lends cc.EventListener# */{
 
     _fixedPriority: 0,                      // The higher the number, the higher the priority, 0 is for scene graph base priority.
     _node: null,                           // scene graph based priority
-    _paused: false,                        // Whether the listener is paused
+    _paused: true,                        // Whether the listener is paused
     _isEnabled: true,                      // Whether the listener is enabled
 
     /**
@@ -161,7 +162,7 @@ cc.EventListener = cc.Class.extend(/** @lends cc.EventListener# */{
      * @returns {boolean}
      */
     checkAvailable: function () {
-        return this._onEvent != null;
+        return this._onEvent !== null;
     },
 
     /**
@@ -193,12 +194,33 @@ cc.EventListener = cc.Class.extend(/** @lends cc.EventListener# */{
     },
 
     /**
-     * Currently JavaScript Bindings (JSB), in some cases, needs to use retain and release. This is a bug in JSB,
+     * <p>Currently JavaScript Bindings (JSB), in some cases, needs to use retain and release. This is a bug in JSB,
      * and the ugly workaround is to use retain/release. So, these 2 methods were added to be compatible with JSB.
-     * This is a hack, and should be removed once JSB fixes the retain/release bug
+     * This is a hack, and should be removed once JSB fixes the retain/release bug<br/>
+     * You will need to retain an object if you created a listener and haven't added it any target node during the same frame.<br/>
+     * Otherwise, JSB's native autorelease pool will consider this object a useless one and release it directly,<br/>
+     * when you want to use it later, a "Invalid Native Object" error will be raised.<br/>
+     * The retain function can increase a reference count for the native object to avoid it being released,<br/>
+     * you need to manually invoke release function when you think this object is no longer needed, otherwise, there will be memory learks.<br/>
+     * retain and release function call should be paired in developer's game code.</p>
+     * @function
+     * @see cc.EventListener#release
      */
     retain:function () {
     },
+    /**
+     * <p>Currently JavaScript Bindings (JSB), in some cases, needs to use retain and release. This is a bug in JSB,
+     * and the ugly workaround is to use retain/release. So, these 2 methods were added to be compatible with JSB.
+     * This is a hack, and should be removed once JSB fixes the retain/release bug<br/>
+     * You will need to retain an object if you created a listener and haven't added it any target node during the same frame.<br/>
+     * Otherwise, JSB's native autorelease pool will consider this object a useless one and release it directly,<br/>
+     * when you want to use it later, a "Invalid Native Object" error will be raised.<br/>
+     * The retain function can increase a reference count for the native object to avoid it being released,<br/>
+     * you need to manually invoke release function when you think this object is no longer needed, otherwise, there will be memory learks.<br/>
+     * retain and release function call should be paired in developer's game code.</p>
+     * @function
+     * @see cc.EventListener#retain
+     */
     release:function () {
     }
 });
@@ -241,11 +263,24 @@ cc.EventListener.MOUSE = 4;
  */
 cc.EventListener.ACCELERATION = 5;
 /**
+ * The type code of focus event listener.
+ * @constant
+ * @type {number}
+ */
+cc.EventListener.ACCELERATION = 6;
+/**
  * The type code of custom event listener.
  * @constant
  * @type {number}
  */
-cc.EventListener.CUSTOM = 6;
+cc.EventListener.CUSTOM = 8;
+
+/**
+ * The type code of Focus change event listener.
+ * @constant
+ * @type {number}
+ */
+cc.EventListener.FOCUS = 7;
 
 cc._EventListenerCustom = cc.EventListener.extend({
     _onCustomEvent: null,
@@ -253,7 +288,7 @@ cc._EventListenerCustom = cc.EventListener.extend({
         this._onCustomEvent = callback;
         var selfPointer = this;
         var listener = function (event) {
-            if (selfPointer._onCustomEvent != null)
+            if (selfPointer._onCustomEvent !== null)
                 selfPointer._onCustomEvent(event);
         };
 
@@ -261,7 +296,7 @@ cc._EventListenerCustom = cc.EventListener.extend({
     },
 
     checkAvailable: function () {
-        return (cc.EventListener.prototype.checkAvailable.call(this) && this._onCustomEvent != null);
+        return (cc.EventListener.prototype.checkAvailable.call(this) && this._onCustomEvent !== null);
     },
 
     clone: function () {
@@ -344,6 +379,10 @@ cc._EventListenerTouchOneByOne = cc.EventListener.extend({
         this.swallowTouches = needSwallow;
     },
 
+    isSwallowTouches: function(){
+        return this.swallowTouches;
+    },
+
     clone: function () {
         var eventListener = new cc._EventListenerTouchOneByOne();
         eventListener.onTouchBegan = this.onTouchBegan;
@@ -389,8 +428,8 @@ cc._EventListenerTouchAllAtOnce = cc.EventListener.extend({
     },
 
     checkAvailable: function(){
-        if (this.onTouchesBegan == null && this.onTouchesMoved == null
-            && this.onTouchesEnded == null && this.onTouchesCancelled == null) {
+        if (this.onTouchesBegan === null && this.onTouchesMoved === null
+            && this.onTouchesEnded === null && this.onTouchesCancelled === null) {
             cc.log(cc._LogInfos._EventListenerTouchAllAtOnce_checkAvailable);
             return false;
         }
@@ -406,8 +445,11 @@ cc._EventListenerTouchAllAtOnce.create = function(){
 
 /**
  * Create a EventListener object by json object
+ * @function
+ * @static
  * @param {object} argObj a json object
  * @returns {cc.EventListener}
+ * todo: It should be the direct use new
  * @example
  * cc.EventListener.create({
  *       event: cc.EventListener.TOUCH_ONE_BY_ONE,
@@ -441,7 +483,8 @@ cc.EventListener.create = function(argObj){
     else if(listenerType === cc.EventListener.ACCELERATION){
         listener = new cc._EventListenerAcceleration(argObj.callback);
         delete argObj.callback;
-    }
+    } else if(listenerType === cc.EventListener.FOCUS)
+        listener = new cc._EventListenerFocus();
 
     for(var key in argObj) {
         listener[key] = argObj[key];
@@ -449,3 +492,28 @@ cc.EventListener.create = function(argObj){
 
     return listener;
 };
+
+cc._EventListenerFocus = cc.EventListener.extend({
+    clone: function(){
+        var listener = new cc._EventListenerFocus();
+        listener.onFocusChanged = this.onFocusChanged;
+        return listener;
+    },
+    checkAvailable: function(){
+        if(!this.onFocusChanged){
+            cc.log("Invalid EventListenerFocus!");
+            return false;
+        }
+        return true;
+    },
+    onFocusChanged: null,
+    ctor: function(){
+        var listener = function(event){
+            if(this.onFocusChanged)
+                this.onFocusChanged(event._widgetLoseFocus, event._widgetGetFocus);
+        };
+        cc.EventListener.prototype.ctor.call(this, cc.EventListener.FOCUS, cc._EventListenerFocus.LISTENER_ID, listener);
+    }
+});
+
+cc._EventListenerFocus.LISTENER_ID = "__cc_focus_event";

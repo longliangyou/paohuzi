@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -39,6 +39,11 @@ cc.TMXObjectGroup = cc.Class.extend(/** @lends cc.TMXObjectGroup# */{
     _positionOffset: null,
     _objects: null,
 
+    /**
+     * <p>The cc.TMXObjectGroup's constructor. <br/>
+     * This function will automatically be invoked when you create a node using new construction: "var node = new cc.TMXObjectGroup()".<br/>
+     * Override it to extend its behavior, remember to call "this._super()" in the extended "ctor" function.</p>
+     */
     ctor:function () {
         this.groupName = "";
         this._positionOffset = cc.p(0,0);
@@ -51,10 +56,11 @@ cc.TMXObjectGroup = cc.Class.extend(/** @lends cc.TMXObjectGroup# */{
      * @return {cc.Point}
      */
     getPositionOffset:function () {
-        return this._positionOffset;
+        return cc.p(this._positionOffset);
     },
 
     /**
+     * Offset position of child objects
      * @param {cc.Point} offset
      */
     setPositionOffset:function (offset) {
@@ -71,6 +77,7 @@ cc.TMXObjectGroup = cc.Class.extend(/** @lends cc.TMXObjectGroup# */{
     },
 
     /**
+     * List of properties stored in a dictionary
      * @param {object} Var
      */
     setProperties:function (Var) {
@@ -78,6 +85,7 @@ cc.TMXObjectGroup = cc.Class.extend(/** @lends cc.TMXObjectGroup# */{
     },
 
     /**
+     * Gets the Group name.
      * @return {String}
      */
     getGroupName:function () {
@@ -85,6 +93,7 @@ cc.TMXObjectGroup = cc.Class.extend(/** @lends cc.TMXObjectGroup# */{
     },
 
     /**
+     * Set the Group name
      * @param {String} groupName
      */
     setGroupName:function (groupName) {
@@ -103,15 +112,26 @@ cc.TMXObjectGroup = cc.Class.extend(/** @lends cc.TMXObjectGroup# */{
     /**
      * <p>Return the dictionary for the specific object name. <br />
      * It will return the 1st object found on the array for the given name.</p>
+     * @deprecated since v3.4 please use .getObject
      * @param {String} objectName
      * @return {object|Null}
      */
     objectNamed:function (objectName) {
+        return this.getObject(objectName);
+    },
+
+    /**
+     * <p>Return the dictionary for the specific object name. <br />
+     * It will return the 1st object found on the array for the given name.</p>
+     * @param {String} objectName
+     * @return {object|Null}
+     */
+    getObject: function(objectName){
         if (this._objects && this._objects.length > 0) {
             var locObjects = this._objects;
             for (var i = 0, len = locObjects.length; i < len; i++) {
                 var name = locObjects[i]["name"];
-                if (name && name == objectName)
+                if (name && name === objectName)
                     return locObjects[i];
             }
         }
@@ -120,6 +140,7 @@ cc.TMXObjectGroup = cc.Class.extend(/** @lends cc.TMXObjectGroup# */{
     },
 
     /**
+     * Gets the objects.
      * @return {Array}
      */
     getObjects:function () {
@@ -127,6 +148,7 @@ cc.TMXObjectGroup = cc.Class.extend(/** @lends cc.TMXObjectGroup# */{
     },
 
     /**
+     * Set the objects.
      * @param {object} objects
      */
     setObjects:function (objects) {

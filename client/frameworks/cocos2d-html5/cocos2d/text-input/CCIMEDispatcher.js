@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -43,7 +43,7 @@ cc.IMEKeyboardNotificationInfo = function (begin, end, duration) {
  */
 cc.IMEDelegate = cc.Class.extend(/** @lends cc.IMEDelegate# */{
     /**
-     * Constructor
+     * Constructor function, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
      */
     ctor:function () {
         cc.imeDispatcher.addDelegate(this);
@@ -132,7 +132,8 @@ cc.IMEDelegate = cc.Class.extend(/** @lends cc.IMEDelegate# */{
 });
 
 /**
- * @namespace Input Method Edit Message Dispatcher.
+ * cc.imeDispatcher is a singleton object which manage input message dispatching.
+ * @class
  * @name cc.imeDispatcher
  */
 cc.IMEDispatcher = cc.Class.extend(/**  @lends cc.imeDispatcher# */{
@@ -141,7 +142,7 @@ cc.IMEDispatcher = cc.Class.extend(/**  @lends cc.imeDispatcher# */{
     _currentInputString:"",
     _lastClickPosition:null,
     /**
-     * Constructor
+     * Constructor function, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
      */
     ctor:function () {
         this.impl = new cc.IMEDispatcher.Impl();
@@ -169,15 +170,15 @@ cc.IMEDispatcher = cc.Class.extend(/**  @lends cc.imeDispatcher# */{
         }
         var selfPointer = this;
         //add event listener
-        cc._addEventListener(this._domInputControl, "input", function () {
+        this._domInputControl.addEventListener("input", function () {
             selfPointer._processDomInputString(selfPointer._domInputControl.value);
         }, false);
-        cc._addEventListener(this._domInputControl, "keydown", function (e) {
+        this._domInputControl.addEventListener("keydown", function (e) {
             // ignore tab key
             if (e.keyCode === cc.KEY.tab) {
                 e.stopPropagation();
                 e.preventDefault();
-            } else if (e.keyCode == cc.KEY.enter) {
+            } else if (e.keyCode === cc.KEY.enter) {
                 selfPointer.dispatchInsertText("\n", 1);
                 e.stopPropagation();
                 e.preventDefault();
@@ -185,14 +186,14 @@ cc.IMEDispatcher = cc.Class.extend(/**  @lends cc.imeDispatcher# */{
         }, false);
 
         if (/msie/i.test(navigator.userAgent)) {
-            cc._addEventListener(this._domInputControl, "keyup", function (e) {
-                if (e.keyCode == cc.KEY.backspace) {
+            this._domInputControl.addEventListener("keyup", function (e) {
+                if (e.keyCode === cc.KEY.backspace) {
                     selfPointer._processDomInputString(selfPointer._domInputControl.value);
                 }
             }, false);
         }
 
-        cc._addEventListener(window, 'mousedown', function (event) {
+        window.addEventListener('mousedown', function (event) {
             var tx = event.pageX || 0;
             var ty = event.pageY || 0;
 
@@ -352,7 +353,7 @@ cc.IMEDispatcher = cc.Class.extend(/**  @lends cc.imeDispatcher# */{
             return false;
 
         // if delegate is not in delegate list, return
-        if (this.impl._delegateList.indexOf(delegate) == -1)
+        if (this.impl._delegateList.indexOf(delegate) === -1)
             return false;
 
         if (this.impl._delegateWithIme) {
@@ -386,7 +387,15 @@ cc.IMEDispatcher = cc.Class.extend(/**  @lends cc.imeDispatcher# */{
             delegate.didAttachWithIME();
             //prompt
             this._currentInputString = delegate.string || "";
-            var userInput = prompt("please enter your word:", this._currentInputString);
+
+            var tipMessage = delegate.getTipMessage ? delegate.getTipMessage() : "please enter your word:";
+            // wechat cover the prompt funciton .So need use the Window.prototype.prompt
+            var userInput;
+            if(window.Window && Window.prototype.prompt != prompt){
+                userInput = Window.prototype.prompt.call(window, tipMessage, this._currentInputString);
+            }else{
+                userInput = prompt(tipMessage, this._currentInputString);
+            }
             if(userInput != null)
                 this._processDomInputString(userInput);
             this.dispatchInsertText("\n", 1);
@@ -422,7 +431,7 @@ cc.IMEDispatcher = cc.Class.extend(/**  @lends cc.imeDispatcher# */{
             return false;
 
         // if delegate is not the current delegate attached with ime, return
-        if (this.impl._delegateWithIme != delegate)
+        if (this.impl._delegateWithIme !== delegate)
             return false;
 
         if (!delegate.canDetachWithIME())
@@ -446,11 +455,11 @@ cc.IMEDispatcher = cc.Class.extend(/**  @lends cc.imeDispatcher# */{
             return;
 
         // if delegate is not in delegate list, return
-        if (this.impl._delegateList.indexOf(delegate) == -1)
+        if (this.impl._delegateList.indexOf(delegate) === -1)
             return;
 
         if (this.impl._delegateWithIme) {
-            if (delegate == this.impl._delegateWithIme) {
+            if (delegate === this.impl._delegateWithIme) {
                 this.impl._delegateWithIme = null;
             }
         }
@@ -468,13 +477,13 @@ cc.IMEDispatcher = cc.Class.extend(/**  @lends cc.imeDispatcher# */{
      */
     processKeycode:function (keyCode) {
         if (keyCode < 32) {
-            if (keyCode == cc.KEY.backspace) {
+            if (keyCode === cc.KEY.backspace) {
                 this.dispatchDeleteBackward();
-            } else if (keyCode == cc.KEY.enter) {
+            } else if (keyCode === cc.KEY.enter) {
                 this.dispatchInsertText("\n", 1);
-            } else if (keyCode == cc.KEY.tab) {
+            } else if (keyCode === cc.KEY.tab) {
                 //tab input
-            } else if (keyCode == cc.KEY.escape) {
+            } else if (keyCode === cc.KEY.escape) {
                 //ESC input
             }
         } else if (keyCode < 255) {
@@ -486,6 +495,8 @@ cc.IMEDispatcher = cc.Class.extend(/**  @lends cc.imeDispatcher# */{
 });
 
 /**
+ * Create the cc.IMEDispatcher.Imp Object. <br />
+ * This is the inner class...
  * @class
  * @extends cc.Class
  * @name cc.IMEDispatcher.Impl
@@ -494,7 +505,7 @@ cc.IMEDispatcher.Impl = cc.Class.extend(/** @lends cc.IMEDispatcher.Impl# */{
     _delegateWithIme:null,
     _delegateList:null,
     /**
-     * Constructor
+     * Constructor function, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
      */
     ctor:function () {
         this._delegateList = [];
@@ -506,7 +517,7 @@ cc.IMEDispatcher.Impl = cc.Class.extend(/** @lends cc.IMEDispatcher.Impl# */{
      */
     findDelegate:function (delegate) {
         for (var i = 0; i < this._delegateList.length; i++) {
-            if (this._delegateList[i] == delegate)
+            if (this._delegateList[i] === delegate)
                 return i;
         }
         return null;
@@ -518,6 +529,6 @@ cc.imeDispatcher = new cc.IMEDispatcher();
 
 document.body ?
     cc.imeDispatcher.init() :
-    cc._addEventListener(window, 'load', function () {
+    window.addEventListener('load', function () {
         cc.imeDispatcher.init();
     }, false);

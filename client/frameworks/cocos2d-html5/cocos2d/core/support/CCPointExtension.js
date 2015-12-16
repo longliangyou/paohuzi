@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -192,7 +192,7 @@ cc.pLength = function (v) {
  * Calculates the distance between two points
  * @param {cc.Point} v1
  * @param {cc.Point} v2
- * @return {cc.pLength}
+ * @return {Number}
  */
 cc.pDistance = function (v1, v2) {
     return cc.pLength(cc.pSub(v1, v2));
@@ -204,7 +204,8 @@ cc.pDistance = function (v1, v2) {
  * @return {cc.Point}
  */
 cc.pNormalize = function (v) {
-    return cc.pMult(v, 1.0 / cc.pLength(v));
+    var n = cc.pLength(v);
+    return n === 0 ? cc.p(v) : cc.pMult(v, 1.0 / n);
 };
 
 /**
@@ -356,6 +357,11 @@ cc.pRotateByAngle = function (v, pivot, angle) {
 
 /**
  * A general line-line intersection test
+ * indicating successful intersection of a line<br />
+ * note that to truly test intersection for segments we have to make<br />
+ * sure that s & t lie within [0..1] and for rays, make sure s & t > 0<br />
+ * the hit point is        p3 + t * (p4 - p3);<br />
+ * the hit point also is    p1 + s * (p2 - p1);
  * @param {cc.Point} A A is the startpoint for the first line P1 = (p1 - p2).
  * @param {cc.Point} B B is the endpoint for the first line P1 = (p1 - p2).
  * @param {cc.Point} C C is the startpoint for the second line P2 = (p3 - p4).
@@ -363,14 +369,9 @@ cc.pRotateByAngle = function (v, pivot, angle) {
  * @param {cc.Point} retP retP.x is the range for a hitpoint in P1 (pa = p1 + s*(p2 - p1)), <br />
  * retP.y is the range for a hitpoint in P3 (pa = p2 + t*(p4 - p3)).
  * @return {Boolean}
- * indicating successful intersection of a line<br />
- * note that to truly test intersection for segments we have to make<br />
- * sure that s & t lie within [0..1] and for rays, make sure s & t > 0<br />
- * the hit point is        p3 + t * (p4 - p3);<br />
- * the hit point also is    p1 + s * (p2 - p1);
  */
 cc.pLineIntersect = function (A, B, C, D, retP) {
-    if ((A.x == B.x && A.y == B.y) || (C.x == D.x && C.y == D.y)) {
+    if ((A.x === B.x && A.y === B.y) || (C.x === D.x && C.y === D.y)) {
         return false;
     }
     var BAx = B.x - A.x;
@@ -385,8 +386,8 @@ cc.pLineIntersect = function (A, B, C, D, retP) {
     retP.x = DCx * ACy - DCy * ACx;
     retP.y = BAx * ACy - BAy * ACx;
 
-    if (denom == 0) {
-        if (retP.x == 0 || retP.y == 0) {
+    if (denom === 0) {
+        if (retP.x === 0 || retP.y === 0) {
             // Lines incident
             return true;
         }
@@ -446,7 +447,7 @@ cc.pIntersectPoint = function (A, B, C, D) {
  */
 cc.pSameAs = function (A, B) {
     if ((A != null) && (B != null)) {
-        return (A.x == B.x && A.y == B.y);
+        return (A.x === B.x && A.y === B.y);
     }
     return false;
 };
@@ -456,48 +457,58 @@ cc.pSameAs = function (A, B) {
 // High Perfomance In Place Operationrs ---------------------------------------
 
 /**
-  * sets the position of the point to 0
-  */
+ * sets the position of the point to 0
+ * @param {cc.Point} v
+ */
 cc.pZeroIn = function(v) {
     v.x = 0;
     v.y = 0;
 };
 
 /**
-  * copies the position of one point to another
-  */
+ * copies the position of one point to another
+ * @param {cc.Point} v1
+ * @param {cc.Point} v2
+ */
 cc.pIn = function(v1, v2) {
     v1.x = v2.x;
     v1.y = v2.y;
 };
 
 /**
-  * multiplies the point with the given factor (inplace)
-  */
+ * multiplies the point with the given factor (inplace)
+ * @param {cc.Point} point
+ * @param {Number} floatVar
+ */
 cc.pMultIn = function(point, floatVar) {
     point.x *= floatVar;
     point.y *= floatVar;
 };
 
 /**
-  * subtracts one point from another (inplace)
-  */
+ * subtracts one point from another (inplace)
+ * @param {cc.Point} v1
+ * @param {cc.Point} v2
+ */
 cc.pSubIn = function(v1, v2) {
     v1.x -= v2.x;
     v1.y -= v2.y;
 };
 
 /**
-  * adds one point to another (inplace)
-  */
+ * adds one point to another (inplace)
+ * @param {cc.Point} v1
+ * @param {cc.point} v2
+ */
 cc.pAddIn = function(v1, v2) {
     v1.x += v2.x;
     v1.y += v2.y;
 };
 
 /**
-  * normalizes the point (inplace)
-  */
+ * normalizes the point (inplace)
+ * @param {cc.Point} v
+ */
 cc.pNormalizeIn = function(v) {
     cc.pMultIn(v, 1.0 / Math.sqrt(v.x * v.x + v.y * v.y));
 };
