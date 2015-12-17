@@ -44,7 +44,7 @@ var FightAIAction = {
         var previousUserId = round.getPreviousUserId(userId);
 
         //先判断下一家的操作
-        var actions = round.getActions(nextUserId, cardId);
+        var actions = round.getActions(nextUserId, cardId);//提或偎 > 和牌 > 跑或碰 > 吃 （只能翻出的底牌，手中的打出的牌不能和）
         cc.log("FightAIAction 当前拥有的操作:",actions.canHu,actions.canPeng,actions.canGang,actions.canChi);
 //        if(actions.canHu){
 //            HuAction.hu(nextUserId, cardId, null);
