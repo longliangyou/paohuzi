@@ -14,6 +14,7 @@ var ServerNotifyManager = {
         //这里服务通过pomelo发送消息  联网时通过pomelo来收听onMessageHandle消息
         //pomelo......
 
+
         //这里会抛送一个事件  单机时会监听这个事件 来收听onMessageHandle消息
         var event = {name:"CMD",data:event};
         this.dispatchEvent(event);
