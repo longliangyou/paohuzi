@@ -28,7 +28,7 @@ var FightHandle = BaseHandle.extend({
             case CardUtil.ServerNotify.onJoinRoom:
                 var serverDirect = data.serverDirect;
                 var user = data.user;
-                if(me.userId == user.userId){//存储自己的风位
+                if(me.userId == user.userId){//存储自己的风味
                     me.serverDirect = serverDirect;
                 }
                 var clientDirect = this.getClientDirectByServerDirect(serverDirect);
@@ -36,7 +36,7 @@ var FightHandle = BaseHandle.extend({
                 break;
             case CardUtil.ServerNotify.onNewRound://开局
                 this.onNewRoundNum_ = checkint(this.onNewRoundNum_) + 1;
-                if(this.onNewRoundNum_ == 3 ){//当三个人都准备好要开桌了
+                if(this.onNewRoundNum_ == 3 ){
                     this.sceneLayer_.onNewRound(FightVo.cards);
                 }
                 break;

@@ -4,7 +4,6 @@
  * Created by Administrator on 2014/7/1.
  */
 var BaseScene = cc.Layer.extend({
-	 sprite:null,
     /**
      * 依赖注入控制器
      * @param handle

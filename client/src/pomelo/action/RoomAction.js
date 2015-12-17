@@ -24,7 +24,7 @@ var RoomAction = {
         cmd:CardUtil.ServerNotify.onJoinRoom,
         data:{
             serverDirect:serverDirect,//风位
-            user: user
+          user: user
         }
       };
       ServerNotifyManager.sendCmdResponse(joinRoomEvent);
