@@ -58,7 +58,7 @@ var LoginModel = BaseModel.extend({
 
         }else if(deskType == 2) {//三人网络场
             FightVo.deskType = 2;
-            //网络场需要做一些处理 todo
+
         }
 
         if(callBack){
